@@ -1,0 +1,16 @@
+{
+    "name": "airalo/sdk",
+    "description": "Airalo's Partner API PHP SDK",
+    "type": "project",
+    "require": {
+        "phpunit/phpunit": "9",
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Airalo\\": "src/",
+            "Airalo\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev"
+}

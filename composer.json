@@ -3,7 +3,8 @@
     "description": "Airalo's Partner API PHP SDK",
     "type": "project",
     "require": {
-        "phpunit/phpunit": "9"
+        "phpunit/phpunit": "9",
+        "php": ">=7.4"
     },
     "autoload": {
         "psr-4": {

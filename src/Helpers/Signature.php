@@ -4,8 +4,6 @@ namespace Airalo\Helpers;
 
 class Signature
 {
-    private const HASH_ALGORITHM = 'sha512';
-
     private string $secret;
 
     /**
@@ -67,10 +65,11 @@ class Signature
 
     /**
      * @param string $payload
+     * @param string $algo
      * @return string
      */
-    private function signData(string $payload): string
+    private function signData(string $payload, string $algo = 'sha512'): string
     {
-        return hash_hmac(self::HASH_ALGORITHM, $payload, $this->secret);
+        return hash_hmac($algo, $payload, $this->secret);
     }
 }

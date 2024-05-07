@@ -1,12 +1,14 @@
 <?php
 
-namespace Airalo\Contstants;
+namespace Airalo\Constants;
 
 final class ApiConstants
 {
     public const SANBOX_URL = 'https://sandbox-partners-api.airalo.com/v2/';
 
     public const PRODUCTION_URL = 'https://partners-api.airalo.com/v2/';
+
+    public const TOKEN_SLUG = 'token';
 
     public const PACKAGES_SLUG = 'packages';
 

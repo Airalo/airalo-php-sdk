@@ -2,6 +2,7 @@
 
 namespace Airalo;
 
+use Airalo\Constants\ApiConstants;
 use Airalo\Exceptions\AiraloException;
 
 final class Config
@@ -75,6 +76,16 @@ final class Config
     public function getEnvironment(): string
     {
         return $this->data['env'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->data['env'] == 'sandbox'
+            ? ApiConstants::SANBOX_URL
+            : ApiConstants::PRODUCTION_URL;
     }
 
     /**

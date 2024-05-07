@@ -77,10 +77,6 @@ class Curl
 
         $result = call_user_func_array([$this, $methodName], $args);
 
-        if (!$this->getHandler) {
-            $this->closeCurl();
-        }
-
         return $result;
     }
 

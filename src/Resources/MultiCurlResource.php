@@ -2,7 +2,7 @@
 
 namespace Airalo\Resources;
 
-class MultiCurl
+class MultiCurlResource
 {
 
 }

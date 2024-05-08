@@ -3,13 +3,15 @@
 namespace Airalo;
 
 use Airalo\Exceptions\AiraloException;
+use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
-use Airalo\Resources\Curl;
-use Airalo\Resources\MultiCurl;
-use Airalo\Services\OAuth;
-use Airalo\Services\Order;
-use Airalo\Services\Packages;
-use Airalo\Services\Topup;
+use Airalo\Resources\CurlResource;
+use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\OAuthService;
+use Airalo\Services\OrderService;
+use Airalo\Services\PackagesService;
+use Airalo\Services\TopupService;
+
 class Airalo
 {
     private static array $pool = [];
@@ -18,17 +20,17 @@ class Airalo
     // Configuration and resources
     //
     private Config $config;
-    private Curl $curl;
-    private MultiCurl $multiCurl;
+    private CurlResource $curl;
+    private MultiCurlResource $multiCurl;
     private Signature $signature;
 
     //
     // Services
     //
-    private OAuth $oauth;
-    private Packages $packages;
-    private Order $order;
-    private Topup $topup;
+    private OAuthService $oauth;
+    private PackagesService $packages;
+    private OrderService $order;
+    private TopupService $topup;
 
     /**
      * @param mixed $config
@@ -54,9 +56,9 @@ class Airalo
     /**
      * @param mixed $limit
      * @param mixed $page
-     * @return array|null
+     * @return EasyAccess|null
      */
-    public function getAllPackages($limit = null, $page = null): ?array
+    public function getAllPackages($limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
             'limit' => $limit,
@@ -67,9 +69,9 @@ class Airalo
     /**
      * @param mixed $limit
      * @param mixed $page
-     * @return array|null
+     * @return EasyAccess|null
      */
-    public function getLocalPackages($limit = null, $page = null): ?array
+    public function getLocalPackages($limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
             'limit' => $limit,
@@ -81,9 +83,9 @@ class Airalo
     /**
      * @param mixed $limit
      * @param mixed $page
-     * @return array|null
+     * @return EasyAccess|null
      */
-    public function getGlobalPackages($limit = null, $page = null): ?array
+    public function getGlobalPackages($limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
             'limit' => $limit,
@@ -95,9 +97,9 @@ class Airalo
     /**
      * @param string $countryCode
      * @param mixed $limit
-     * @return array|null
+     * @return EasyAccess|null
      */
-    public function getCountryPackages(string $countryCode, $limit = null): ?array
+    public function getCountryPackages(string $countryCode, $limit = null): ?EasyAccess
     {
         return $this->packages->getPackages([
             'limit' => $limit,
@@ -112,8 +114,8 @@ class Airalo
     private function initResources($config): void
     {
         $this->config = self::$pool['config'] ?? new Config($config);
-        $this->curl = self::$pool['curl'] ?? new Curl();
-        $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurl();
+        $this->curl = self::$pool['curl'] ?? new CurlResource();
+        $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurlResource();
         $this->signature = self::$pool['signature'] ?? new Signature($this->config->get('client_secret'));
     }
 
@@ -122,11 +124,11 @@ class Airalo
      */
     private function initServices(): void
     {
-        $this->oauth = self::$pool['oauth'] ?? new OAuth($this->config, $this->curl, $this->signature);
+        $this->oauth = self::$pool['oauth'] ?? new OAuthService($this->config, $this->curl, $this->signature);
         $token = $this->oauth->getAccessToken();
 
-        $this->packages = self::$pool['packages'] ?? new Packages($this->config, $this->curl, $token);
-        $this->order = self::$pool['order'] ?? new Order($this->config, $this->curl, $token);
-        $this->topup = self::$pool['topup'] ?? new Topup($this->config, $this->curl, $token);
+        $this->packages = self::$pool['packages'] ?? new PackagesService($this->config, $this->curl, $token);
+        $this->order = self::$pool['order'] ?? new OrderService($this->config, $this->curl, $token);
+        $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $token);
     }
 }

@@ -5,9 +5,10 @@ namespace Airalo\Services;
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
 use Airalo\Helpers\Cached;
-use Airalo\Resources\Curl;
+use Airalo\Helpers\EasyAccess;
+use Airalo\Resources\CurlResource;
 
-class Packages
+class PackagesService
 {
     private string $accessToken;
 
@@ -15,14 +16,14 @@ class Packages
 
     private Config $config;
 
-    private Curl $curl;
+    private CurlResource $curl;
 
     /**
      * @param Config $config
-     * @param Curl $curl
+     * @param CurlResource $curl
      * @param string $accessToken
      */
-    public function __construct(Config $config, Curl $curl, string $accessToken)
+    public function __construct(Config $config, CurlResource $curl, string $accessToken)
     {
         $this->accessToken = $accessToken;
 
@@ -38,9 +39,9 @@ class Packages
 
     /**
      * @param array $params
-     * @return array|null
+     * @return EasyAccess|null
      */
-    public function getPackages(array $params = []): ?array
+    public function getPackages(array $params = []): ?EasyAccess
     {
         $url = $this->buildUrl($params);
 
@@ -76,7 +77,7 @@ class Packages
                 $currentPage++;
             }
 
-            return $result;
+            return new EasyAccess($result);
         }, $url, 3600);
     }
 

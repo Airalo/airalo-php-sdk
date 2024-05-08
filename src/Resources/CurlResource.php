@@ -5,7 +5,7 @@ namespace Airalo\Resources;
 use Airalo\Exceptions\AiraloException;
 use CurlHandle;
 
-class Curl
+class CurlResource
 {
     /**
      * @var resource|null
@@ -130,7 +130,7 @@ class Curl
      * @param array $options
      * @return Curl
      */
-    public function setopt(array $options): Curl
+    public function setopt(array $options): CurlResource
     {
         $this->initCurl();
         foreach ($options as $option => $value) {
@@ -150,7 +150,7 @@ class Curl
         return $this;
     }
 
-    public function useRFC(int $rfc): Curl
+    public function useRFC(int $rfc): CurlResource
     {
         $this->rfc = $rfc;
 
@@ -162,7 +162,7 @@ class Curl
      * @param string $password
      * @return Curl
      */
-    public function setBasicAuthentication(string $username, string $password = ''): Curl
+    public function setBasicAuthentication(string $username, string $password = ''): CurlResource
     {
         $this->initCurl();
         curl_setopt($this->curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -175,7 +175,7 @@ class Curl
      * @param array $array
      * @return Curl
      */
-    public function setHeaders(array $array = []): Curl
+    public function setHeaders(array $array = []): CurlResource
     {
         $this->initCurl();
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $array);
@@ -187,7 +187,7 @@ class Curl
      * @param integer $timeout
      * @return Curl
      */
-    public function setTimeout(int $timeout = 30): Curl
+    public function setTimeout(int $timeout = 30): CurlResource
     {
         $this->initCurl();
         curl_setopt($this->curl, CURLOPT_TIMEOUT, $timeout);

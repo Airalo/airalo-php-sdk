@@ -2,7 +2,7 @@
 
 namespace Airalo\Services;
 
-class Topup
+class OrderService
 {
 
 }

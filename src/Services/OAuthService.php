@@ -8,9 +8,9 @@ use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\Misc;
 use Airalo\Helpers\Signature;
-use Airalo\Resources\Curl;
+use Airalo\Resources\CurlResource;
 
-class OAuth
+class OAuthService
 {
     private const CACHE_NAME = 'access_token';
 
@@ -20,7 +20,7 @@ class OAuth
 
     private array $payload;
 
-    private Curl $curl;
+    private CurlResource $curl;
 
     private Signature $signature;
 
@@ -29,7 +29,7 @@ class OAuth
      * @param Curl $curl
      * @param Signature $signature
      */
-    public function __construct(Config $config, Curl $curl, Signature $signature)
+    public function __construct(Config $config, CurlResource $curl, Signature $signature)
     {
         $this->config = $config;
 

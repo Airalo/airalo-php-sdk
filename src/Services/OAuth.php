@@ -26,8 +26,10 @@ class OAuth
 
     /**
      * @param Config $config
+     * @param Curl $curl
+     * @param Signature $signature
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, Curl $curl, Signature $signature)
     {
         $this->config = $config;
 
@@ -35,9 +37,9 @@ class OAuth
             'grant_type' => 'client_credentials',
         ];
 
-        $this->curl = new Curl();
+        $this->curl = $curl;
 
-        $this->signature = new Signature($this->config->get('client_secret'));
+        $this->signature = $signature;
     }
 
     /**

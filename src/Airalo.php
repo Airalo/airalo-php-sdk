@@ -54,26 +54,30 @@ class Airalo
     }
 
     /**
+     * @param bool $flat
      * @param mixed $limit
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getAllPackages($limit = null, $page = null): ?EasyAccess
+    public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
+            'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
         ]);
     }
 
     /**
+     * @param bool $flat
      * @param mixed $limit
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getLocalPackages($limit = null, $page = null): ?EasyAccess
+    public function getLocalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
+            'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
             'type' => 'local',
@@ -81,13 +85,15 @@ class Airalo
     }
 
     /**
+     * @param bool $flat
      * @param mixed $limit
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getGlobalPackages($limit = null, $page = null): ?EasyAccess
+    public function getGlobalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
     {
         return $this->packages->getPackages([
+            'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
             'type' => 'global',
@@ -96,14 +102,61 @@ class Airalo
 
     /**
      * @param string $countryCode
+     * @param bool $flat
      * @param mixed $limit
      * @return EasyAccess|null
      */
-    public function getCountryPackages(string $countryCode, $limit = null): ?EasyAccess
+    public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess
     {
         return $this->packages->getPackages([
+            'flat' => $flat,
             'limit' => $limit,
             'country' => strtoupper($countryCode),
+        ]);
+    }
+
+    /**
+     * @param string $packageId
+     * @param int $quantity
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function order(string $packageId, int $quantity, ?string $description = null): ?EasyAccess
+    {
+        return $this->order->createOrder([
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'type' => 'sim',
+            'description' => $description ?? 'Order placed via Airalo PHP SDK',
+        ]);
+    }
+
+    /**
+     * @param array $packages
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderBulk(array $packages, ?string $description = null): ?EasyAccess
+    {
+        if (empty($packages)) {
+            return null;
+        }
+
+        return $this->order->createOrderBulk($packages, $description);
+    }
+
+    /**
+     * @param string $packageId
+     * @param int $iccid
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function topup(string $packageId, string $iccid, ?string $description = null): ?EasyAccess
+    {
+        return $this->topup->createTopup([
+            'package_id' => $packageId,
+            'iccid' => $iccid,
+            'description' => $description ?? 'Topup placed via Airalo PHP SDK',
         ]);
     }
 
@@ -114,8 +167,8 @@ class Airalo
     private function initResources($config): void
     {
         $this->config = self::$pool['config'] ?? new Config($config);
-        $this->curl = self::$pool['curl'] ?? new CurlResource();
-        $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurlResource();
+        $this->curl = self::$pool['curl'] ?? new CurlResource($this->config);
+        $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurlResource($this->config);
         $this->signature = self::$pool['signature'] ?? new Signature($this->config->get('client_secret'));
     }
 
@@ -128,7 +181,8 @@ class Airalo
         $token = $this->oauth->getAccessToken();
 
         $this->packages = self::$pool['packages'] ?? new PackagesService($this->config, $this->curl, $token);
-        $this->order = self::$pool['order'] ?? new OrderService($this->config, $this->curl, $token);
-        $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $token);
+        $this->order = self::$pool['order']
+            ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
+        $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
     }
 }

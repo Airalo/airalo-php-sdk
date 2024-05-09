@@ -83,9 +83,17 @@ final class Config
      */
     public function getUrl(): string
     {
-        return $this->data['env'] == 'sandbox'
+        return $this->getEnvironment() == 'sandbox'
             ? ApiConstants::SANBOX_URL
             : ApiConstants::PRODUCTION_URL;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHttpHeaders(): array
+    {
+        return $this->data['http_headers'] ?? [];
     }
 
     /**

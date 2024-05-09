@@ -31,10 +31,6 @@ class PackagesService
         $this->baseUrl = $this->config->getUrl();
 
         $this->curl = $curl;
-        $this->curl->setHeaders([
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $this->accessToken,
-        ]);
     }
 
     /**
@@ -45,7 +41,7 @@ class PackagesService
     {
         $url = $this->buildUrl($params);
 
-        return Cached::get(function () use ($url, $params) {
+        $result = Cached::get(function () use ($url, $params) {
             $currentPage = $params['page'] ?? 0;
             $result = ['data' => []];
 
@@ -54,14 +50,19 @@ class PackagesService
                     $pageUrl = $url . "&page=$currentPage";
                 }
 
-                if (!$response = $this->curl->get($pageUrl ?? $url)) {
+                $response = $this->curl->setHeaders([
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $this->accessToken,
+                ])->get($pageUrl ?? $url);
+
+                if (!$response) {
                     return null;
                 }
 
                 $response = json_decode($response, true);
 
                 if (empty($response['data'])) {
-                    return null;
+                    break;
                 }
 
                 $result['data'] = array_merge($result['data'], $response['data']);
@@ -77,8 +78,10 @@ class PackagesService
                 $currentPage++;
             }
 
-            return new EasyAccess($result);
-        }, $url, 3600);
+            return new EasyAccess($params['flat'] ? $this->flatten($result) : $result);
+        }, $this->getKey($url, $params), 3600);
+
+        return count($result['data']) ? $result : null;
     }
 
     /**
@@ -103,5 +106,62 @@ class PackagesService
         }
 
         return $url;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function flatten(array $data): array
+    {
+        $flattened = ['data' => []];
+
+        foreach ($data['data'] as $each) {
+            foreach ($each['operators'] as $operator) {
+                foreach ($operator['packages'] as $package) {
+                    $countries = [];
+
+                    foreach ($operator['countries'] as $country) {
+                        $countries[] = $country['country_code'];
+                    }
+
+                    $flattened['data'][] = [
+                        'package_id' => $package['id'],
+                        'slug' => $each['slug'],
+                        'type' => $package['type'],
+                        'price' => $package['price'],
+                        'net_price' => $package['net_price'],
+                        'amount' => $package['amount'],
+                        'day' => $package['day'],
+                        'is_unlimited' => $package['is_unlimited'],
+                        'title' => $package['title'],
+                        'data' => $package['data'],
+                        'short_info' => $package['short_info'],
+                        'voice' => $package['voice'],
+                        'text' => $package['text'],
+                        'plan_type' => $operator['plan_type'],
+                        'activation_policy' => $operator['activation_policy'],
+                        'operator' => [
+                            'title' => $operator['title'],
+                            'is_roaming' => $operator['is_roaming'],
+                            'info' => $operator['info'],
+                        ],
+                        'countries' => $countries,
+                    ];
+                }
+            }
+        }
+
+        return $flattened;
+    }
+
+    /**
+     * @param string $url
+     * @param array $params
+     * @return string
+     */
+    private function getKey(string $url, array $params): string
+    {
+        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders()));
     }
 }

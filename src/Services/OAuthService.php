@@ -54,10 +54,9 @@ class OAuthService
                 $token = Cached::get(function () {
                     $response = $this->curl
                         ->setHeaders([
-                            'airalo-sdk: yes',
                             'airalo-signature: ' . $this->signature->getSignature($this->payload),
                         ])
-                        ->post($this->config->getUrl() . ApiConstants::TOKEN_SLUG, $this->payload);
+                        ->post($this->config->getUrl() . ApiConstants::TOKEN_SLUG, http_build_query($this->payload));
 
                     if (!$response || $this->curl->code != 200) {
                         throw new AiraloException('Access token generation failed');

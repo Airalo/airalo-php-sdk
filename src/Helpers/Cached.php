@@ -4,6 +4,8 @@ namespace Airalo\Helpers;
 
 final class Cached
 {
+    private const CACHE_KEY = 'airalo_';
+
     /**
      * @var mixed
      */
@@ -21,17 +23,17 @@ final class Cached
     /**
      * @param mixed $work
      * @param string $cacheName
+     * @param int $ttl
      * @return mixed
      */
-    public static function get($work, string $cacheName)
+    public static function get($work, string $cacheName, int $ttl = 0)
     {
         self::init($cacheName);
 
         self::$id = self::getID($cacheName);
 
-
         $type = gettype($work);
-        if (!$result = self::cacheGet()) {
+        if (!$result = self::cacheGet($ttl)) {
             $result = in_array($type, ['object', 'callable'])
                 ? $work()
                 : $work;
@@ -43,14 +45,13 @@ final class Cached
     }
 
     /**
-     * @param string $cacheName
      * @return void
      */
-    public static function clearCache(string $cacheName): void
+    public static function clearCache(): void
     {
-        self::init($cacheName);
+        self::init();
 
-        @unlink(self::$cachePath . self::getID(self::$cacheName));
+        array_map('unlink', glob(self::$cachePath . self::CACHE_KEY . '*'));
     }
 
     /**
@@ -74,13 +75,14 @@ final class Cached
      */
     private static function getID(string $key): string
     {
-        return md5($key);
+        return self::CACHE_KEY . md5($key);
     }
 
     /**
+     * @param int $customTtl
      * @return mixed
      */
-    private static function cacheGet()
+    private static function cacheGet(int $customTtl = 0)
     {
         $file = self::$cachePath . self::$id;
 
@@ -89,9 +91,7 @@ final class Cached
         }
 
         $now = strtotime('now');
-        $ttl = is_string(self::$ttl)
-            ? strtotime(self::$ttl)
-            : $now + self::$ttl;
+        $ttl = $now + ($customTtl ?: self::$ttl);
 
         if ($now - filemtime($file) > $ttl - $now) {
             unlink($file);
@@ -110,6 +110,10 @@ final class Cached
      */
     private static function cacheThis($result)
     {
+        if (!$result) {
+            return;
+        }
+
         $data = serialize($result);
         $file = self::$cachePath . self::$id;
 

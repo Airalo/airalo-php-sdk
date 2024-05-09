@@ -8,9 +8,9 @@ use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\Misc;
 use Airalo\Helpers\Signature;
-use Airalo\Resources\Curl;
+use Airalo\Resources\CurlResource;
 
-class OAuth
+class OAuthService
 {
     private const CACHE_NAME = 'access_token';
 
@@ -20,14 +20,16 @@ class OAuth
 
     private array $payload;
 
-    private Curl $curl;
+    private CurlResource $curl;
 
     private Signature $signature;
 
     /**
      * @param Config $config
+     * @param Curl $curl
+     * @param Signature $signature
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, CurlResource $curl, Signature $signature)
     {
         $this->config = $config;
 
@@ -35,9 +37,9 @@ class OAuth
             'grant_type' => 'client_credentials',
         ];
 
-        $this->curl = new Curl();
+        $this->curl = $curl;
 
-        $this->signature = new Signature($this->config->get('client_secret'));
+        $this->signature = $signature;
     }
 
     /**
@@ -52,10 +54,9 @@ class OAuth
                 $token = Cached::get(function () {
                     $response = $this->curl
                         ->setHeaders([
-                            'airalo-sdk: yes',
                             'airalo-signature: ' . $this->signature->getSignature($this->payload),
                         ])
-                        ->post($this->config->getUrl() . ApiConstants::TOKEN_SLUG, $this->payload);
+                        ->post($this->config->getUrl() . ApiConstants::TOKEN_SLUG, http_build_query($this->payload));
 
                     if (!$response || $this->curl->code != 200) {
                         throw new AiraloException('Access token generation failed');

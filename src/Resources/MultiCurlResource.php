@@ -172,27 +172,18 @@ class MultiCurlResource
     }
 
     /**
-     * @param mixed $window
      * @return mixed
      */
-    public function exec($window = null)
+    public function exec()
     {
-        if (is_null($window)) {
-            $window = self::WINDOW;
-        }
-
-        if ($window < 0 || $window > 50) {
-            $window = self::WINDOW;
-        }
-
         $master = curl_multi_init();
         $responses = array_fill_keys(array_keys($this->handlers), false);
 
-        $rolling_window = (sizeof($this->handlers) < $window) ? sizeof($this->handlers) : $window;
+        $rollingWindow = (sizeof($this->handlers) < self::WINDOW) ? sizeof($this->handlers) : self::WINDOW;
 
         reset($this->handlers);
 
-        for ($i = 0; $i < $rolling_window; $i++) {
+        for ($i = 0; $i < $rollingWindow; $i++) {
             $handler = $i == 0 ? current($this->handlers) : next($this->handlers);
             curl_multi_add_handle($master, $handler);
         }
@@ -215,14 +206,11 @@ class MultiCurlResource
 
                 $handler = next($this->handlers);
 
-                if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-                    $checkHandler = $handler instanceof \CurlHandle;
-                } else {
-                    $checkHandler = is_resource($handler);
-                }
+                $checkHandler = version_compare(PHP_VERSION, '8.0.0', '>=')
+                    ? $handler instanceof \CurlHandle
+                    : is_resource($handler);
 
                 if ($checkHandler) {
-                    // start a new request (it's important to do this before removing the old one)
                     curl_multi_add_handle($master, $handler);
 
                     curl_multi_remove_handle($master, $done['handle']);
@@ -230,7 +218,6 @@ class MultiCurlResource
 
                 $status = curl_multi_exec($master, $active);
 
-                // clean memory
                 unset($this->handlers[$tag], $info, $output, $header, $tag, $handler);
             }
 

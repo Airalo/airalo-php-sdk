@@ -2,7 +2,7 @@
 
 namespace Airalo\Helpers;
 
-final class Misc
+final class Crypt
 {
     /**
      * @param string $data

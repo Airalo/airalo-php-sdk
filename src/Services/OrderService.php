@@ -4,6 +4,7 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Constants\SdkConstants;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
@@ -49,6 +50,8 @@ class OrderService
      */
     public function createOrder(array $payload): ?EasyAccess
     {
+        $this->validateOrder($payload);
+
         $response = $this->curl
             ->setHeaders($this->getHeaders($payload))
             ->post($this->config->getUrl() . ApiConstants::ORDERS_SLUG, $payload);
@@ -69,6 +72,8 @@ class OrderService
      */
     public function createOrderBulk(array $params, ?string $description = null): ?EasyAccess
     {
+        $this->validateBulkOrder($params);
+
         foreach ($params as $packageId => $quantity) {
             $payload = [
                 'package_id' => $packageId,
@@ -76,6 +81,8 @@ class OrderService
                 'type' => 'sim',
                 'description' => $description ?? 'Bulk order placed via Airalo PHP SDK',
             ];
+
+            $this->validateOrder($payload);
 
             $this->multiCurl
                 ->tag($packageId)
@@ -107,5 +114,37 @@ class OrderService
             'Authorization: Bearer ' . $this->accessToken,
             'airalo-signature: ' . $this->signature->getSignature($payload),
         ];
+    }
+
+    /**
+     * @throws AiraloException
+     * @param array $payload
+     * @return void
+     */
+    private function validateOrder(array $payload): void
+    {
+        if (!isset($payload['package_id']) || $payload['package_id'] == '') {
+            throw new AiraloException('The package_id is required, payload: ' . json_encode($payload));
+        }
+
+        if ($payload['quantity'] < 1) {
+            throw new AiraloException('The quantity is required, payload: ' . json_encode($payload));
+        }
+
+        if ($payload['quantity'] > SdkConstants::ORDER_LIMIT) {
+            throw new AiraloException('The quantity may not be greater than ' . SdkConstants::BULK_ORDER_LIMIT);
+        }
+    }
+
+    /**
+     * @throws AiraloException
+     * @param array $payload
+     * @return void
+     */
+    private function validateBulkOrder(array $payload): void
+    {
+        if (count($payload) > SdkConstants::BULK_ORDER_LIMIT) {
+            throw new AiraloException('The packages count may not be greater than ' . SdkConstants::BULK_ORDER_LIMIT);
+        }
     }
 }

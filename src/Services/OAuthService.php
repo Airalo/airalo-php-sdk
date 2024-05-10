@@ -6,7 +6,7 @@ use Airalo\Config;
 use Airalo\Constants\ApiConstants;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\Cached;
-use Airalo\Helpers\Misc;
+use Airalo\Helpers\Crypt;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 
@@ -72,10 +72,10 @@ class OAuthService
                         throw new AiraloException('Access token not found in response');
                     }
 
-                    return Misc::encrypt($response['data']['access_token'], $this->config->get('client_secret'));
+                    return Crypt::encrypt($response['data']['access_token'], $this->config->get('client_secret'));
                 }, self::CACHE_NAME);
 
-                return Misc::decrypt($token, $this->config->get('client_secret'));
+                return Crypt::decrypt($token, $this->config->get('client_secret'));
             } catch (\Throwable $e) {
                 $retryCount++;
 

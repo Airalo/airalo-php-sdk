@@ -43,6 +43,8 @@ class TopupService
      */
     public function createTopup(array $payload): ?EasyAccess
     {
+        $this->validateTopup($payload);
+
         $response = $this->curl
             ->setHeaders([
                 'Accept: application/json',
@@ -58,5 +60,21 @@ class TopupService
         }
 
         return new EasyAccess($response);
+    }
+
+    /**
+     * @throws AiraloException
+     * @param array $payload
+     * @return void
+     */
+    private function validateTopup(array $payload): void
+    {
+        if (!isset($payload['package_id']) || $payload['package_id'] == '') {
+            throw new AiraloException('The package_id is required, payload: ' . json_encode($payload));
+        }
+
+        if (!isset($payload['iccid']) || $payload['iccid'] == '') {
+            throw new AiraloException('The iccid is required, payload: ' . json_encode($payload));
+        }
     }
 }

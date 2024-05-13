@@ -3,7 +3,7 @@
 namespace Airalo\Resources;
 
 use Airalo\Config;
-use Airalo\Constants\SdkConstants;
+use Airalo\Exceptions\AiraloException;
 
 class MultiCurlResource
 {
@@ -21,13 +21,7 @@ class MultiCurlResource
 
     private $tag;
 
-    private int $rfc = PHP_QUERY_RFC1738;
-
     private Config $config;
-
-    private array $defaultHeaders = [
-        'airalo-php-sdk: ' . SdkConstants::VERSION,
-    ];
 
     /**
      * @param Config $config
@@ -35,12 +29,10 @@ class MultiCurlResource
     public function __construct(Config $config)
     {
         if (!extension_loaded('curl')) {
-            throw new \Exception('cURL library is not loaded');
+            throw new AiraloException('cURL library is not loaded');
         }
 
         $this->config = $config;
-
-        self::$headers = array_merge($this->defaultHeaders, $this->config->getHttpHeaders());
     }
 
     /**
@@ -55,8 +47,6 @@ class MultiCurlResource
         if ($this->ignoreSSL) {
             $curl->ignoreSSL();
         }
-
-        $curl->setRFC($this->rfc);
 
         if ($this->timeout) {
             $curl->setTimeout($this->timeout);
@@ -150,17 +140,6 @@ class MultiCurlResource
     }
 
     /**
-     * @param int $rfc
-     * @return MultiCurlResource
-     */
-    public function useRFC(int $rfc): MultiCurlResource
-    {
-        $this->rfc = $rfc;
-
-        return $this;
-    }
-
-    /**
      * @param int $timeout
      * @return MultiCurlResource
      */
@@ -193,10 +172,7 @@ class MultiCurlResource
 
             while ($done = curl_multi_info_read($master)) {
                 $info = curl_getinfo($done['handle']);
-
                 $output = curl_multi_getcontent($done['handle']);
-
-                $info   = curl_getinfo($done['handle']);
                 $header = substr($output, 0, $info['header_size']);
                 $output = substr($output, strlen($header));
 

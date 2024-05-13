@@ -2,6 +2,8 @@
 
 namespace Airalo\Helpers;
 
+use Airalo\Exceptions\AiraloException;
+
 final class Crypt
 {
     /**
@@ -11,6 +13,8 @@ final class Crypt
      */
     public static function encrypt(string $data, string $key): string
     {
+        self::validateSodiumEnabled();
+
         $key = substr($key, 0, SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
 
         if (!$key || strlen($key) != SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
@@ -35,6 +39,8 @@ final class Crypt
      */
     public static function decrypt(string $data, string $key): string
     {
+        self::validateSodiumEnabled();
+
         $key = substr($key, 0, SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
 
         if (!$key || strlen($key) != SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
@@ -73,5 +79,16 @@ final class Crypt
         }
 
         return !is_numeric($data) && base64_encode($base64Decoded) === $data;
+    }
+
+    /**
+     * @throws AiraloException
+     * @return void
+     */
+    private static function validateSodiumEnabled(): void
+    {
+        if (!extension_loaded('sodium')) {
+            throw new AiraloException('Sodium library is not loaded');
+        }
     }
 }

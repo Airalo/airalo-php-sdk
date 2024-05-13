@@ -59,7 +59,7 @@ class OAuthService
                         ->post($this->config->getUrl() . ApiConstants::TOKEN_SLUG, http_build_query($this->payload));
 
                     if (!$response || $this->curl->code != 200) {
-                        throw new AiraloException('Access token generation failed');
+                        throw new AiraloException('Access token generation failed, response: ' . $response);
                     }
 
                     $response = json_decode($response, true);
@@ -79,7 +79,7 @@ class OAuthService
             } catch (\Throwable $e) {
                 $retryCount++;
 
-                if ($retryCount > self::RETRY_LIMIT) {
+                if ($retryCount >= self::RETRY_LIMIT) {
                     throw new AiraloException('Failed to get access token from API: ' . $e->getMessage());
                 }
 

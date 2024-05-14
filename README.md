@@ -11,7 +11,7 @@ The SDK supports:
 - unified response format of type `EasyAccess` which allows key access as associative array and/or object at the same time without json_decode usage<br>
 - compatible with Unix, macOS, Windows operating systems<br>
 
-# Prerequisites
+# Requisites
 - PHP version >= `7.4`
 - `cURL` extension enabled in php.ini (enabled by default)
 - `sodium` extension enabled in php.ini (enabled by default)

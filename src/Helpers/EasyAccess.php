@@ -101,6 +101,7 @@ class EasyAccess implements \ArrayAccess, \Countable
      * @param mixed $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->{$offset}) ? $this->{$offset} : null;

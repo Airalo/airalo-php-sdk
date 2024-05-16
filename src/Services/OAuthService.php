@@ -12,7 +12,7 @@ use Airalo\Resources\CurlResource;
 
 class OAuthService
 {
-    private const CACHE_NAME = 'access_token';
+    private const CACHE_NAME = 'airalo_access_token';
 
     private const RETRY_LIMIT = 2;
 
@@ -72,10 +72,10 @@ class OAuthService
                         throw new AiraloException('Access token not found in response');
                     }
 
-                    return Crypt::encrypt($response['data']['access_token'], $this->config->get('client_secret'));
+                    return Crypt::encrypt($response['data']['access_token'], $this->getEncryptionKey());
                 }, self::CACHE_NAME);
 
-                return Crypt::decrypt($token, $this->config->get('client_secret'));
+                return Crypt::decrypt($token, $this->getEncryptionKey());
             } catch (\Throwable $e) {
                 $retryCount++;
 
@@ -88,5 +88,13 @@ class OAuthService
         }
 
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    private function getEncryptionKey(): string
+    {
+        return md5($this->config->getCredentials(true));
     }
 }

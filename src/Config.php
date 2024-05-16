@@ -60,14 +60,21 @@ final class Config
     }
 
     /**
-     * @return array
+     * @param bool $asString
+     * @return array|string
      */
-    public function getCredentials(): array
+    public function getCredentials(bool $asString = false)
     {
-        return [
+        $credentials = [
             'client_id' => $this->data['client_id'],
             'client_secret' => $this->data['client_secret'],
         ];
+
+        if ($asString) {
+            return http_build_query($credentials);
+        }
+
+        return $credentials;
     }
 
     /**

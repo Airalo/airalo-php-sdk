@@ -35,8 +35,12 @@ class AiraloStatic
             self::initServices();
 
             if (empty(self::$pool)) {
-                foreach (get_class_vars(self::class) as $key => $value) {
-                    self::$pool[$key] = $value;
+                $reflection = new \ReflectionClass(self::class);
+
+                foreach ($reflection->getProperties(\ReflectionProperty::IS_STATIC) as $property) {
+                    if ($object = $property->getValue()) {
+                        self::$pool[$property->getName()] = $object;
+                    }
                 }
             }
         } catch (\Throwable $e) {

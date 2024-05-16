@@ -31,8 +31,6 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      - name: Create env file
-        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:

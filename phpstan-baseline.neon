@@ -336,12 +336,7 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
-			message: "#^Parameter \\#2 \\$key of static method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: src/Services/OAuthService.php
-
-		-
-			message: "#^Parameter \\#2 \\$key of static method Airalo\\\\Helpers\\\\Crypt\\:\\:encrypt\\(\\) expects string, mixed given\\.$#"
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, array\\|string given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
 

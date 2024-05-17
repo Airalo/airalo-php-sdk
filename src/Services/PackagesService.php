@@ -4,6 +4,7 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
@@ -25,6 +26,10 @@ class PackagesService
      */
     public function __construct(Config $config, CurlResource $curl, string $accessToken)
     {
+        if (!$accessToken) {
+            throw new AiraloException('Invalid access token please check your credentials');
+        }
+
         $this->accessToken = $accessToken;
 
         $this->config = $config;

@@ -31,6 +31,10 @@ class TopupService
         Signature $signature,
         string $accessToken
     ) {
+        if (!$accessToken) {
+            throw new AiraloException('Invalid access token please check your credentials');
+        }
+
         $this->config = $config;
         $this->curl = $curl;
         $this->signature = $signature;

@@ -174,6 +174,6 @@ class PackagesService
      */
     private function getKey(string $url, array $params): string
     {
-        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders()));
+        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders())  . $this->accessToken);
     }
 }

@@ -38,6 +38,7 @@ class AiraloStatic
                 $reflection = new \ReflectionClass(self::class);
 
                 foreach ($reflection->getProperties(\ReflectionProperty::IS_STATIC) as $property) {
+                    $property->setAccessible(true);
                     if ($object = $property->getValue()) {
                         self::$pool[$property->getName()] = $object;
                     }
@@ -64,6 +65,18 @@ class AiraloStatic
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
+        ]);
+    }
+
+    public static function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$packages->getPackages([
+            'flat' => $flat,
+            'limit' => $limit,
+            'page' => $page,
+            'simOnly' => true,
         ]);
     }
 

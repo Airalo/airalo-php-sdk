@@ -68,6 +68,16 @@ class Airalo
         ]);
     }
 
+    public function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        return $this->packages->getPackages([
+            'flat' => $flat,
+            'limit' => $limit,
+            'page' => $page,
+            'simOnly' => true,
+        ]);
+    }
+
     /**
      * @param bool $flat
      * @param mixed $limit

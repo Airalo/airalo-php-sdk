@@ -90,22 +90,29 @@ class PackagesService
      */
     private function buildUrl(array $params): string
     {
-        $url = $this->baseUrl . ApiConstants::PACKAGES_SLUG . '?include=topup';
+        $url = $this->baseUrl . ApiConstants::PACKAGES_SLUG . '?';
+
+        $queryParams = [];
+        $queryParams['include'] = 'topup';
+
+        if (isset($params['simOnly']) && $params['simOnly'] === true) {
+            unset($queryParams['include']);
+        }
 
         if (isset($params['type']) && $params['type'] == 'local') {
-            $url .= '&filter[type]=local';
+            $queryParams['filter[type]'] = 'local';
         }
         if (isset($params['type']) && $params['type'] == 'global') {
-            $url .= '&filter[type]=global';
+            $queryParams['filter[type]'] = 'global';
         }
         if (isset($params['country'])) {
-            $url .= '&filter[country]=' . $params['country'];
+            $queryParams['filter[country]'] = $params['country'];
         }
         if (isset($params['limit']) && $params['limit'] > 0) {
-            $url .= '&limit=' . $params['limit'];
+            $queryParams['limit'] = $params['limit'];
         }
 
-        return $url;
+        return $url . http_build_query($queryParams);
     }
 
     /**

@@ -191,6 +191,11 @@ Fetching country specific Airalo packages. By default the response will be the s
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
+`public function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
+Fetching Sim only Airalo packages without top ups. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object.<br>
+By default no limit number of packages will be applied if `$limit` is empty<br>
+By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
+
 <h2> Orders </h2>
 
 `public function order(string $packageId, int $quantity, ?string $description = null): ?EasyAccess`<br>

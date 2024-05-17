@@ -38,6 +38,7 @@ class AiraloStatic
                 $reflection = new \ReflectionClass(self::class);
 
                 foreach ($reflection->getProperties(\ReflectionProperty::IS_STATIC) as $property) {
+                    $property->setAccessible(true);
                     if ($object = $property->getValue()) {
                         self::$pool[$property->getName()] = $object;
                     }

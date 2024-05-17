@@ -7,6 +7,7 @@ use Airalo\Constants\ApiConstants;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
+use Airalo\Responses\PackagesResponse;
 
 class PackagesService
 {
@@ -37,7 +38,7 @@ class PackagesService
      * @param array $params
      * @return EasyAccess|null
      */
-    public function getPackages(array $params = []): ?EasyAccess
+    public function getPackages(array $params = [])
     {
         $url = $this->buildUrl($params);
 
@@ -78,8 +79,16 @@ class PackagesService
                 $currentPage++;
             }
 
+            if ($params['object']) {
+                return new PackagesResponse($result);
+            }
+
             return new EasyAccess($params['flat'] ? $this->flatten($result) : $result);
         }, $this->getKey($url, $params), 3600);
+
+        if ($result instanceof PackagesResponse) {
+            return $result->getItemsCount() ? $result : null;
+        }
 
         return count($result['data']) ? $result : null;
     }

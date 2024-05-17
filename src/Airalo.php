@@ -59,12 +59,13 @@ class Airalo
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public function getAllPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         return $this->packages->getPackages([
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
+            'object' => $object,
         ]);
     }
 
@@ -74,13 +75,14 @@ class Airalo
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getLocalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public function getLocalPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         return $this->packages->getPackages([
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
             'type' => 'local',
+            'object' => $object,
         ]);
     }
 
@@ -90,13 +92,14 @@ class Airalo
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getGlobalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public function getGlobalPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         return $this->packages->getPackages([
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
             'type' => 'global',
+            'object' => $object,
         ]);
     }
 
@@ -106,12 +109,13 @@ class Airalo
      * @param mixed $limit
      * @return EasyAccess|null
      */
-    public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess
+    public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null, $object = false)
     {
         return $this->packages->getPackages([
             'flat' => $flat,
             'limit' => $limit,
             'country' => strtoupper($countryCode),
+            'object' => $object,
         ]);
     }
 

@@ -52,7 +52,7 @@ class AiraloStatic
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public static function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public static function getAllPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         self::checkInitialized();
 
@@ -60,6 +60,7 @@ class AiraloStatic
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
+            'object' => $object,
         ]);
     }
 
@@ -69,7 +70,7 @@ class AiraloStatic
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public static function getLocalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public static function getLocalPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         self::checkInitialized();
 
@@ -78,6 +79,7 @@ class AiraloStatic
             'limit' => $limit,
             'page' => $page,
             'type' => 'local',
+            'object' => $object,
         ]);
     }
 
@@ -87,7 +89,7 @@ class AiraloStatic
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public static function getGlobalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public static function getGlobalPackages(bool $flat = false, $limit = null, $page = null, $object = false)
     {
         self::checkInitialized();
 
@@ -96,6 +98,7 @@ class AiraloStatic
             'limit' => $limit,
             'page' => $page,
             'type' => 'global',
+            'object' => $object,
         ]);
     }
 
@@ -105,7 +108,7 @@ class AiraloStatic
      * @param mixed $limit
      * @return EasyAccess|null
      */
-    public static function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess
+    public static function getCountryPackages(string $countryCode, bool $flat = false, $limit = null, $object = false)
     {
         self::checkInitialized();
 
@@ -113,6 +116,7 @@ class AiraloStatic
             'flat' => $flat,
             'limit' => $limit,
             'country' => strtoupper($countryCode),
+            'object' => false,
         ]);
     }
 

@@ -37,6 +37,10 @@ class OrderService
         Signature $signature,
         string $accessToken
     ) {
+        if (!$accessToken) {
+            throw new AiraloException('Invalid access token please check your credentials');
+        }
+
         $this->config = $config;
         $this->curl = $curl;
         $this->multiCurl = $multiCurl;

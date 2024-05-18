@@ -1,2 +1,516 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:getSimPackages\\(\\) has parameter \\$limit with no type specified\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:getSimPackages\\(\\) has parameter \\$page with no type specified\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:orderBulk\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$iccid with type int is incompatible with native type string\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Property Airalo\\\\Airalo\\:\\:\\$pool type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:getSimPackages\\(\\) has parameter \\$limit with no type specified\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:getSimPackages\\(\\) has parameter \\$page with no type specified\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:orderBulk\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Property Airalo\\\\AiraloStatic\\:\\:\\$pool type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\Config\\:\\:get\\(\\) has parameter \\$default with no type specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Airalo\\\\Config\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Airalo\\\\Config\\:\\:getCredentials\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Airalo\\\\Config\\:\\:getHttpHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$value$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Property Airalo\\\\Config\\:\\:\\$data \\(array\\) does not accept mixed\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Property Airalo\\\\Config\\:\\:\\$data type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
+			count: 1
+			path: src/Helpers/Cached.php
+
+		-
+			message: "#^Static property Airalo\\\\Helpers\\\\Cached\\:\\:\\$cacheName is never read, only written\\.$#"
+			count: 1
+			path: src/Helpers/Cached.php
+
+		-
+			message: "#^Trying to invoke mixed but it's not a callable\\.$#"
+			count: 1
+			path: src/Helpers/Cached.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Helpers/Crypt.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function base64_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Helpers/Crypt.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, mixed given\\.$#"
+			count: 1
+			path: src/Helpers/Crypt.php
+
+		-
+			message: "#^Call to function is_null\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Class Airalo\\\\Helpers\\\\EasyAccess implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\EasyAccess\\:\\:__construct\\(\\) with return type void returns null but should not return anything\\.$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\EasyAccess\\:\\:__toString\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\EasyAccess\\:\\:__toString\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Result of method Airalo\\\\Helpers\\\\EasyAccess\\:\\:offsetSet\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: src/Helpers/EasyAccess.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\Signature\\:\\:preparePayload\\(\\) should return string\\|null but returns string\\|false\\.$#"
+			count: 1
+			path: src/Helpers/Signature.php
+
+		-
+			message: "#^Instanceof between resource\\|null and CurlHandle will always evaluate to false\\.$#"
+			count: 2
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:__call\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:get\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:get\\(\\) is unused\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:head\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:head\\(\\) is unused\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:post\\(\\) is unused\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:setHeaders\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:setopt\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{\\$this\\(Airalo\\\\Resources\\\\CurlResource\\), string\\} given\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$handle of function curl_close expects CurlHandle, resource given\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$handle of function curl_exec expects CurlHandle, resource\\|null given\\.$#"
+			count: 2
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$handle of function curl_getinfo expects CurlHandle, resource\\|null given\\.$#"
+			count: 2
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$handle of function curl_setopt expects CurlHandle, resource\\|null given\\.$#"
+			count: 17
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|true given\\.$#"
+			count: 2
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$curl \\(resource\\|null\\) does not accept CurlHandle\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$defaultHeaders type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$requestHeaders type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/CurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\MultiCurlResource\\:\\:add\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\MultiCurlResource\\:\\:get\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\MultiCurlResource\\:\\:post\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\MultiCurlResource\\:\\:setHeaders\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Method Airalo\\\\Resources\\\\MultiCurlResource\\:\\:setopt\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{Airalo\\\\Resources\\\\CurlResource, string\\} given\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$handle of function curl_setopt expects CurlHandle, mixed given\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, string\\|null given\\.$#"
+			count: 2
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Parameter \\#1 \\$timeout of method Airalo\\\\Resources\\\\CurlResource\\:\\:setTimeout\\(\\) expects int, true given\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\MultiCurlResource\\:\\:\\$handlers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\MultiCurlResource\\:\\:\\$headers type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\MultiCurlResource\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\MultiCurlResource\\:\\:\\$tag has no type specified\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Property Airalo\\\\Resources\\\\MultiCurlResource\\:\\:\\$timeout \\(bool\\) does not accept int\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 0 and \\-1 will always evaluate to false\\.$#"
+			count: 1
+			path: src/Resources/MultiCurlResource.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Cannot access offset 'access_token' on mixed\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Cannot access offset 'data' on mixed\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Comparison operation \"\\<\" between 0\\|1 and 2 is always true\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of static method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Parameter \\#1 \\$data of static method Airalo\\\\Helpers\\\\Crypt\\:\\:encrypt\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function md5 expects string, array\\|string given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OAuthService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Property Airalo\\\\Services\\\\OAuthService\\:\\:\\$payload type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
+			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:createOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:createOrderBulk\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:getHeaders\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:getHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:validateBulkOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:validateOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OrderService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Call to private method get\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Cannot access offset 'data' on mixed\\.$#"
+			count: 2
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Cannot access offset 'last_page' on mixed\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Cannot access offset 'meta' on mixed\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:buildUrl\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:flatten\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:flatten\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:getKey\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:getPackages\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:getPackages\\(\\) should return Airalo\\\\Helpers\\\\EasyAccess\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/TopupService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:createTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/TopupService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:validateTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/TopupService.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/TopupService.php
+
+		-
+			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\TopupService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
+			count: 1
+			path: src/Services/TopupService.php

@@ -12,5 +12,13 @@
             "Airalo\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev"
+    "scripts": {
+        "phpunit": "vendor/bin/phpunit",
+        "phpstan": "php vendor/bin/phpstan analyze -c phpstan.neon --memory-limit=-1",
+        "phpstan-update-baseline": "php vendor/bin/phpstan analyze -c phpstan.neon --memory-limit=-1 --generate-baseline"
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpstan/phpstan": "^1.10"
+    }
 }

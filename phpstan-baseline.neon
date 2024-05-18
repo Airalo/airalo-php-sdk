@@ -356,7 +356,7 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function md5 expects string, array\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$str of function md5 expects string, array\\|string given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
 

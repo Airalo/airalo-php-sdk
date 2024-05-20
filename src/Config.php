@@ -5,7 +5,7 @@ namespace Airalo;
 use Airalo\Constants\ApiConstants;
 use Airalo\Exceptions\AiraloException;
 
-final class Config
+class Config
 {
     private const MANDATORY_CONFIG_KEYS = [
         'client_id',
@@ -21,6 +21,7 @@ final class Config
 
     /**
      * @param mixed $data
+     * @throws AiraloException
      */
     public function __construct($data)
     {
@@ -43,7 +44,7 @@ final class Config
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param null $default
      * @return mixed
      */
     public function get(string $key, $default = null)
@@ -105,6 +106,7 @@ final class Config
 
     /**
      * @return void
+     * @throws AiraloException
      */
     private function validate(): void
     {

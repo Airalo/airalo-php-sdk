@@ -19,18 +19,18 @@ class Airalo
     //
     // Configuration and resources
     //
-    private Config $config;
-    private CurlResource $curl;
-    private MultiCurlResource $multiCurl;
-    private Signature $signature;
+    public Config $config;
+    public CurlResource $curl;
+    public MultiCurlResource $multiCurl;
+    public Signature $signature;
 
     //
     // Services
     //
-    private OAuthService $oauth;
-    private PackagesService $packages;
-    private OrderService $order;
-    private TopupService $topup;
+    public OAuthService $oauth;
+    public PackagesService $packages;
+    public OrderService $order;
+    public TopupService $topup;
 
     /**
      * @param mixed $config
@@ -173,8 +173,9 @@ class Airalo
     /**
      * @param mixed $config
      * @return void
+     * @throws AiraloException
      */
-    private function initResources($config): void
+    public function initResources($config): void
     {
         $this->config = self::$pool['config'] ?? new Config($config);
         $this->curl = self::$pool['curl'] ?? new CurlResource($this->config);
@@ -184,8 +185,9 @@ class Airalo
 
     /**
      * @return void
+     * @throws AiraloException
      */
-    private function initServices(): void
+    public function initServices(): void
     {
         $this->oauth = self::$pool['oauth'] ?? new OAuthService($this->config, $this->curl, $this->signature);
         $token = $this->oauth->getAccessToken();

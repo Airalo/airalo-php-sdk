@@ -61,11 +61,6 @@ parameters:
 			path: src/Config.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$value$#"
-			count: 1
-			path: src/Config.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 1
 			path: src/Config.php

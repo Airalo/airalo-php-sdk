@@ -1,6 +1,7 @@
 <?php
 namespace Airalo\Tests;
 
+use Airalo\Exceptions\AiraloException;
 use PHPUnit\Framework\TestCase;
 use Airalo\Airalo;
 use Airalo\Config;
@@ -12,6 +13,8 @@ use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
 use Airalo\Helpers\EasyAccess;
+use ReflectionMethod;
+use ReflectionClass;
 
 class AiraloTest extends TestCase
 {
@@ -25,6 +28,10 @@ class AiraloTest extends TestCase
     private $topupServiceMock;
     private $airalo;
 
+    /**
+     * @throws \ReflectionException
+     * @throws AiraloException
+     */
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -47,23 +54,7 @@ class AiraloTest extends TestCase
             ->onlyMethods(['initResources', 'initServices'])
             ->getMock();
 
-        $this->airalo->expects($this->any())
-            ->method('initResources')
-            ->willReturnCallback(function ($config) {
-                $this->airalo->config = $this->configMock;
-                $this->airalo->curl = $this->curlMock;
-                $this->airalo->multiCurl = $this->multiCurlMock;
-                $this->airalo->signature = $this->signatureMock;
-            });
-
-        $this->airalo->expects($this->any())
-            ->method('initServices')
-            ->willReturnCallback(function () {
-                $this->airalo->oauth = $this->oauthServiceMock;
-                $this->airalo->packages = $this->packagesServiceMock;
-                $this->airalo->order = $this->orderServiceMock;
-                $this->airalo->topup = $this->topupServiceMock;
-            });
+       $this->setAiraloPropertiesAccessible();
 
         $this->airalo->__construct($this->configMock);
     }
@@ -180,5 +171,34 @@ class AiraloTest extends TestCase
 
         $result = $this->airalo->topup('package-id', 'iccid');
         $this->assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function setAiraloPropertiesAccessible()
+    {
+        $method = new ReflectionMethod($this->airalo, 'initResources');
+        $method->setAccessible(true);
+
+        $methodInitServices = new ReflectionMethod($this->airalo, 'initServices');
+        $methodInitServices->setAccessible(true);
+
+        $reflection = new ReflectionClass(Airalo::class);
+        $config = $reflection->getProperty('config');
+        $config->setAccessible(true);
+        $config->setValue($this->airalo, $this->configMock);
+
+        $curl = $reflection->getProperty('packages');
+        $curl->setAccessible(true);
+        $curl->setValue($this->airalo, $this->packagesServiceMock);
+
+        $curl = $reflection->getProperty('order');
+        $curl->setAccessible(true);
+        $curl->setValue($this->airalo, $this->orderServiceMock);
+
+        $curl = $reflection->getProperty('topup');
+        $curl->setAccessible(true);
+        $curl->setValue($this->airalo, $this->topupServiceMock);
     }
 }

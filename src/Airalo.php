@@ -19,18 +19,18 @@ class Airalo
     //
     // Configuration and resources
     //
-    public Config $config;
-    public CurlResource $curl;
-    public MultiCurlResource $multiCurl;
-    public Signature $signature;
+    private Config $config;
+    private CurlResource $curl;
+    private MultiCurlResource $multiCurl;
+    private Signature $signature;
 
     //
     // Services
     //
-    public OAuthService $oauth;
-    public PackagesService $packages;
-    public OrderService $order;
-    public TopupService $topup;
+    private OAuthService $oauth;
+    private PackagesService $packages;
+    private OrderService $order;
+    private TopupService $topup;
 
     /**
      * @param mixed $config

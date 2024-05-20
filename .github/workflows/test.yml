@@ -37,7 +37,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: gd, zip, json, fileinfo, dom
+          extensions: gd, zip, json, fileinfo, dom, sodium
           coverage: xdebug
       - name: Run PHPUnit
         run: composer phpunit

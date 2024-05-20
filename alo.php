@@ -17,10 +17,12 @@ function requireFiles(string $dir): void
 
         if (is_dir($path)) {
             requireFiles($path);
-        } else {
-            if (pathinfo($path, PATHINFO_EXTENSION) == 'php') {
-                require($path);
-            }
+
+            continue;
+        }
+
+        if (pathinfo($path, PATHINFO_EXTENSION) == 'php') {
+            require($path);
         }
     }
 

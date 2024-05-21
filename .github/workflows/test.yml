@@ -1,0 +1,43 @@
+name: PHPUnit
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - release/**
+      - hotfix/**
+      - epic/**
+  pull_request:
+    branches:
+      - master
+      - develop
+jobs:
+  tests:
+    name: Run PHPUnit (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ "7.4" ]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CICD }}
+      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_CICD }}"} }'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php-versions }}
+          version: 2.x
+          php_extensions: gd zip json fileinfo dom
+          dev: yes
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: gd, zip, json, fileinfo, dom, sodium
+          coverage: xdebug
+      - name: Run PHPUnit
+        run: composer phpunit

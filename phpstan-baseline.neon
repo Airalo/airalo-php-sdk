@@ -46,11 +46,6 @@ parameters:
 			path: src/AiraloStatic.php
 
 		-
-			message: "#^Method Airalo\\\\Config\\:\\:get\\(\\) has parameter \\$default with no type specified\\.$#"
-			count: 1
-			path: src/Config.php
-
-		-
 			message: "#^Method Airalo\\\\Config\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Config.php
@@ -62,11 +57,6 @@ parameters:
 
 		-
 			message: "#^Method Airalo\\\\Config\\:\\:getHttpHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Config.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$value$#"
 			count: 1
 			path: src/Config.php
 

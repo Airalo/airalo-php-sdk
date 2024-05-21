@@ -11,6 +11,7 @@ use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
+use Airalo\Tests\Mock\AiraloMock;
 
 class AiraloStatic
 {
@@ -182,6 +183,14 @@ class AiraloStatic
             'iccid' => $iccid,
             'description' => $description ?? 'Topup placed via Airalo PHP SDK',
         ]);
+    }
+
+    /**
+     * @return AiraloMock
+     */
+    public static function mock(): AiraloMock
+    {
+        return new AiraloMock();
     }
 
     /**

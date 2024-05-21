@@ -2,7 +2,7 @@
 
 namespace Airalo\Helpers;
 
-// Surpressing deprecated warnings for PHP >= 8.0 on dynamically setting properties
+// Supressing deprecated warnings for PHP >= 8.0 on dynamically setting properties
 error_reporting(E_ALL ^ (E_DEPRECATED));
 
 use Airalo\Exceptions\AiraloException;
@@ -13,6 +13,7 @@ class EasyAccess implements \ArrayAccess, \Countable
 
     /**
      * @param mixed $data
+     * @throws AiraloException
      */
     public function __construct($data = [])
     {

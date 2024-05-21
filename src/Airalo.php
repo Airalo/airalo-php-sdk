@@ -11,6 +11,7 @@ use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
+use Airalo\Tests\Mock\AiraloMock;
 
 class Airalo
 {
@@ -173,8 +174,9 @@ class Airalo
     /**
      * @param mixed $config
      * @return void
+     * @throws AiraloException
      */
-    private function initResources($config): void
+    public function initResources($config): void
     {
         $this->config = self::$pool['config'] ?? new Config($config);
         $this->curl = self::$pool['curl'] ?? new CurlResource($this->config);
@@ -184,8 +186,9 @@ class Airalo
 
     /**
      * @return void
+     * @throws AiraloException
      */
-    private function initServices(): void
+    public function initServices(): void
     {
         $this->oauth = self::$pool['oauth'] ?? new OAuthService($this->config, $this->curl, $this->signature);
         $token = $this->oauth->getAccessToken();
@@ -194,5 +197,13 @@ class Airalo
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
+    }
+
+    /**
+     * @return AiraloMock
+     */
+    public function mock(): AiraloMock
+    {
+        return new AiraloMock();
     }
 }

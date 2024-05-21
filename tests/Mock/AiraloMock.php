@@ -3,91 +3,170 @@
 namespace Airalo\Tests\Mock;
 
 use Airalo\Airalo;
-use Airalo\Config;
-use Airalo\Helpers\Signature;
-use Airalo\Resources\CurlResource;
-use Airalo\Resources\MultiCurlResource;
-use Airalo\Services\OAuthService;
-use Airalo\Services\OrderService;
-use Airalo\Services\PackagesService;
-use Airalo\Services\TopupService;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionClass;
+use Airalo\Helpers\EasyAccess;
 
-class AiraloMock extends TestCase
+class AiraloMock
 {
-    public $airalo;
-    private $configMock;
-    private $curlMock;
-    private $multiCurlMock;
-    private $signatureMock;
-    private $oauthServiceMock;
-    private $packagesServiceMock;
-    private $orderServiceMock;
-    private $topupServiceMock;
+    private $packages;
+    private $orders;
+    private $topups;
 
-    /**
-     * @throws ReflectionException
-     */
     public function __construct()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setConstructorArgs(['data' => ['client_id' => 'test', 'client_secret' => 'test']])
-            ->getMock();
-        $this->curlMock = $this->createMock(CurlResource::class);
-        $this->multiCurlMock = $this->createMock(MultiCurlResource::class);
-        $this->signatureMock = $this->createMock(Signature::class);
-        $this->oauthServiceMock = $this->createMock(OAuthService::class);
-        $this->packagesServiceMock = $this->createMock(PackagesService::class);
-        $this->orderServiceMock = $this->createMock(OrderService::class);
-        $this->topupServiceMock = $this->createMock(TopupService::class);
-
-        $this->oauthServiceMock
-            ->method('getAccessToken')
-            ->willReturn('mocked-access-token');
-
-        $this->airalo = $this->getMockBuilder(Airalo::class)
-            ->setConstructorArgs(['config' => ['client_id' => 'test', 'client_secret' => 'test']])
-            ->onlyMethods(['initResources', 'initServices'])
-            ->getMock();
-
-        $this->setAiraloPropertiesAccessible();
-    }
-
-    public function getMockedAiralo(): MockObject
-    {
-        return $this->airalo;
+        $this->packages = [];
+        $this->orders = [];
+        $this->topups = [];
     }
 
     /**
-     * @throws \ReflectionException
+     * @param array $packages
+     * @return AiraloMock
      */
-    private function setAiraloPropertiesAccessible()
+    public function setPackages(array $packages): AiraloMock
     {
-        $method = new ReflectionMethod($this->airalo, 'initResources');
-        $method->setAccessible(true);
+        $this->packages = $packages;
 
-        $methodInitServices = new ReflectionMethod($this->airalo, 'initServices');
-        $methodInitServices->setAccessible(true);
+        return $this;
+    }
 
-        $reflection = new ReflectionClass(Airalo::class);
-        $config = $reflection->getProperty('config');
-        $config->setAccessible(true);
-        $config->setValue($this->airalo, $this->configMock);
+    /**
+     * @param array $orders
+     * @return AiraloMock
+     */
+    public function setOrders(array $orders): AiraloMock
+    {
+        $this->orders = $orders;
 
-        $curl = $reflection->getProperty('packages');
-        $curl->setAccessible(true);
-        $curl->setValue($this->airalo, $this->packagesServiceMock);
+        return $this;
+    }
 
-        $curl = $reflection->getProperty('order');
-        $curl->setAccessible(true);
-        $curl->setValue($this->airalo, $this->orderServiceMock);
+    /**
+     * @param array $topups
+     * @return AiraloMock
+     */
+    public function setTopups(array $topups): AiraloMock
+    {
+        $this->topups = $topups;
 
-        $curl = $reflection->getProperty('topup');
-        $curl->setAccessible(true);
-        $curl->setValue($this->airalo, $this->topupServiceMock);
+        return $this;
+    }
+
+    /**
+     * @param boolean $flat
+     * @param mixed $limit
+     * @param mixed $page
+     * @return EasyAccess|null
+     */
+    public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        return new EasyAccess($this->packages);
+    }
+
+    /**
+     * @param boolean $flat
+     * @param mixed $limit
+     * @param mixed $page
+     * @return EasyAccess|null
+     */
+    public function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        return new EasyAccess(array_filter($this->packages, function ($package) {
+            return isset($package['simOnly']) && $package['simOnly'] == true;
+        }));
+    }
+
+    /**
+     * @param boolean $flat
+     * @param mixed $limit
+     * @param mixed $page
+     * @return EasyAccess|null
+     */
+    public function getLocalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        return new EasyAccess(array_filter($this->packages, function ($package) {
+            return isset($package['type']) && $package['type'] == 'local';
+        }));
+    }
+
+    /**
+     * @param boolean $flat
+     * @param mixed $limit
+     * @param mixed $page
+     * @return EasyAccess|null
+     */
+    public function getGlobalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    {
+        return new EasyAccess(array_filter($this->packages, function ($package) {
+            return isset($package['type']) && $package['type'] == 'global';
+        }));
+    }
+
+    /**
+     * @param string $countryCode
+     * @param boolean $flat
+     * @param mixed $limit
+     * @return EasyAccess|null
+     */
+    public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess
+    {
+        $countryCode = strtoupper($countryCode);
+
+        return new EasyAccess(array_filter($this->packages, function ($package) use ($countryCode) {
+            return isset($package['country']) && $package['country'] === $countryCode;
+        }));
+    }
+
+    /**
+     * @param string $packageId
+     * @param integer $quantity
+     * @param string|null $description
+     * @return EasyAccess|null
+     */
+    public function order(string $packageId, int $quantity, ?string $description = null): ?EasyAccess
+    {
+        $order = [
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'type' => 'sim',
+            'description' => $description ?? 'Order placed via AiraloMock',
+        ];
+
+        return new EasyAccess(!empty($this->orders) ? $this->orders : $order);
+    }
+
+    /**
+     * @param array $packages
+     * @param string|null $description
+     * @return EasyAccess|null
+     */
+    public function orderBulk(array $packages, ?string $description = null): ?EasyAccess
+    {
+        if (empty($packages)) {
+            return null;
+        }
+
+        $bulkOrder = [
+            'packages' => $packages,
+            'description' => $description ?? 'Bulk order placed via AiraloMock',
+        ];
+
+        return new EasyAccess(!empty($this->orders) ? $this->orders : $bulkOrder);
+    }
+
+    /**
+     * @param string $packageId
+     * @param string $iccid
+     * @param string|null $description
+     * @return EasyAccess|null
+     */
+    public function topup(string $packageId, string $iccid, ?string $description = null): ?EasyAccess
+    {
+        $topup = [
+            'package_id' => $packageId,
+            'iccid' => $iccid,
+            'description' => $description ?? 'Topup placed via AiraloMock',
+        ];
+
+        return new EasyAccess(!empty($this->topups) ? $this->topups : $topup);
     }
 }

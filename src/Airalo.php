@@ -11,6 +11,7 @@ use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
+use Airalo\Tests\Mock\AiraloMock;
 
 class Airalo
 {
@@ -196,5 +197,13 @@ class Airalo
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
+    }
+
+    /**
+     * @return AiraloMock
+     */
+    public function mock(): AiraloMock
+    {
+        return new AiraloMock();
     }
 }

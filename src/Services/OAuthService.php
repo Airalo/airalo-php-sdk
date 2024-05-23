@@ -49,6 +49,8 @@ class OAuthService
     {
         $retryCount = 0;
 
+        $cacheName = self::CACHE_NAME . '_' . hash('sha256', $this->config->getCredentials(true));
+
         while ($retryCount < self::RETRY_LIMIT) {
             try {
                 $token = Cached::get(function () {
@@ -73,7 +75,7 @@ class OAuthService
                     }
 
                     return Crypt::encrypt($response['data']['access_token'], $this->getEncryptionKey());
-                }, self::CACHE_NAME);
+                }, $cacheName);
 
                 return Crypt::decrypt($token, $this->getEncryptionKey());
             } catch (\Throwable $e) {

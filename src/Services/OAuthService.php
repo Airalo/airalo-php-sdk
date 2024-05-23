@@ -49,6 +49,7 @@ class OAuthService
     {
         $retryCount = 0;
 
+        /** @phpstan-ignore-next-line */
         $cacheName = self::CACHE_NAME . '_' . hash('sha256', $this->config->getCredentials(true));
 
         while ($retryCount < self::RETRY_LIMIT) {

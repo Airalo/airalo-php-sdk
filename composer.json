@@ -1,0 +1,24 @@
+{
+    "name": "airalo/sdk",
+    "description": "Airalo's Partner API PHP SDK",
+    "type": "project",
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Airalo\\": "src/",
+            "Airalo\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpunit": "vendor/bin/phpunit",
+        "phpstan": "php vendor/bin/phpstan analyze -c phpstan.neon --memory-limit=-1",
+        "phpstan-update-baseline": "php vendor/bin/phpstan analyze -c phpstan.neon --memory-limit=-1 --generate-baseline"
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpstan/phpstan": "^1.10"
+    }
+}

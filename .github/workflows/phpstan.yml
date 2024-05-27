@@ -30,7 +30,6 @@ jobs:
         with:
           php_version: ${{ matrix.php-versions }}
           version: 2.x
-          php_extensions: gd zip json fileinfo dom
           dev: yes
       - name: Setup PHP
         uses: shivammathur/setup-php@v2

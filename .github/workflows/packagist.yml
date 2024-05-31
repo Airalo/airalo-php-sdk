@@ -14,4 +14,4 @@ jobs:
       PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
     steps:
       - name: Run Packagist update script
-        run: bash ../scripts/update_packagist.sh
+        run: bash ./scripts/update_packagist.sh

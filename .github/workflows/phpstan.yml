@@ -38,4 +38,4 @@ jobs:
           extensions: gd, zip, json, fileinfo, dom
           coverage: xdebug
       - name: Run PHPStan
-        run: composer phpstan && bash ./scripts/update_packagist.sh
+        run: composer phpstan

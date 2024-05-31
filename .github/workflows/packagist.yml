@@ -1,9 +1,21 @@
 name: Packagist
 
+# on:
+#   push:
+#     tags:
+#       - "*"
+
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
+      - develop
+      - feature/**
+  pull_request:
+    branches:
+      - main
+      - develop
+      - feature/**
 
 jobs:
   update-packagist:
@@ -14,4 +26,4 @@ jobs:
       PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
     steps:
       - name: Run Packagist update script
-        run: bash ./scripts/update_packagist.sh
+        run: pwd && ls -la && bash ./scripts/update_packagist.sh

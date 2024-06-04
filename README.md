@@ -215,7 +215,7 @@ $alo = new Airalo([
 ]);
 
 $allPackages = $alo->getAllPackages(true);
-$packageId = $countryPackages->data->{0}->package_id;
+$packageId = $allPackages->data->{0}->package_id;
 
 $order = $alo->order($packageId, 1);
 
@@ -228,7 +228,7 @@ AiraloStatic::init([
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);
-$packageId = $countryPackages->data->{0}->package_id;
+$packageId = $allPackages->data->{0}->package_id;
 
 $order = AiraloStatic::order($packageId, 1);
 ```

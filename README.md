@@ -88,11 +88,11 @@ $alo = new Airalo([
 
 $allPackages = $alo->getAllPackages(true);
 // fully accessed as an object without any changes of the response
-$packageId = $countryPackages->data->{0}->package_id;
+$packageId = $allPackages->data->{0}->package_id;
 // fully accessed as an associative array without any changes of the response
-$packageId = $countryPackages['data'][0]['package_id'];
+$packageId = $allPackages['data'][0]['package_id'];
 // mixed usage
-$packageId = $countryPackages['data'][0]->package_id;
+$packageId = $allPackages['data'][0]->package_id;
 
 // easy string convert to raw JSON format
 $jsonString = (string)$allPackages;
@@ -251,9 +251,9 @@ $alo = new Airalo([
 ]);
 
 $allPackages = $alo->getAllPackages(true);
-$firstPackageId = $countryPackages['data'][0]->package_id;
-$secondPackageId = $countryPackages['data'][1]->package_id;
-$thirdPackageId = $countryPackages['data'][2]->package_id;
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
 
 $orders = $aa->orderBulk([
     $firstPackageId => 2,
@@ -269,9 +269,9 @@ AiraloStatic::init([
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);
-$firstPackageId = $countryPackages['data'][0]->package_id;
-$secondPackageId = $countryPackages['data'][1]->package_id;
-$thirdPackageId = $countryPackages['data'][2]->package_id;
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
 
 $orders = AiraloStatic::orderBulk([
     $firstPackageId => 2,
@@ -511,7 +511,7 @@ $alo = new Airalo([
 ]);
 
 $allPackages = $alo->getAllPackages(true);
-$packageId = $countryPackages->data->{0}->package_id;
+$packageId = $allPackages->data->{0}->package_id;
 
 $order = $alo->order($packageId, 1);
 $iccid = $orders['bul-7gb-3days']['data']['sims'][0]['iccid'];
@@ -527,7 +527,7 @@ AiraloStatic::init([
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);
-$packageId = $countryPackages->data->{0}->package_id;
+$packageId = $allPackages->data->{0}->package_id;
 
 $order = AiraloStatic::order($packageId, 1);
 $iccid = $orders['bul-7gb-3days']['data']['sims'][0]['iccid'];

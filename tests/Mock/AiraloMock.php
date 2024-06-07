@@ -10,12 +10,14 @@ class AiraloMock
     private $packages;
     private $orders;
     private $topups;
+    private $vouchers;
 
     public function __construct()
     {
         $this->packages = [];
         $this->orders = [];
         $this->topups = [];
+        $this->vouchers = [];
     }
 
     /**
@@ -168,5 +170,26 @@ class AiraloMock
         ];
 
         return new EasyAccess(!empty($this->topups) ? $this->topups : $topup);
+    }
+
+    /**
+     * @param string $voucherCode
+     * @param int $usageLimit
+     * @param int $amount
+     * @param int $quantity
+     * @param ?boolean $isPaid
+     * @return EasyAccess|null
+     */
+    public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, $isPaid = false): ?EasyAccess
+    {
+        $voucher = [
+            'voucher_code' => $voucherCode,
+            'usage_limit' => $usageLimit,
+            'amount' => $amount,
+            'quantity' => $quantity,
+            'is_paid' => $isPaid,
+        ];
+
+        return new EasyAccess(!empty($this->vouchers) ? $this->vouchers : $voucher);
     }
 }

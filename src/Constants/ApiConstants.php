@@ -4,9 +4,9 @@ namespace Airalo\Constants;
 
 final class ApiConstants
 {
-    public const SANBOX_URL = 'https://sandbox-partners-api.airalo.com/v2/';
+    public const SANBOX_URL = 'api-partners.airalo.local:8081/v2/';
 
-    public const PRODUCTION_URL = 'https://partners-api.airalo.com/v2/';
+    public const PRODUCTION_URL = 'api-partners.airalo.local:8081/v2/';
 
     public const TOKEN_SLUG = 'token';
 
@@ -15,6 +15,8 @@ final class ApiConstants
     public const COMPATIBILITY_SLUG = 'compatible-devices';
 
     public const ORDERS_SLUG = 'orders';
+
+    public const VOUCHERS_SLUG = 'voucher/airmoney';
 
     public const TOPUPS_SLUG = 'orders/topups';
 

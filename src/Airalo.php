@@ -179,10 +179,10 @@ class Airalo
      * @param int $usageLimit
      * @param int $amount
      * @param int $quantity
-     * @param ?boolean $isPaid
+     * @param ?bool $isPaid
      * @return EasyAccess|null
      */
-    public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, $isPaid = false): ?EasyAccess
+    public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false): ?EasyAccess
     {
         return $this->voucher->createVoucher([
             'voucher_code' => $voucherCode,
@@ -219,7 +219,7 @@ class Airalo
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->voucher = self::$pool['voucher']
-            ?? new VoucherService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
+            ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
     }
 

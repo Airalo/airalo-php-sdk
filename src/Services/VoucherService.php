@@ -9,7 +9,6 @@ use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
-use Airalo\Resources\MultiCurlResource;
 
 class VoucherService
 {
@@ -18,8 +17,6 @@ class VoucherService
 
     private CurlResource $curl;
 
-    private MultiCurlResource $multiCurl;
-
     private Signature $signature;
 
     private string $accessToken;
@@ -27,15 +24,14 @@ class VoucherService
 
     /**
      * @param Config $config
-     * @param Curl $curl
-     * @param MultiCurlResource $multiCurl
+     * @param CurlResource $curl
      * @param Signature $signature
      * @param string $accessToken
+     * @throws AiraloException
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
-        MultiCurlResource $multiCurl,
         Signature $signature,
         string $accessToken
     ) {
@@ -45,12 +41,16 @@ class VoucherService
 
         $this->config = $config;
         $this->curl = $curl;
-        $this->multiCurl = $multiCurl;
         $this->signature = $signature;
         $this->accessToken = $accessToken;
     }
 
 
+    /**
+     * @param array<string, mixed> $payload Associative array of payload data
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
     public function createVoucher(array $payload): ?EasyAccess
     {
 
@@ -72,8 +72,8 @@ class VoucherService
 
 
     /**
-     * @param array $payload
-     * @return array
+     * @param array<string, mixed> $payload Associative array of payload data
+     * @return array<string> List of header strings
      */
     private function getHeaders(array $payload): array
     {
@@ -85,8 +85,10 @@ class VoucherService
     }
 
     /**
+     * Validate the voucher payload.
+     *
+     * @param array<string, mixed> $payload Associative array of payload data
      * @throws AiraloException
-     * @param array $payload
      * @return void
      */
     private function validateVoucher(array $payload): void
@@ -99,8 +101,8 @@ class VoucherService
             throw new AiraloException('The amount may not be greater than ' . SdkConstants::VOUCHER_MAX_NUM);
         }
 
-        if (isset($payload['voucher_code']) && strlen($payload['voucher_code']) > 255) {
-            throw new AiraloException('The voucher_code may not increase 255 characters ');
+        if (isset($payload['voucher_code']) && is_string($payload['voucher_code']) && strlen($payload['voucher_code']) > 255) {
+            throw new AiraloException('The voucher code may not exceed 255 characters.');
         }
 
         if (isset($payload['usage_limit']) && ($payload['usage_limit'] < 1 || $payload['usage_limit'] > SdkConstants::VOUCHER_MAX_NUM)) {

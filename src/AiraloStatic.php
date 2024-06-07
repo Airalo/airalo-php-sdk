@@ -155,12 +155,14 @@ class AiraloStatic
     }
 
     /**
-     * @param string $packageId
+     * @param string $voucherCode
+     * @param int $usageLimit
+     * @param int $amount
      * @param int $quantity
-     * @param ?string $description
+     * @param ?bool $isPaid
      * @return EasyAccess|null
      */
-    public static function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, $isPaid = false): ?EasyAccess
+    public static function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false): ?EasyAccess
     {
         self::checkInitialized();
 
@@ -238,7 +240,7 @@ class AiraloStatic
         self::$order = self::$pool['order']
             ?? new OrderService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
         self::$voucher = self::$pool['voucher']
-            ?? new VoucherService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
+            ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
     }
 

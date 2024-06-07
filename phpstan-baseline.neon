@@ -499,3 +499,8 @@ parameters:
 			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\TopupService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services\VoucherService.php

@@ -180,7 +180,7 @@ class AiraloMock
      * @param ?boolean $isPaid
      * @return EasyAccess|null
      */
-    public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, $isPaid = false): ?EasyAccess
+    public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, bool $isPaid = false): ?EasyAccess
     {
         $voucher = [
             'voucher_code' => $voucherCode,

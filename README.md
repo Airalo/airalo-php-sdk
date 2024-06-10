@@ -489,6 +489,58 @@ Example:
   }
 }
 ```
+<h2> Vouchers </h2>
+
+`public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false): ?EasyAccess`<br>
+calls `voucher` endpoint of the REST API.
+Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+
+$vouchers = $alo->voucher('ABC111', 40, 22, 1, false);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+
+$vouchers = AiraloStatic::voucher('ABC111', 40, 22, 1, false);
+```
+
+
+Example response:<br>
+```json
+{
+  "data": {
+    "id": 8,
+    "code": "ABC111",
+    "usage_limit": 40,
+    "amount": 22,
+    "is_paid": false,
+    "created_at": "2024-06-10 07:23:24"
+  },
+  "meta": {
+    "message": "success"
+  }
+}
+```
+
+
 
 <h2> Topups </h2>
 

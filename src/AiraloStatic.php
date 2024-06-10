@@ -7,6 +7,7 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
@@ -24,6 +25,7 @@ class AiraloStatic
     private static PackagesService $packages;
     private static OrderService $order;
     private static TopupService $topup;
+    private static InstallationInstructionsService $instruction;
 
     /**
      * @param mixed $config
@@ -186,6 +188,19 @@ class AiraloStatic
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public static function getSimInstructions(string $iccid): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$instruction->getInstructions([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -216,6 +231,8 @@ class AiraloStatic
         self::$packages = self::$pool['packages'] ?? new PackagesService(self::$config, self::$curl, $token);
         self::$order = self::$pool['order']
             ?? new OrderService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
+        self::$instruction = self::$pool['instruction']
+            ?? new InstallationInstructionsService(self::$config, self::$curl, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
     }
 

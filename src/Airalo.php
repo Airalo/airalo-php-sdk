@@ -177,10 +177,11 @@ class Airalo
      * @param string $iccid
      * @return EasyAccess|null
      */
-    public function getSimInstructions(string $iccid): ?EasyAccess
+    public function getSimInstructions(string $iccid,string $lang = 'en'): ?EasyAccess
     {
         return $this->instruction->getInstructions([
             'iccid' => $iccid,
+            'language' => $lang,
         ]);
     }
 

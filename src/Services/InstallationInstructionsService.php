@@ -48,12 +48,13 @@ class InstallationInstructionsService
     {
         $url = $this->buildUrl($params);
 
-        $result = Cached::get(function () use ($url) {
+        $result = Cached::get(function () use ($url, $params) {
 
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
                 'Content-Type: application/json',
                 'Authorization: Bearer ' . $this->accessToken,
+                'Accept-Language: ' . $params['language'] ?? 'en'
             ])->get($url);
 
 

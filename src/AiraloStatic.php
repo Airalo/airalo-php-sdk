@@ -191,12 +191,13 @@ class AiraloStatic
      * @param string $iccid
      * @return EasyAccess|null
      */
-    public static function getSimInstructions(string $iccid): ?EasyAccess
+    public static function getSimInstructions(string $iccid,string $lang = 'en'): ?EasyAccess
     {
         self::checkInitialized();
 
         return self::$instruction->getInstructions([
-            'iccid' => $iccid
+            'iccid' => $iccid,
+            'language' => $lang
         ]);
     }
 

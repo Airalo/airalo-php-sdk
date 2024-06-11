@@ -538,8 +538,8 @@ $topup = AiraloStatic::topup($packageId, $iccid);
 Example response can be found in the API documentation (link above). <br>
 <h2> Sim Instructions </h2>
 
-`public function getSimInstructions(string $iccid): ?EasyAccess`<br>
-Places an $iccid with user iccid  and calls `getSimInstructions` endpoint of the REST API.
+`public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>
+Places an $iccid with user iccid & $language with language like en,de. by default its en and calls `getSimInstructions` endpoint of the REST API.
 Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 ```php
 <?php

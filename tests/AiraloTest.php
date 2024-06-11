@@ -182,7 +182,10 @@ class AiraloTest extends TestCase
         $this->instructionServiceMock
             ->expects($this->once())
             ->method('getInstructions')
-            ->with(['iccid' => 'iccid'])
+            ->with([
+                'iccid' => 'iccid',
+                'language' => 'en',
+                ])
             ->willReturn($expectedResult);
 
         $result = $this->airalo->getSimInstructions('iccid');

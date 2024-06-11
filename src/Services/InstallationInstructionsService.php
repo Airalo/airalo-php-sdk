@@ -54,7 +54,7 @@ class InstallationInstructionsService
             $response = $this->curl->setHeaders([
                 'Content-Type: application/json',
                 'Authorization: Bearer ' . $this->accessToken,
-                'Accept-Language: ' . $params['language'] ?? 'en'
+                'Accept-Language: ' . $params['language']
             ])->get($url);
 
 

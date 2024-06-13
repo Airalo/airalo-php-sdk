@@ -155,14 +155,14 @@ class AiraloStatic
     }
 
     /**
-     * @param string $voucherCode
      * @param int $usageLimit
      * @param int $amount
      * @param int $quantity
      * @param ?bool $isPaid
+     * @param ?string $voucherCode
      * @return EasyAccess|null
      */
-    public static function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false): ?EasyAccess
+    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
     {
         self::checkInitialized();
 

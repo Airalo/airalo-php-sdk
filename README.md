@@ -491,7 +491,7 @@ Example:
 ```
 <h2> Vouchers </h2>
 
-`public function voucher(string $voucherCode, int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false): ?EasyAccess`<br>
+`public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess`<br>
 calls `voucher` endpoint of the REST API.
 Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 ```php
@@ -508,7 +508,7 @@ $alo = new Airalo([
 ]);
 
 
-$vouchers = $alo->voucher('ABC111', 40, 22, 1, false);
+$vouchers = $alo->voucher( 40, 22, 1, false,'ABC111');
 
 //
 // Static usage
@@ -519,7 +519,7 @@ AiraloStatic::init([
 ]);
 
 
-$vouchers = AiraloStatic::voucher('ABC111', 40, 22, 1, false);
+$vouchers = AiraloStatic::voucher(40, 22, 1, false,'ABC111');
 ```
 
 

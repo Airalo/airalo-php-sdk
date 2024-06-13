@@ -105,6 +105,10 @@ class VoucherService
             throw new AiraloException('The voucher code may not exceed 255 characters.');
         }
 
+        if (isset($payload['voucher_code']) && isset($payload['quantity']) && $payload['quantity'] > 1) {
+            throw new AiraloException('The selected voucher code allows a maximum quantity of 1');
+        }
+
         if (isset($payload['usage_limit']) && ($payload['usage_limit'] < 1 || $payload['usage_limit'] > SdkConstants::VOUCHER_MAX_NUM)) {
             throw new AiraloException('The usage_limit may not be greater than ' . SdkConstants::VOUCHER_MAX_NUM);
         }
@@ -114,7 +118,7 @@ class VoucherService
         }
 
         if ($payload['quantity'] > SdkConstants::VOUCHER_MAX_QUANTITY) {
-            throw new AiraloException('The quantity may not be greater than ' . SdkConstants::VOUCHER_MAX_NUM);
+            throw new AiraloException('The quantity may not be greater than ' . SdkConstants::VOUCHER_MAX_QUANTITY);
         }
 
     }

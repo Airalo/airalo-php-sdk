@@ -183,15 +183,15 @@ class AiraloTest extends TestCase
             ->expects($this->once())
             ->method('createVoucher')
             ->with([
-                'voucher_code' => 'voucher-code',
                 'usage_limit' => 40,
                 'amount' => 22,
                 'quantity' => 1,
-                'is_paid' => false
+                'is_paid' => false,
+                'voucher_code' => 'voucher-code',
             ])
             ->willReturn($expectedResult);
 
-        $result = $this->airalo->voucher('voucher-code', 40,22,1,false);
+        $result = $this->airalo->voucher( 40,22,1,false,'voucher-code');
         $this->assertSame($expectedResult, $result);
     }
 

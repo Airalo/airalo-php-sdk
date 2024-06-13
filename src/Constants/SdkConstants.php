@@ -11,5 +11,5 @@ final class SdkConstants
     public const ORDER_LIMIT = 50;
 
     public const VOUCHER_MAX_NUM = 100000;
-    public const VOUCHER_MAX_QUANTITY = 1000;
+    public const VOUCHER_MAX_QUANTITY = 100;
 }

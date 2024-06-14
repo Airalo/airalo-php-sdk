@@ -2,6 +2,7 @@
 namespace Airalo\Tests;
 
 use Airalo\Exceptions\AiraloException;
+use Airalo\Services\SimService;
 use PHPUnit\Framework\TestCase;
 use Airalo\Airalo;
 use Airalo\Config;
@@ -27,6 +28,7 @@ class AiraloTest extends TestCase
     private $orderServiceMock;
     private $topupServiceMock;
     private $airalo;
+    private $simServiceMock;
 
     /**
      * @throws \ReflectionException
@@ -44,6 +46,7 @@ class AiraloTest extends TestCase
         $this->packagesServiceMock = $this->createMock(PackagesService::class);
         $this->orderServiceMock = $this->createMock(OrderService::class);
         $this->topupServiceMock = $this->createMock(TopupService::class);
+        $this->simServiceMock = $this->createMock(SimService::class);
 
         $this->oauthServiceMock
             ->method('getAccessToken')
@@ -173,6 +176,21 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testSimUsage()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+        $this->simServiceMock
+            ->expects($this->once())
+            ->method('simUsage')
+            ->with([
+                'iccid' => 'iccid',
+            ])
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->simUsage( 'iccid');
+        $this->assertSame($expectedResult, $result);
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -200,5 +218,9 @@ class AiraloTest extends TestCase
         $curl = $reflection->getProperty('topup');
         $curl->setAccessible(true);
         $curl->setValue($this->airalo, $this->topupServiceMock);
+
+        $curl = $reflection->getProperty('sim');
+        $curl->setAccessible(true);
+        $curl->setValue($this->airalo, $this->simServiceMock);
     }
 }

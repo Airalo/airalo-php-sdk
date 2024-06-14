@@ -10,6 +10,7 @@ use Airalo\Resources\MultiCurlResource;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
+use Airalo\Services\SimService;
 use Airalo\Services\TopupService;
 use Airalo\Tests\Mock\AiraloMock;
 
@@ -32,6 +33,7 @@ class Airalo
     private PackagesService $packages;
     private OrderService $order;
     private TopupService $topup;
+    private SimService $sim;
 
     /**
      * @param mixed $config
@@ -172,6 +174,17 @@ class Airalo
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function simUsage(string $iccid): ?EasyAccess
+    {
+        return $this->sim->simUsage([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -197,6 +210,7 @@ class Airalo
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
+        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $token);
     }
 
     /**

@@ -19,6 +19,7 @@ final class ApiConstants
     public const TOPUPS_SLUG = 'orders/topups';
 
     public const SIMS_SLUG = 'sims';
+    public const SIMS_USAGE = 'usage';
 
     public const NOTIFICATIONS_SLUG = 'notifications';
 }

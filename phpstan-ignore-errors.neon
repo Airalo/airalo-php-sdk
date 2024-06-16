@@ -9,5 +9,5 @@ parameters:
             message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
             path: *
         -
-            message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\[^\\]+::__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$"
+            message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\[^\\\\]+::__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
             path: *

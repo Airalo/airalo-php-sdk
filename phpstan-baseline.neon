@@ -335,10 +335,6 @@ parameters:
 			count: 1
 			path: src/Services/OAuthService.php
 
-		-
-			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OAuthService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
-			count: 1
-			path: src/Services/OAuthService.php
 
 		-
 			message: "#^Property Airalo\\\\Services\\\\OAuthService\\:\\:\\$payload type has no value type specified in iterable type array\\.$#"
@@ -387,11 +383,6 @@ parameters:
 
 		-
 			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:validateOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Services/OrderService.php
-
-		-
-			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OrderService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
 			count: 1
 			path: src/Services/OrderService.php
 
@@ -469,13 +460,3 @@ parameters:
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:validateTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
-
-		-
-			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\TopupService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
-			count: 1
-			path: src/Services/TopupService.php
-
-		-
-			message: '#^Parameter \$curl of method Airalo\\Services\\SimService::__construct\(\) has invalid type Airalo\\Services\\Curl\.$#'
-			count: 1
-			path: src/Services/SimService.php

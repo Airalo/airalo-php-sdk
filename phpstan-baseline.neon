@@ -321,22 +321,12 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/OAuthService.php
-
-		-
 			message: "#^Parameter \\#1 \\$data of static method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
 
 		-
 			message: "#^Parameter \\#1 \\$data of static method Airalo\\\\Helpers\\\\Crypt\\:\\:encrypt\\(\\) expects string, mixed given\\.$#"
-			count: 1
-			path: src/Services/OAuthService.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
 
@@ -401,11 +391,6 @@ parameters:
 			path: src/Services/OrderService.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/OrderService.php
-
-		-
 			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OrderService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
 			count: 1
 			path: src/Services/OrderService.php
@@ -461,11 +446,6 @@ parameters:
 			path: src/Services/PackagesService.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
-			count: 1
-			path: src/Services/PackagesService.php
-
-		-
 			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, mixed given\\.$#"
 			count: 1
 			path: src/Services/PackagesService.php
@@ -491,25 +471,9 @@ parameters:
 			path: src/Services/TopupService.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/TopupService.php
-
-		-
 			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\TopupService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
-			count: 1
-			path: src/Services/SimService.php
-
-		-
-
-			message: '#^PHPDoc tag @param for parameter \$curl with type Airalo\\Services\\Curl is not subtype of native type Airalo\\Resources\\CurlResource\.$#'
-			count: 1
-			path: src/Services/SimService.php
 
 		-
 			message: '#^Parameter \$curl of method Airalo\\Services\\SimService::__construct\(\) has invalid type Airalo\\Services\\Curl\.$#'

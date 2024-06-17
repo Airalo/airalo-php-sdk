@@ -11,7 +11,6 @@ use Airalo\Helpers\Signature;
 use Airalo\Helpers\Cached;
 class SimService
 {
-
     private Config $config;
 
     private CurlResource $curl;
@@ -58,7 +57,7 @@ class SimService
             $result = json_decode($response, true);
 
             return new EasyAccess($result);
-        }, $this->getKey($url, $params), 3600);
+        }, $this->getKey($url, $params), 300);
 
         /* @phpstan-ignore-next-line */
         return count($result['data']) ? $result : null;

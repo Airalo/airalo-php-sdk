@@ -18,6 +18,7 @@ class AiraloMock
         $this->packages = [];
         $this->orders = [];
         $this->topups = [];
+        $this->simUsage = [];
         $this->vouchers = [];
         $this->instructions = [];
     }
@@ -40,6 +41,17 @@ class AiraloMock
     public function setOrders(array $orders): AiraloMock
     {
         $this->orders = $orders;
+
+        return $this;
+    }
+
+    /**
+     * @param array $simUsage
+     * @return AiraloMock
+     */
+    public function setSimUsage(array $usage): AiraloMock
+    {
+        $this->simUsage = $usage;
 
         return $this;
     }
@@ -183,6 +195,20 @@ class AiraloMock
         ];
 
         return new EasyAccess(!empty($this->topups) ? $this->topups : $topup);
+    }
+
+
+    /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function simUsage(string $iccid): ?EasyAccess
+    {
+        $usage = [
+            'iccid' => $iccid,
+        ];
+
+        return new EasyAccess(!empty($this->simUsage) ? $this->simUsage : $usage);
     }
 
     /**

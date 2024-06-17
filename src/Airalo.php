@@ -11,6 +11,7 @@ use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
+use Airalo\Services\SimService;
 use Airalo\Services\TopupService;
 use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
@@ -36,6 +37,7 @@ class Airalo
     private InstallationInstructionsService $instruction;
     private TopupService $topup;
     private VoucherService $voucher;
+    private SimService $sim;
 
     /**
      * @param mixed $config
@@ -208,6 +210,17 @@ class Airalo
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function simUsage(string $iccid): ?EasyAccess
+    {
+        return $this->sim->simUsage([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -239,6 +252,7 @@ class Airalo
         $this->voucher = self::$pool['voucher']
             ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
+        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $token);
     }
 
     /**

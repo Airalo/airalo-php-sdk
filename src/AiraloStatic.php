@@ -11,6 +11,7 @@ use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
+use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
 
 class AiraloStatic
@@ -23,6 +24,7 @@ class AiraloStatic
     private static OAuthService $oauth;
     private static PackagesService $packages;
     private static OrderService $order;
+    private static VoucherService $voucher;
     private static TopupService $topup;
 
     /**
@@ -153,6 +155,27 @@ class AiraloStatic
     }
 
     /**
+     * @param int $usageLimit
+     * @param int $amount
+     * @param int $quantity
+     * @param ?bool $isPaid
+     * @param ?string $voucherCode
+     * @return EasyAccess|null
+     */
+    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$voucher->createVoucher([
+            'voucher_code' => $voucherCode,
+            'usage_limit' => $usageLimit,
+            'amount' => $amount,
+            'quantity' => $quantity,
+            'is_paid' => $isPaid
+        ]);
+    }
+
+    /**
      * @param array $packages
      * @param ?string $description
      * @return EasyAccess|null
@@ -216,6 +239,8 @@ class AiraloStatic
         self::$packages = self::$pool['packages'] ?? new PackagesService(self::$config, self::$curl, $token);
         self::$order = self::$pool['order']
             ?? new OrderService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
+        self::$voucher = self::$pool['voucher']
+            ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
     }
 

@@ -3,13 +3,9 @@ on:
   push:
     branches:
       - main
-      - develop
-      - feature/**
   pull_request:
     branches:
       - main
-      - develop
-      - feature/**
 jobs:
   tests:
     name: Run PHPUnit (PHP ${{ matrix.php-versions }})

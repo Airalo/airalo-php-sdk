@@ -7,9 +7,11 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
+use Airalo\Services\SimService;
 use Airalo\Services\TopupService;
 use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
@@ -32,8 +34,10 @@ class Airalo
     private OAuthService $oauth;
     private PackagesService $packages;
     private OrderService $order;
+    private InstallationInstructionsService $instruction;
     private TopupService $topup;
     private VoucherService $voucher;
+    private SimService $sim;
 
     /**
      * @param mixed $config
@@ -173,6 +177,18 @@ class Airalo
         ]);
     }
 
+    /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function getSimInstructions(string $iccid,string $lang = 'en'): ?EasyAccess
+    {
+        return $this->instruction->getInstructions([
+            'iccid' => $iccid,
+            'language' => $lang,
+        ]);
+    }
+
 
     /**
      * @param int $usageLimit
@@ -194,6 +210,17 @@ class Airalo
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function simUsage(string $iccid): ?EasyAccess
+    {
+        return $this->sim->simUsage([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -205,6 +232,8 @@ class Airalo
         $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurlResource($this->config);
         $this->signature = self::$pool['signature'] ?? new Signature($this->config->get('client_secret'));
     }
+
+
 
     /**
      * @return void
@@ -218,9 +247,12 @@ class Airalo
         $this->packages = self::$pool['packages'] ?? new PackagesService($this->config, $this->curl, $token);
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
+        $this->instruction = self::$pool['instruction']
+            ?? new InstallationInstructionsService($this->config, $this->curl, $token);
         $this->voucher = self::$pool['voucher']
             ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
+        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $token);
     }
 
     /**

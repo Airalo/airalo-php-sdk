@@ -12,6 +12,8 @@ final class ApiConstants
 
     public const PACKAGES_SLUG = 'packages';
 
+    public const INSTRUCTIONS_SLUG = 'instructions';
+
     public const COMPATIBILITY_SLUG = 'compatible-devices';
 
     public const ORDERS_SLUG = 'orders';
@@ -21,6 +23,7 @@ final class ApiConstants
     public const TOPUPS_SLUG = 'orders/topups';
 
     public const SIMS_SLUG = 'sims';
+    public const SIMS_USAGE = 'usage';
 
     public const NOTIFICATIONS_SLUG = 'notifications';
 }

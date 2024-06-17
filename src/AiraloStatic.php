@@ -7,9 +7,11 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
+use Airalo\Services\SimService;
 use Airalo\Services\TopupService;
 use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
@@ -26,6 +28,8 @@ class AiraloStatic
     private static OrderService $order;
     private static VoucherService $voucher;
     private static TopupService $topup;
+    private static InstallationInstructionsService $instruction;
+    private static SimService $sim;
 
     /**
      * @param mixed $config
@@ -209,6 +213,31 @@ class AiraloStatic
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public static function getSimInstructions(string $iccid,string $lang = 'en'): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$instruction->getInstructions([
+            'iccid' => $iccid,
+            'language' => $lang
+        ]);
+    }
+
+    /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function simUsage(string $iccid): ?EasyAccess
+    {
+        return self::$sim->simUsage([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -239,9 +268,12 @@ class AiraloStatic
         self::$packages = self::$pool['packages'] ?? new PackagesService(self::$config, self::$curl, $token);
         self::$order = self::$pool['order']
             ?? new OrderService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
+        self::$instruction = self::$pool['instruction']
+            ?? new InstallationInstructionsService(self::$config, self::$curl, $token);
         self::$voucher = self::$pool['voucher']
             ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
+        self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, $token);
     }
 
     /**

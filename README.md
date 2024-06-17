@@ -587,41 +587,6 @@ $iccid = $orders['bul-7gb-3days']['data']['sims'][0]['iccid'];
 $topup = AiraloStatic::topup($packageId, $iccid);
 ```
 
-<h2> Sim Usage </h2>
-
-`public function simUsage(string $iccid): ?EasyAccess`<br>
-
-Places an $iccid with user iccid  and calls `simUsage` endpoint of the REST API. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
-
-```php
-<?php
-
-require __DIR__ . '/vendor/autoload.php';
-
-use Airalo\Airalo;
-use Airalo\AiraloStatic;
-
-$alo = new Airalo([
-    'client_id' => '<YOUR_API_CLIENT_ID>',
-    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
-]);
-
-
-$topup = $alo->simUsage($iccid);
-
-//
-// Static usage
-//
-AiraloStatic::init([
-    'client_id' => '<YOUR_API_CLIENT_ID>',
-    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
-]);
-
-
-$topup = AiraloStatic::simUsage($iccid);
-```
-
 Example response can be found in the API documentation (link above). <br>
 
 

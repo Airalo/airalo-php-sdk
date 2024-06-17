@@ -321,6 +321,11 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
+			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
 			message: "#^Parameter \\#1 \\$data of static method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) expects string, mixed given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
@@ -331,10 +336,19 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
 			message: "#^Parameter \\#1 \\$str of function md5 expects string, array\\|string given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
 
+		-
+			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OAuthService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
 
 		-
 			message: "#^Property Airalo\\\\Services\\\\OAuthService\\:\\:\\$payload type has no value type specified in iterable type array\\.$#"
@@ -387,6 +401,16 @@ parameters:
 			path: src/Services/OrderService.php
 
 		-
+			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\OrderService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
 			message: "#^Call to private method get\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
 			count: 1
 			path: src/Services/PackagesService.php
@@ -433,6 +457,11 @@ parameters:
 
 		-
 			message: "#^Method Airalo\\\\Services\\\\PackagesService\\:\\:getPackages\\(\\) should return Airalo\\\\Helpers\\\\EasyAccess\\|null but returns mixed\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
 			count: 1
 			path: src/Services/PackagesService.php
 

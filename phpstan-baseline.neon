@@ -487,14 +487,6 @@ parameters:
 			message: '#^Parameter \$curl of method Airalo\\Services\\InstallationInstructionsService::__construct\(\) has invalid type Airalo\\Services\\Curl\.$#'
 			count: 1
 			path: src/Services/InstallationInstructionsService.php
-
-
-
-		-
-			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services\VoucherService.php
-
 		-
 			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
 			count: 1

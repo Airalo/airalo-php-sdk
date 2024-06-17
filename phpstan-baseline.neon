@@ -517,3 +517,9 @@ parameters:
 			count: 1
 			path: src/Services/InstallationInstructionsService.php
 
+
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services\VoucherService.php

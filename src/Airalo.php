@@ -12,6 +12,7 @@ use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
+use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
 
 class Airalo
@@ -34,6 +35,7 @@ class Airalo
     private OrderService $order;
     private InstallationInstructionsService $instruction;
     private TopupService $topup;
+    private VoucherService $voucher;
 
     /**
      * @param mixed $config
@@ -185,6 +187,26 @@ class Airalo
         ]);
     }
 
+
+    /**
+     * @param int $usageLimit
+     * @param int $amount
+     * @param int $quantity
+     * @param ?bool $isPaid
+     * @param ?string $voucherCode
+     * @return EasyAccess|null
+     */
+    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
+    {
+        return $this->voucher->createVoucher([
+            'voucher_code' => $voucherCode,
+            'usage_limit' => $usageLimit,
+            'amount' => $amount,
+            'quantity' => $quantity,
+            'is_paid' => $isPaid,
+        ]);
+    }
+
     /**
      * @param mixed $config
      * @return void
@@ -214,6 +236,8 @@ class Airalo
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->instruction = self::$pool['instruction']
             ?? new InstallationInstructionsService($this->config, $this->curl, $token);
+        $this->voucher = self::$pool['voucher']
+            ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
     }
 

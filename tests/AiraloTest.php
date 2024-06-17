@@ -3,6 +3,7 @@ namespace Airalo\Tests;
 
 use Airalo\Exceptions\AiraloException;
 use Airalo\Services\InstallationInstructionsService;
+use Airalo\Services\VoucherService;
 use PHPUnit\Framework\TestCase;
 use Airalo\Airalo;
 use Airalo\Config;
@@ -26,6 +27,7 @@ class AiraloTest extends TestCase
     private $oauthServiceMock;
     private $packagesServiceMock;
     private $orderServiceMock;
+    private $voucherServiceMock;
     private $topupServiceMock;
     private $instructionServiceMock;
     private $airalo;
@@ -46,6 +48,7 @@ class AiraloTest extends TestCase
         $this->packagesServiceMock = $this->createMock(PackagesService::class);
         $this->orderServiceMock = $this->createMock(OrderService::class);
         $this->topupServiceMock = $this->createMock(TopupService::class);
+        $this->voucherServiceMock = $this->createMock(VoucherService::class);
         $this->instructionServiceMock = $this->createMock(InstallationInstructionsService::class);
 
         $this->oauthServiceMock
@@ -193,6 +196,25 @@ class AiraloTest extends TestCase
 
     }
 
+    public function testVoucherAirmoney()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+        $this->voucherServiceMock
+            ->expects($this->once())
+            ->method('createVoucher')
+            ->with([
+                'usage_limit' => 40,
+                'amount' => 22,
+                'quantity' => 1,
+                'is_paid' => false,
+                'voucher_code' => 'voucher-code',
+            ])
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->voucher( 40,22,1,false,'voucher-code');
+        $this->assertSame($expectedResult, $result);
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -224,5 +246,9 @@ class AiraloTest extends TestCase
         $curl = $reflection->getProperty('topup');
         $curl->setAccessible(true);
         $curl->setValue($this->airalo, $this->topupServiceMock);
+
+        $curl = $reflection->getProperty('voucher');
+        $curl->setAccessible(true);
+        $curl->setValue($this->airalo, $this->voucherServiceMock);
     }
 }

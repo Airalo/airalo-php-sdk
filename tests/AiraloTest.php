@@ -2,9 +2,9 @@
 namespace Airalo\Tests;
 
 use Airalo\Exceptions\AiraloException;
+use Airalo\Services\VoucherService;
 use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\SimService;
-use Airalo\Services\VoucherService;
 use PHPUnit\Framework\TestCase;
 use Airalo\Airalo;
 use Airalo\Config;
@@ -50,6 +50,7 @@ class AiraloTest extends TestCase
         $this->packagesServiceMock = $this->createMock(PackagesService::class);
         $this->orderServiceMock = $this->createMock(OrderService::class);
         $this->topupServiceMock = $this->createMock(TopupService::class);
+        $this->voucherServiceMock = $this->createMock(VoucherService::class);
         $this->simServiceMock = $this->createMock(SimService::class);
         $this->voucherServiceMock = $this->createMock(VoucherService::class);
         $this->instructionServiceMock = $this->createMock(InstallationInstructionsService::class);

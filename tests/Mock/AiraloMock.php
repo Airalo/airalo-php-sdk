@@ -19,8 +19,8 @@ class AiraloMock
         $this->orders = [];
         $this->topups = [];
         $this->simUsage = [];
-        $this->vouchers = [];
         $this->instructions = [];
+        $this->vouchers = [];
     }
 
     /**
@@ -197,6 +197,27 @@ class AiraloMock
         return new EasyAccess(!empty($this->topups) ? $this->topups : $topup);
     }
 
+    /**
+     * @param int $usageLimit
+     * @param int $amount
+     * @param int $quantity
+     * @param ?bool $isPaid
+     * @param ?string $voucherCode
+     * @return EasyAccess|null
+     */
+    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
+    {
+        $voucher = [
+            'voucher_code' => $voucherCode,
+            'usage_limit' => $usageLimit,
+            'amount' => $amount,
+            'quantity' => $quantity,
+            'is_paid' => $isPaid,
+        ];
+
+        return new EasyAccess(!empty($this->vouchers) ? $this->vouchers : $voucher);
+    }
+
 
     /**
      * @param string $iccid
@@ -224,26 +245,5 @@ class AiraloMock
         ];
 
         return new EasyAccess(!empty($this->topups) ? $this->topups : $topup);
-    }
-
-    /**
-     * @param int $usageLimit
-     * @param int $amount
-     * @param int $quantity
-     * @param ?bool $isPaid
-     * @param ?string $voucherCode
-     * @return EasyAccess|null
-     */
-    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
-    {
-        $voucher = [
-            'voucher_code' => $voucherCode,
-            'usage_limit' => $usageLimit,
-            'amount' => $amount,
-            'quantity' => $quantity,
-            'is_paid' => $isPaid,
-        ];
-
-        return new EasyAccess(!empty($this->vouchers) ? $this->vouchers : $voucher);
     }
 }

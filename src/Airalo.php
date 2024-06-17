@@ -36,8 +36,8 @@ class Airalo
     private OrderService $order;
     private InstallationInstructionsService $instruction;
     private TopupService $topup;
-    private VoucherService $voucher;
     private SimService $sim;
+    private VoucherService $voucher;
 
     /**
      * @param mixed $config
@@ -232,9 +232,6 @@ class Airalo
         $this->multiCurl = self::$pool['multiCurl'] ?? new MultiCurlResource($this->config);
         $this->signature = self::$pool['signature'] ?? new Signature($this->config->get('client_secret'));
     }
-
-
-
     /**
      * @return void
      * @throws AiraloException

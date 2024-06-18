@@ -171,6 +171,10 @@ class VoucherService
             if (empty($voucher['quantity'])) {
                 throw new AiraloException('The vouchers.quantity is required and should be greater than 0, payload: ' . json_encode($payload));
             }
+
+            if ($payload['quantity'] > SdkConstants::VOUCHER_MAX_QUANTITY) {
+                throw new AiraloException('The vouchers.quantity may not be greater than ' . SdkConstants::VOUCHER_MAX_QUANTITY);
+            }
         }
     }
 

@@ -94,8 +94,6 @@ class InstallationInstructionsService
         return $url;
     }
 
-
-
     /**
      * Generates a unique key based on the provided URL, parameters, HTTP headers, and access token.
      *
@@ -107,6 +105,4 @@ class InstallationInstructionsService
     {
         return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders())  . $this->accessToken);
     }
-
-
 }

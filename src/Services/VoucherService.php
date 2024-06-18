@@ -12,7 +12,6 @@ use Airalo\Resources\CurlResource;
 
 class VoucherService
 {
-
     private Config $config;
 
     private CurlResource $curl;
@@ -20,7 +19,6 @@ class VoucherService
     private Signature $signature;
 
     private string $accessToken;
-
 
     /**
      * @param Config $config
@@ -45,7 +43,6 @@ class VoucherService
         $this->accessToken = $accessToken;
     }
 
-
     /**
      * @param array<string, mixed> $payload Associative array of payload data
      * @return EasyAccess|null
@@ -68,8 +65,6 @@ class VoucherService
 
         return new EasyAccess($response);
     }
-
-
 
     /**
      * @param array<string, mixed> $payload Associative array of payload data
@@ -120,7 +115,5 @@ class VoucherService
         if ($payload['quantity'] > SdkConstants::VOUCHER_MAX_QUANTITY) {
             throw new AiraloException('The quantity may not be greater than ' . SdkConstants::VOUCHER_MAX_QUANTITY);
         }
-
     }
-
 }

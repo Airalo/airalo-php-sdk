@@ -11,3 +11,6 @@ parameters:
         -
             message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\[^\\\\]+::__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
             path: *
+        -
+            message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+            path: *

@@ -301,11 +301,6 @@ parameters:
 			path: src/Resources/MultiCurlResource.php
 
 		-
-			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/OAuthService.php
-
-		-
 			message: "#^Cannot access offset 'access_token' on mixed\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
@@ -348,11 +343,6 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: src/Services/OrderService.php
-
-		-
-			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
 			count: 1
 			path: src/Services/OrderService.php
 
@@ -447,11 +437,6 @@ parameters:
 			path: src/Services/PackagesService.php
 
 		-
-			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/TopupService.php
-
-		-
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:createTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
@@ -476,7 +461,6 @@ parameters:
 			count: 1
 			path: src/Services/InstallationInstructionsService.php
 
-
 		-
 
 			message: '#^PHPDoc tag @param for parameter \$curl with type Airalo\\Services\\Curl is not subtype of native type Airalo\\Resources\\CurlResource\.$#'
@@ -487,7 +471,3 @@ parameters:
 			message: '#^Parameter \$curl of method Airalo\\Services\\InstallationInstructionsService::__construct\(\) has invalid type Airalo\\Services\\Curl\.$#'
 			count: 1
 			path: src/Services/InstallationInstructionsService.php
-		-
-			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services\VoucherService.php

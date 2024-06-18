@@ -37,7 +37,6 @@ class SimService
         $this->baseUrl = $this->config->getUrl();
     }
 
-
     /**
      * @param array<string, mixed> $params An associative array of parameters
      * @return EasyAccess|null
@@ -101,8 +100,4 @@ class SimService
     {
         return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders())  . $this->accessToken);
     }
-
-
-
-
 }

@@ -209,6 +209,18 @@ class Airalo
     }
 
     /**
+     * @param array<int, array{package_id: string, quantity: int}> $vouchers
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public function esimVouchers(array $vouchers): ?EasyAccess
+    {
+        return $this->voucher->createEsimVoucher([
+            'vouchers' => $vouchers
+        ]);
+    }
+
+    /**
      * @param string $iccid
      * @return EasyAccess|null
      */

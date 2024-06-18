@@ -541,6 +541,69 @@ Example response:<br>
 ```
 
 
+<h2>Esim Vouchers</h2>
+
+`public function esimVouchers(array $vouchers): ?EasyAccess`<br>
+calls `voucher/esim` endpoint of the REST API.
+Full response example can be found here: https://partners-doc.airalo.com/#5a48bb8d-70d1-4030-ad92-4a82eb979281<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+
+$vouchers = $alo->esimVouchers([
+    [
+        "package_id": "package_slug",
+        "quantity": 2
+    ]
+]);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+
+$vouchers = AiraloStatic::esimVouchers([
+    [
+        "package_id": "package_slug",
+        "quantity": 1
+    ]
+]);
+```
+
+
+Example response:<br>
+```json
+{
+  "data": [
+    {
+      "package_id": "package_slug",
+      "codes": [
+        "BIXLAAAA",
+        "BSXLAAAA"
+      ]
+    }
+  ],
+  "meta": {
+    "message": "success"
+  }
+}
+```
+
+
 
 <h2> Topups </h2>
 

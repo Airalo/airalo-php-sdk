@@ -234,6 +234,32 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testVoucherEsimAirmoney()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+        $this->voucherServiceMock
+            ->expects($this->once())
+            ->method('createEsimVoucher')
+            ->with([
+                'vouchers' => [
+                    [
+                        'package_id' => 'package_slug',
+                        'quantity' => 1
+                    ]
+                ]
+            ])
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->esimVouchers([
+            [
+                'package_id' => 'package_slug',
+                'quantity' => 1
+            ]
+        ]);
+
+        $this->assertSame($expectedResult, $result);
+    }
+
     /**
      * @throws \ReflectionException
      */

@@ -69,6 +69,29 @@ class VoucherService
         return new EasyAccess($response);
     }
 
+    /**
+     * @param array<string, mixed> $payload Associative array of payload data
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public function createEsimVoucher(array $payload): ?EasyAccess
+    {
+
+        $this->validateEsimVoucher($payload);
+
+        $response = $this->curl
+            ->setHeaders($this->getHeaders($payload))
+            ->post($this->config->getUrl() . ApiConstants::VOUCHERS_ESIM_SLUG, $payload);
+
+        if ($this->curl->code != 200) {
+            throw new AiraloException(
+                'Voucher creation failed, status code: ' . $this->curl->code . ', response: ' . $response
+            );
+        }
+
+        return new EasyAccess($response);
+    }
+
 
 
     /**
@@ -121,6 +144,34 @@ class VoucherService
             throw new AiraloException('The quantity may not be greater than ' . SdkConstants::VOUCHER_MAX_QUANTITY);
         }
 
+    }
+
+    /**
+     * Validate the esim voucher payload.
+     *
+     * @param array<string, mixed> $payload Associative array of payload data
+     * @throws AiraloException
+     * @return void
+     */
+    private function validateEsimVoucher(array $payload): void
+    {
+        if (empty($payload['vouchers'])) {
+            throw new AiraloException('vouchers field is required, payload: ' . json_encode($payload));
+        }
+
+        if (!is_array($payload['vouchers'])) {
+            throw new AiraloException('vouchers field should be an array, payload: ' . json_encode($payload));
+        }
+
+        foreach ($payload['vouchers'] as $voucher) {
+            if (empty($voucher['package_id'])) {
+                throw new AiraloException('The vouchers.package_id is required, payload: ' . json_encode($payload));
+            }
+
+            if (empty($voucher['quantity'])) {
+                throw new AiraloException('The vouchers.quantity is required and should be greater than 0, payload: ' . json_encode($payload));
+            }
+        }
     }
 
 }

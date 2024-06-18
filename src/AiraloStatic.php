@@ -180,6 +180,20 @@ class AiraloStatic
     }
 
     /**
+     * @param array $vouchers
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public function esimVouchers(array $vouchers): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$voucher->createEsimVoucher([
+            'vouchers' => $vouchers
+        ]);
+    }
+
+    /**
      * @param array $packages
      * @param ?string $description
      * @return EasyAccess|null

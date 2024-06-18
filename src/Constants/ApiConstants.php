@@ -20,6 +20,8 @@ final class ApiConstants
 
     public const VOUCHERS_SLUG = 'voucher/airmoney';
 
+    public const VOUCHERS_ESIM_SLUG = 'voucher/eesim';
+
     public const TOPUPS_SLUG = 'orders/topups';
 
     public const SIMS_SLUG = 'sims';

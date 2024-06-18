@@ -13,6 +13,8 @@ class AiraloMock
     private $instructions;
     private $vouchers;
 
+    private $esimVouchers;
+
     public function __construct()
     {
         $this->packages = [];
@@ -21,6 +23,7 @@ class AiraloMock
         $this->simUsage = [];
         $this->instructions = [];
         $this->vouchers = [];
+        $this->esimVouchers = [];
     }
 
     /**
@@ -216,6 +219,11 @@ class AiraloMock
         ];
 
         return new EasyAccess(!empty($this->vouchers) ? $this->vouchers : $voucher);
+    }
+
+    public function esimVouchers(array $vouchers):? EasyAccess
+    {
+        return new EasyAccess(!empty($this->esimVouchers) ? $this->esimVouchers : $vouchers);
     }
 
 

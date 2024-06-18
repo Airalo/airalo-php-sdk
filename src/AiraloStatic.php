@@ -180,7 +180,7 @@ class AiraloStatic
     }
 
     /**
-     * @param array $vouchers
+     * @param array<int, array{package_id: string, quantity: int}> $vouchers
      * @return EasyAccess|null
      * @throws AiraloException
      */

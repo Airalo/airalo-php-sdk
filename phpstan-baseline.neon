@@ -11,6 +11,11 @@ parameters:
 			path: src/Airalo.php
 
 		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:orderAsyncBulk\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
 			message: "#^Method Airalo\\\\Airalo\\:\\:orderBulk\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Airalo.php
@@ -32,6 +37,11 @@ parameters:
 
 		-
 			message: "#^Method Airalo\\\\AiraloStatic\\:\\:getSimPackages\\(\\) has parameter \\$page with no type specified\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:orderAsyncBulk\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/AiraloStatic.php
 
@@ -330,7 +340,6 @@ parameters:
 			count: 1
 			path: src/Services/OAuthService.php
 
-
 		-
 			message: "#^Property Airalo\\\\Services\\\\OAuthService\\:\\:\\$payload type has no value type specified in iterable type array\\.$#"
 			count: 1
@@ -343,11 +352,21 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
-			count: 1
+			count: 2
 			path: src/Services/OrderService.php
 
 		-
 			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:createOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:createOrderAsync\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\OrderService\\:\\:createOrderAsyncBulk\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Services/OrderService.php
 
@@ -445,29 +464,3 @@ parameters:
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:validateTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$curl with type Airalo\\\\Services\\\\Curl is not subtype of native type Airalo\\\\Resources\\\\CurlResource\\.$#"
-			count: 1
-			path: src/Services/TopupService.php
-
-		-
-			message: "#^Parameter \\$curl of method Airalo\\\\Services\\\\TopupService\\:\\:__construct\\(\\) has invalid type Airalo\\\\Services\\\\Curl\\.$#"
-			count: 1
-			path: src/Services/TopupService.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
-			count: 1
-			path: src/Services/InstallationInstructionsService.php
-
-		-
-
-			message: '#^PHPDoc tag @param for parameter \$curl with type Airalo\\Services\\Curl is not subtype of native type Airalo\\Resources\\CurlResource\.$#'
-			count: 1
-			path: src/Services/InstallationInstructionsService.php
-
-		-
-			message: '#^Parameter \$curl of method Airalo\\Services\\InstallationInstructionsService::__construct\(\) has invalid type Airalo\\Services\\Curl\.$#'
-			count: 1
-			path: src/Services/InstallationInstructionsService.php

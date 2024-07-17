@@ -4,7 +4,7 @@ namespace Airalo\Constants;
 
 final class SdkConstants
 {
-    public const VERSION = '1.0.3';
+    public const VERSION = '1.0.8';
 
     public const BULK_ORDER_LIMIT = 50;
 

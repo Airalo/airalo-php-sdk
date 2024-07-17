@@ -159,6 +159,26 @@ class AiraloStatic
     }
 
     /**
+     * @param string $packageId
+     * @param int $quantity
+     * @param ?string $webhookUrl
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public static function orderAsync(string $packageId, int $quantity, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$order->createOrderAsync([
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'type' => 'sim',
+            'description' => $description ?? 'Order placed via Airalo PHP SDK',
+            'webhook_url' => $webhookUrl,
+        ]);
+    }
+
+    /**
      * @param int $usageLimit
      * @param int $amount
      * @param int $quantity
@@ -207,6 +227,23 @@ class AiraloStatic
         }
 
         return self::$order->createOrderBulk($packages, $description);
+    }
+
+    /**
+     * @param array $packages
+     * @param ?string $webhookUrl
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public static function orderAsyncBulk(array $packages, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        if (empty($packages)) {
+            return null;
+        }
+
+        return self::$order->createOrderAsyncBulk($packages, $webhookUrl, $description);
     }
 
     /**

@@ -233,6 +233,41 @@ $packageId = $allPackages->data->{0}->package_id;
 $order = AiraloStatic::order($packageId, 1);
 ```
 
+`public function orderAsync(string $packageId, int $quantity, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess`<br>
+Places an async order for a given package id (fetched from any of the packages calls) and calls `order-async` endpoint of the REST API.
+Full information can be found here: https://partners-doc.airalo.com/#c8471dfc-83d6-4d36-ac8e-6dce2d55a49e<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = $alo->getAllPackages(true);
+$packageId = $allPackages->data->{0}->package_id;
+
+$order = $alo->orderAsync($packageId, 1);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = AiraloStatic::getAllPackages(true);
+$packageId = $allPackages->data->{0}->package_id;
+
+$order = AiraloStatic::orderAsync($packageId, 1, 'https://your-webhook.com');
+```
+
 
 `public function orderBulk(array $packages, ?string $description = null): ?EasyAccess`<br>
 Parameters: array `$packages` where the key is the package name and the value represents the desired quantity.
@@ -489,6 +524,80 @@ Example:
   }
 }
 ```
+
+`public function orderAsyncBulk(array $packages, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess`<br>
+Parameters: array `$packages` where the key is the package name and the value represents the desired quantity.
+Parallel async ordering for multiple packages (up to 50 different package ids) within the same function call. Example usage:<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = $alo->getAllPackages(true);
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
+
+$orders = $aa->orderAsyncBulk([
+    $firstPackageId => 2,
+    $secondPackageId => 1,
+]);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = AiraloStatic::getAllPackages(true);
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
+
+$orders = AiraloStatic::orderAsyncBulk([
+    $firstPackageId => 2,
+    $secondPackageId => 1,
+], 'https://your-webhook.com');
+
+```
+
+Example response:<br>
+```json
+{
+  "change-7days-1gb": {
+    "data": {
+      "request_id": "PWhB8cr-QXPssdA2O2RRvzaeT",
+      "accepted_at": "2024-07-17 10:10:31"
+    },
+    "meta": {
+      "message": "success"
+    }
+  },
+  "change-30days-10gb": {
+    "data": {
+      "request_id": "nYcMsdlgtCsE_sXFAE0vdikSd",
+      "accepted_at": "2024-07-17 10:10:31"
+    },
+    "meta": {
+      "message": "success"
+    }
+  }
+}
+```
+>**_NOTE:_**<br>
+>Each package id is a key in the returned response. The quantity of `sims` object represents the ordered quantity from the initial call.
+><br><b>If an error occurs in one of the parallel async orders, the error REST response will be assigned to the package id key, so you must make sure to validate each response</b>
+
 <h2> Vouchers </h2>
 
 `public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess`<br>

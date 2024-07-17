@@ -252,7 +252,7 @@ $alo = new Airalo([
 $allPackages = $alo->getAllPackages(true);
 $packageId = $allPackages->data->{0}->package_id;
 
-$order = $alo->orderAsync($packageId, 1);
+$order = $alo->orderAsync($packageId, 1, 'https://your-webhook.com');
 
 //
 // Static usage
@@ -549,7 +549,7 @@ $thirdPackageId = $allPackages['data'][2]->package_id;
 $orders = $aa->orderAsyncBulk([
     $firstPackageId => 2,
     $secondPackageId => 1,
-]);
+], 'https://your-webhook.com');
 
 //
 // Static usage

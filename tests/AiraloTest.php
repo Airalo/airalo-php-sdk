@@ -166,6 +166,41 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testOrderAsync()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+        $this->orderServiceMock
+            ->expects($this->once())
+            ->method('createOrderAsync')
+            ->with([
+                'package_id' => 'package-id',
+                'quantity' => 1,
+                'type' => 'sim',
+                'description' => 'Order placed via Airalo PHP SDK',
+                'webhook_url' => null
+            ])
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->orderAsync('package-id', 1);
+        $this->assertSame($expectedResult, $result);
+    }
+
+    public function testOrderAsyncBulk()
+    {
+        $packages = ['package_id' => 1, 'package-id-1' => 1];
+        $expectedResult = new EasyAccess(['test' => 1, 'test2' => 2]);
+
+        $this->orderServiceMock
+            ->expects($this->once())
+            ->method('createOrderAsyncBulk')
+            ->with($packages)
+            ->willReturn($expectedResult);
+
+
+        $result = $this->airalo->orderAsyncBulk($packages);
+        $this->assertSame($expectedResult, $result);
+    }
+
     public function testTopup()
     {
         $expectedResult = $this->createMock(EasyAccess::class);

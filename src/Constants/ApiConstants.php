@@ -18,6 +18,8 @@ final class ApiConstants
 
     public const ORDERS_SLUG = 'orders';
 
+    public const ASYNC_ORDERS_SLUG = 'orders-async';
+
     public const VOUCHERS_SLUG = 'voucher/airmoney';
 
     public const VOUCHERS_ESIM_SLUG = 'voucher/esim';

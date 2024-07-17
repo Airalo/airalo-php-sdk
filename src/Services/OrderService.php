@@ -70,6 +70,27 @@ class OrderService
     }
 
     /**
+     * @param array $payload
+     * @return EasyAccess|null
+     */
+    public function createOrderAsync(array $payload): ?EasyAccess
+    {
+        $this->validateOrder($payload);
+
+        $response = $this->curl
+            ->setHeaders($this->getHeaders($payload))
+            ->post($this->config->getUrl() . ApiConstants::ASYNC_ORDERS_SLUG, $payload);
+
+        if ($this->curl->code != 202) {
+            throw new AiraloException(
+                'Order creation failed, status code: ' . $this->curl->code . ', response: ' . $response
+            );
+        }
+
+        return new EasyAccess($response);
+    }
+
+    /**
      * @param array $params
      * @param string|null $description
      * @return EasyAccess|null
@@ -92,6 +113,46 @@ class OrderService
                 ->tag($packageId)
                 ->setHeaders($this->getHeaders($payload))
                 ->post($this->config->getUrl() . ApiConstants::ORDERS_SLUG, $payload);
+        }
+
+        if (!$response = $this->multiCurl->exec()) {
+            return null;
+        }
+
+        $result = [];
+
+        foreach ($response as $key => $response) {
+            $result[$key] = new EasyAccess($response);
+        }
+
+        return new EasyAccess($result);
+    }
+
+    /**
+     * @param array $params
+     * @param string|null $webhookUrl
+     * @param string|null $description
+     * @return EasyAccess|null
+     */
+    public function createOrderAsyncBulk(array $params, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess
+    {
+        $this->validateBulkOrder($params);
+
+        foreach ($params as $packageId => $quantity) {
+            $payload = [
+                'package_id' => $packageId,
+                'quantity' => $quantity,
+                'type' => 'sim',
+                'description' => $description ?? 'Bulk order placed via Airalo PHP SDK',
+                'webhook_url' => $webhookUrl,
+            ];
+
+            $this->validateOrder($payload);
+
+            $this->multiCurl
+                ->tag($packageId)
+                ->setHeaders($this->getHeaders($payload))
+                ->post($this->config->getUrl() . ApiConstants::ASYNC_ORDERS_SLUG, $payload);
         }
 
         if (!$response = $this->multiCurl->exec()) {

@@ -149,6 +149,24 @@ class Airalo
     }
 
     /**
+     * @param string $packageId
+     * @param int $quantity
+     * @param ?string $webhookUrl
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderAsync(string $packageId, int $quantity, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess
+    {
+        return $this->order->createOrderAsync([
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'type' => 'sim',
+            'description' => $description ?? 'Order placed via Airalo PHP SDK',
+            'webhook_url' => $webhookUrl,
+        ]);
+    }
+
+    /**
      * @param array $packages
      * @param ?string $description
      * @return EasyAccess|null
@@ -160,6 +178,21 @@ class Airalo
         }
 
         return $this->order->createOrderBulk($packages, $description);
+    }
+
+    /**
+     * @param array $packages
+     * @param ?string $webhookUrl
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderAsyncBulk(array $packages, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess
+    {
+        if (empty($packages)) {
+            return null;
+        }
+
+        return $this->order->createOrderAsyncBulk($packages, $webhookUrl, $description);
     }
 
     /**

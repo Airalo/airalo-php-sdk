@@ -186,7 +186,7 @@ class AiraloStatic
      * @param ?string $voucherCode
      * @return EasyAccess|null
      */
-    public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
+    public static function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess
     {
         self::checkInitialized();
 
@@ -204,7 +204,7 @@ class AiraloStatic
      * @return EasyAccess|null
      * @throws AiraloException
      */
-    public function esimVouchers(array $vouchers): ?EasyAccess
+    public static function esimVouchers(array $vouchers): ?EasyAccess
     {
         self::checkInitialized();
 
@@ -281,7 +281,7 @@ class AiraloStatic
      * @param string $iccid
      * @return EasyAccess|null
      */
-    public function simUsage(string $iccid): ?EasyAccess
+    public static function simUsage(string $iccid): ?EasyAccess
     {
         return self::$sim->simUsage([
             'iccid' => $iccid

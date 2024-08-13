@@ -7,24 +7,28 @@ use Airalo\Constants\ApiConstants;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
-use Airalo\Helpers\Signature;
 use Airalo\Helpers\Cached;
+use Airalo\Resources\MultiCurlResource;
+
 class SimService
 {
     private Config $config;
 
     private CurlResource $curl;
+    private MultiCurlResource $multiCurl;
     private string $baseUrl;
     private string $accessToken;
 
     /**
      * @param Config $config
      * @param Curl $curl
+     * @param MultiCurlResource $multiCurl
      * @param string $accessToken
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
+        MultiCurlResource $multiCurl,
         string $accessToken
     ) {
         if (!$accessToken) {
@@ -33,6 +37,7 @@ class SimService
 
         $this->config = $config;
         $this->curl = $curl;
+        $this->multiCurl = $multiCurl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
     }
@@ -60,6 +65,34 @@ class SimService
 
         /* @phpstan-ignore-next-line */
         return count($result['data']) ? $result : null;
+    }
+
+    /**
+     * @param array<string> $iccids
+     * @return EasyAccess|null
+     */
+    public function simUsageBulk(array $iccids = []): ?EasyAccess
+    {
+        foreach ($iccids as $iccid) {
+            $this->multiCurl
+                ->tag($iccid)
+                ->setHeaders([
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $this->accessToken,
+                ])->get($this->buildUrl(['iccid' => $iccid]));
+        }
+
+        if (!$response = $this->multiCurl->exec()) {
+            return null;
+        }
+
+        $result = [];
+
+        foreach ($response as $iccid => $response) {
+            $result[$iccid] = new EasyAccess($response);
+        }
+
+        return new EasyAccess($result);
     }
 
     /**

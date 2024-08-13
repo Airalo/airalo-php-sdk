@@ -791,10 +791,50 @@ AiraloStatic::init([
 ]);
 
 
-$topup = AiraloStatic::simUsage($iccid);
+$usage = AiraloStatic::simUsage($iccid);
 ```
 
 Example response can be found in the API documentation (link above). <br>
+
+
+`public function simUsageBulk(array $iccids): ?EasyAccess`<br>
+
+Places an array of $iccids and calls `simUsage` endpoint of the REST API in parallel for each of the iccids. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$iccids = ['870000000001', '870000000002', '870000000003', '870000000004'];
+$usage = $alo->simUsageBulk($iccids);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$iccids = ['870000000001', '870000000002', '870000000003', '870000000004'];
+$usage = AiraloStatic::simUsage($iccids);
+```
+
+Example response can be found in the API documentation (link above). <br>
+>**_NOTE:_**<br>
+>Each iccid is a key in the returned response.
+><br><b>If an error occurs in one of the parallel usage calls, the error REST response will be assigned to the iccid key, so you must make sure to validate each response</b>
+<br><br>
 <h2> Sim Instructions </h2>
 
 `public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>

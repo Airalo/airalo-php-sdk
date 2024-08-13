@@ -289,6 +289,15 @@ class AiraloStatic
     }
 
     /**
+     * @param array<string> $iccids
+     * @return mixed
+     */
+    public static function simUsageBulk(array $iccids)
+    {
+        return self::$sim->simUsageBulk($iccids);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -324,7 +333,7 @@ class AiraloStatic
         self::$voucher = self::$pool['voucher']
             ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
-        self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, $token);
+        self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token);
     }
 
     /**

@@ -265,6 +265,15 @@ class Airalo
     }
 
     /**
+     * @param array<string> $iccids
+     * @return mixed
+     */
+    public function simUsageBulk(array $iccids)
+    {
+        return $this->sim->simUsageBulk($iccids);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -293,7 +302,7 @@ class Airalo
         $this->voucher = self::$pool['voucher']
             ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
-        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $token);
+        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
     }
 
     /**

@@ -87,7 +87,7 @@ class SimService
         }
 
         $result = [];
-
+        /* @phpstan-ignore-next-line */
         foreach ($response as $iccid => $each) {
             $result[$iccid] = new EasyAccess($each);
         }

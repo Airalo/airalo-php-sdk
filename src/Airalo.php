@@ -265,7 +265,7 @@ class Airalo
     }
 
     /**
-     * @param array $iccids
+     * @param array<string> $iccids
      * @return EasyAccess|null
      */
     public function simUsageBulk(array $iccids): ?EasyAccess

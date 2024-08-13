@@ -289,7 +289,7 @@ class AiraloStatic
     }
 
     /**
-     * @param array $iccids
+     * @param array<string> $iccids
      * @return EasyAccess|null
      */
     public static function simUsageBulk(array $iccids): ?EasyAccess

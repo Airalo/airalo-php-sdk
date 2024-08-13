@@ -266,9 +266,9 @@ class Airalo
 
     /**
      * @param array<string> $iccids
-     * @return EasyAccess|null
+     * @return mixed
      */
-    public function simUsageBulk(array $iccids): ?EasyAccess
+    public function simUsageBulk(array $iccids)
     {
         return $this->sim->simUsageBulk($iccids);
     }

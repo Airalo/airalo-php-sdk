@@ -290,9 +290,9 @@ class AiraloStatic
 
     /**
      * @param array<string> $iccids
-     * @return EasyAccess|null
+     * @return mixed
      */
-    public static function simUsageBulk(array $iccids): ?EasyAccess
+    public static function simUsageBulk(array $iccids)
     {
         return self::$sim->simUsageBulk($iccids);
     }

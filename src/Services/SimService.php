@@ -69,9 +69,9 @@ class SimService
 
     /**
      * @param array<string> $iccids
-     * @return EasyAccess|null
+     * @return mixed
      */
-    public function simUsageBulk(array $iccids = []): ?EasyAccess
+    public function simUsageBulk(array $iccids = [])
     {
         foreach ($iccids as $iccid) {
             $this->multiCurl

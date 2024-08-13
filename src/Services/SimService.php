@@ -82,17 +82,19 @@ class SimService
                 ])->get($this->buildUrl(['iccid' => $iccid]));
         }
 
-        if (!$response = $this->multiCurl->exec()) {
-            return null;
-        }
-
-        $result = [];
-        /* @phpstan-ignore-next-line */
-        foreach ($response as $iccid => $each) {
-            $result[$iccid] = new EasyAccess($each);
-        }
-
-        return new EasyAccess($result);
+        return Cached::get(function () {
+            if (!$response = $this->multiCurl->exec()) {
+                return null;
+            }
+    
+            $result = [];
+            /* @phpstan-ignore-next-line */
+            foreach ($response as $iccid => $each) {
+                $result[$iccid] = new EasyAccess($each);
+            }
+    
+            return new EasyAccess($result);
+        }, $this->getKey(implode('', $iccids), []), 300);
     }
 
     /**

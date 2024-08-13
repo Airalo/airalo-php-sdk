@@ -830,7 +830,11 @@ $iccids = ['870000000001', '870000000002', '870000000003', '870000000004'];
 $usage = AiraloStatic::simUsage($iccids);
 ```
 
-Example response can be found in the API documentation (link above). <br><br>
+Example response can be found in the API documentation (link above). <br>
+>**_NOTE:_**<br>
+>Each iccid is a key in the returned response.
+><br><b>If an error occurs in one of the parallel usage calls, the error REST response will be assigned to the iccid key, so you must make sure to validate each response</b>
+<br><br>
 <h2> Sim Instructions </h2>
 
 `public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>

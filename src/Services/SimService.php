@@ -88,8 +88,8 @@ class SimService
 
         $result = [];
 
-        foreach ($response as $iccid => $response) {
-            $result[$iccid] = new EasyAccess($response);
+        foreach ($response as $iccid => $each) {
+            $result[$iccid] = new EasyAccess($each);
         }
 
         return new EasyAccess($result);

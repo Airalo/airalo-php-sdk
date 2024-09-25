@@ -55,6 +55,7 @@ class OrderService
     public function createOrder(array $payload): ?EasyAccess
     {
         $this->validateOrder($payload);
+        $payload = $this->decorateOrderPayload($payload);
 
         $response = $this->curl
             ->setHeaders($this->getHeaders($payload))
@@ -76,6 +77,8 @@ class OrderService
     public function createOrderAsync(array $payload): ?EasyAccess
     {
         $this->validateOrder($payload);
+
+        $payload = $this->decorateOrderPayload($payload);
 
         $response = $this->curl
             ->setHeaders($this->getHeaders($payload))
@@ -108,6 +111,7 @@ class OrderService
             ];
 
             $this->validateOrder($payload);
+            $payload = $this->decorateOrderPayload($payload);
 
             $this->multiCurl
                 ->tag($packageId)
@@ -148,6 +152,7 @@ class OrderService
             ];
 
             $this->validateOrder($payload);
+            $payload = $this->decorateOrderPayload($payload);
 
             $this->multiCurl
                 ->tag($packageId)
@@ -211,5 +216,20 @@ class OrderService
         if (count($payload) > SdkConstants::BULK_ORDER_LIMIT) {
             throw new AiraloException('The packages count may not be greater than ' . SdkConstants::BULK_ORDER_LIMIT);
         }
+    }
+
+    /**
+     * @param array<string,mixed> $payload
+     * @return array<string,mixed>
+     */
+    private function decorateOrderPayload(array $payload): array
+    {
+        if (isset($payload['source'])) {
+            return $payload;
+        }
+
+        $payload['source'] = SdkConstants::API_ORDER_SOURCE;
+
+        return $payload;
     }
 }

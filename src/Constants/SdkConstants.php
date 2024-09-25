@@ -14,5 +14,5 @@ final class SdkConstants
     public const VOUCHER_MAX_QUANTITY = 100;
 
 
-    public const API_ORDER_SOURCE = 2;
+    public const ORDER_SDK_SOURCE = 2;
 }

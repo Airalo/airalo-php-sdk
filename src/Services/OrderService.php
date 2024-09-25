@@ -23,6 +23,8 @@ class OrderService
 
     private string $accessToken;
 
+    private ?int $orderSource;
+
     /**
      * @param Config $config
      * @param Curl $curl
@@ -46,6 +48,8 @@ class OrderService
         $this->multiCurl = $multiCurl;
         $this->signature = $signature;
         $this->accessToken = $accessToken;
+        // @phpstan-ignore-next-line
+        $this->orderSource = $config->get('source', SdkConstants::ORDER_SDK_SOURCE);
     }
 
     /**
@@ -55,6 +59,7 @@ class OrderService
     public function createOrder(array $payload): ?EasyAccess
     {
         $this->validateOrder($payload);
+
         $payload = $this->decorateOrderPayload($payload);
 
         $response = $this->curl
@@ -228,7 +233,7 @@ class OrderService
             return $payload;
         }
 
-        $payload['source'] = SdkConstants::API_ORDER_SOURCE;
+        $payload['source'] = $this->orderSource;
 
         return $payload;
     }

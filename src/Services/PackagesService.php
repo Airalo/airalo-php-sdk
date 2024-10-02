@@ -47,7 +47,7 @@ class PackagesService
         $url = $this->buildUrl($params);
 
         $result = Cached::get(function () use ($url, $params) {
-            $currentPage = $params['page'] ?? 0;
+            $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 
             while (true) {

@@ -159,6 +159,8 @@ class PackagesService
                             'info' => $operator['info'],
                         ],
                         'countries' => $countries,
+                        'image' => $operator['image']['url'] ?? null,
+                        'other_info' => $operator['other_info'],
                     ];
                 }
             }

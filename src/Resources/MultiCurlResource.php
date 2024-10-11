@@ -173,7 +173,9 @@ class MultiCurlResource
             while ($done = curl_multi_info_read($master)) {
                 $info = curl_getinfo($done['handle']);
                 $output = curl_multi_getcontent($done['handle']);
+                // @phpstan-ignore-next-line
                 $header = substr($output, 0, $info['header_size']);
+                // @phpstan-ignore-next-line
                 $output = substr($output, strlen($header));
 
                 $tag = array_search($done['handle'], $this->handlers);

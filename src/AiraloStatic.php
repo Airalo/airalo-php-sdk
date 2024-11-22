@@ -253,6 +253,23 @@ class AiraloStatic
 
     /**
      * @param array $packages
+     * @param array $esimCloud
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public static function orderBulkWithEmailSimShare(array $packages, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        if (empty($packages)) {
+            return null;
+        }
+
+        return self::$order->createOrderBulkWithEmailSimShare($packages, $esimCloud, $description);
+    }
+
+    /**
+     * @param array $packages
      * @param ?string $webhookUrl
      * @param ?string $description
      * @return EasyAccess|null

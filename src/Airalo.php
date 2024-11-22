@@ -202,6 +202,21 @@ class Airalo
 
     /**
      * @param array $packages
+     * @param array $esimCloud
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderBulkWithEmailSimShare(array $packages, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        if (empty($packages)) {
+            return null;
+        }
+
+        return $this->order->createOrderBulkWithEmailSimShare($packages, $esimCloud, $description);
+    }
+
+    /**
+     * @param array $packages
      * @param ?string $webhookUrl
      * @param ?string $description
      * @return EasyAccess|null

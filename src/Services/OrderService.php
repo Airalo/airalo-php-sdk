@@ -162,6 +162,51 @@ class OrderService
 
     /**
      * @param array $params
+     * @param array $esimCloud
+     * @param string|null $description
+     * @return EasyAccess|null
+     */
+    public function createOrderBulkWithEmailSimShare(array $params, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        $this->validateBulkOrder($params);
+        $this->validateCloudSimShare($esimCloud);
+
+        foreach ($params as $packageId => $quantity) {
+            $payload = [
+                'package_id' => $packageId,
+                'quantity' => $quantity,
+                'type' => 'sim',
+                'description' => $description ?? 'Bulk order placed via Airalo PHP SDK',
+            ];
+
+            $payload += [
+                'to_email' => $esimCloud['to_email'],
+                'sharing_option' => $esimCloud['sharing_option'],
+            ];
+
+            $this->validateOrder($payload);
+
+            $this->multiCurl
+                ->tag($packageId)
+                ->setHeaders($this->getHeaders($payload))
+                ->post($this->config->getUrl() . ApiConstants::ORDERS_SLUG, $payload);
+        }
+
+        if (!$response = $this->multiCurl->exec()) {
+            return null;
+        }
+
+        $result = [];
+
+        foreach ($response as $key => $response) {
+            $result[$key] = new EasyAccess($response);
+        }
+
+        return new EasyAccess($result);
+    }
+
+    /**
+     * @param array $params
      * @param string|null $webhookUrl
      * @param string|null $description
      * @return EasyAccess|null

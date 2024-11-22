@@ -71,6 +71,38 @@ class OrderService
 
     /**
      * @param array $payload
+     * @param array $esimCloud
+     * @return EasyAccess|null
+     */
+    public function createOrderWithEmailSimShare(array $payload, array $esimCloud): ?EasyAccess
+    {
+        $this->validateOrder($payload);
+        $this->validateCloudSimShare($esimCloud);
+
+        $payload += [
+            'to_email' => $esimCloud['to_email'],
+            'sharing_option' => $esimCloud['sharing_option'],
+        ];
+
+        if (isset($esimCloud['copy_address'])) {
+            $payload['copy_address'] = $esimCloud['copy_address'];
+        }
+
+        $response = $this->curl
+            ->setHeaders($this->getHeaders($payload))
+            ->post($this->config->getUrl() . ApiConstants::ORDERS_SLUG, $payload);
+
+        if ($this->curl->code != 200) {
+            throw new AiraloException(
+                'Order creation failed, status code: ' . $this->curl->code . ', response: ' . $response
+            );
+        }
+
+        return new EasyAccess($response);
+    }
+
+    /**
+     * @param array $payload
      * @return EasyAccess|null
      */
     public function createOrderAsync(array $payload): ?EasyAccess
@@ -198,6 +230,41 @@ class OrderService
 
         if ($payload['quantity'] > SdkConstants::ORDER_LIMIT) {
             throw new AiraloException('The quantity may not be greater than ' . SdkConstants::BULK_ORDER_LIMIT);
+        }
+    }
+
+    /**
+     * @param array $simCloudShare
+     * @return void
+     */
+    private function validateCloudSimShare(array $simCloudShare): void
+    {
+        $emailRegex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+
+        if (
+            !isset($simCloudShare['to_email'])
+            || $simCloudShare['to_email'] == ''
+            || !preg_match($emailRegex, $simCloudShare['to_email'])
+        ) {
+            throw new AiraloException('The to_email is required email address, payload: ' . json_encode($simCloudShare));
+        }
+
+        if (!isset($simCloudShare['sharing_option']) || !is_array($simCloudShare['sharing_option'])) {
+            throw new AiraloException('The sharing_option is required array, payload: ' . json_encode($simCloudShare));
+        }
+
+        foreach ($simCloudShare['sharing_option'] as $sharingOption) {
+            if (!in_array($sharingOption, ['link', 'pdf'])) {
+                throw new AiraloException('The sharing_option may be link or pdf or both, payload: ' . json_encode($simCloudShare));
+            }
+        }
+
+        if (isset($simCloudShare['copy_address']) && is_array($simCloudShare['copy_address'])) {
+            foreach ($simCloudShare['copy_address'] as $eachCCemail) {
+                if (!preg_match($emailRegex, $eachCCemail)) {
+                    throw new AiraloException("The copy_address: $eachCCemail must be valid email address, payload: " . json_encode($simCloudShare));
+                }
+            }
         }
     }
 

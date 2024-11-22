@@ -161,6 +161,28 @@ class AiraloStatic
     /**
      * @param string $packageId
      * @param int $quantity
+     * @param array $esimCloud
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public static function orderWithEmailSimShare(string $packageId, int $quantity, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$order->createOrderWithEmailSimShare(
+            [
+                'package_id' => $packageId,
+                'quantity' => $quantity,
+                'type' => 'sim',
+                'description' => $description ?? 'Order placed via Airalo PHP SDK',
+            ],
+            $esimCloud
+        );
+    }
+
+    /**
+     * @param string $packageId
+     * @param int $quantity
      * @param ?string $webhookUrl
      * @param ?string $description
      * @return EasyAccess|null

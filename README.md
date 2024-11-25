@@ -268,6 +268,48 @@ $packageId = $allPackages->data->{0}->package_id;
 $order = AiraloStatic::orderAsync($packageId, 1, 'https://your-webhook.com');
 ```
 
+`public function orderWithEmailSimShare(string $packageId, int $quantity, array $esimCloud, ?string $description = null): ?EasyAccess`<br>
+Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.<br>
+Accepts additional array $esimCloud with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
+The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
+This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
+Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = $alo->getAllPackages(true);
+$packageId = $allPackages->data->{0}->package_id;
+
+$order = $alo->order($packageId, 1);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = AiraloStatic::getAllPackages(true);
+$packageId = $allPackages->data->{0}->package_id;
+
+$order = AiraloStatic::orderWithEmailSimShare($packageId, 1, [
+  'to_email' => 'end.user.email@domain.com',        // mandatory
+  'sharing_option' => ['link', 'pdf'],              // mandatory
+  'copy_address' => ['other.user.email@domain.com'] // optional
+]);
+```
+
 
 `public function orderBulk(array $packages, ?string $description = null): ?EasyAccess`<br>
 Parameters: array `$packages` where the key is the package name and the value represents the desired quantity.
@@ -597,6 +639,63 @@ Example response:<br>
 >**_NOTE:_**<br>
 >Each package id is a key in the returned response. The quantity of `sims` object represents the ordered quantity from the initial call.
 ><br><b>If an error occurs in one of the parallel async orders, the error REST response will be assigned to the package id key, so you must make sure to validate each response</b>
+
+
+`public function orderBulkWithEmailSimShare(array $packages, array $esimCloud, ?string $description = null): ?EasyAccess`<br>
+Parallel ordering for multiple packages (up to 50 different package ids) within the same function call. Example usage:<br>
+Accepts additional array $esimCloud with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
+The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
+This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
+Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = $alo->getAllPackages(true);
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
+
+$orders = $aa->orderBulk([
+    $firstPackageId => 2,
+    $secondPackageId => 1,
+]);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$allPackages = AiraloStatic::getAllPackages(true);
+$firstPackageId = $allPackages['data'][0]->package_id;
+$secondPackageId = $allPackages['data'][1]->package_id;
+$thirdPackageId = $allPackages['data'][2]->package_id;
+
+$orders = AiraloStatic::orderBulkWithEmailSimShare(
+  [
+    $firstPackageId => 2,
+    $secondPackageId => 1,
+  ],
+  [
+    'to_email' => 'end.user.email@domain.com',           // mandatory
+    'sharing_option' => ['link', 'pdf'],                 // mandatory
+    'copy_address' => ['another.user.email@domain.com'], // optional
+  ]
+);
+```
+
 
 <h2> Vouchers </h2>
 

@@ -295,6 +295,26 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testOrderWithEmailSimShare()
+    {
+        $expectedResult = new EasyAccess(['test' => 1, 'test2' => 2]);
+        $payload = [
+            'package_id' => 'test',
+            'quantity' => 1,
+            'type' => 'sim',
+            'description' => 'Order placed via Airalo PHP SDK',
+        ];
+        $shareOptions = ['to_email' => 'test@test.com', 'sharing_option' => ['link']];
+
+        $this->orderServiceMock
+            ->method('createOrderWithEmailSimShare')
+            ->with($payload, $shareOptions)
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->orderWithEmailSimShare('test', 1, $shareOptions);
+        $this->assertSame($expectedResult, $result);
+    }
+
     /**
      * @throws \ReflectionException
      */

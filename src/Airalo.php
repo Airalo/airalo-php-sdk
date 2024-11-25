@@ -151,6 +151,26 @@ class Airalo
     /**
      * @param string $packageId
      * @param int $quantity
+     * @param array $esimCloud
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderWithEmailSimShare(string $packageId, int $quantity, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        return $this->order->createOrderWithEmailSimShare(
+            [
+                'package_id' => $packageId,
+                'quantity' => $quantity,
+                'type' => 'sim',
+                'description' => $description ?? 'Order placed via Airalo PHP SDK',
+            ],
+            $esimCloud
+        );
+    }
+
+    /**
+     * @param string $packageId
+     * @param int $quantity
      * @param ?string $webhookUrl
      * @param ?string $description
      * @return EasyAccess|null
@@ -178,6 +198,21 @@ class Airalo
         }
 
         return $this->order->createOrderBulk($packages, $description);
+    }
+
+    /**
+     * @param array $packages
+     * @param array $esimCloud
+     * @param ?string $description
+     * @return EasyAccess|null
+     */
+    public function orderBulkWithEmailSimShare(array $packages, array $esimCloud, ?string $description = null): ?EasyAccess
+    {
+        if (empty($packages)) {
+            return null;
+        }
+
+        return $this->order->createOrderBulkWithEmailSimShare($packages, $esimCloud, $description);
     }
 
     /**

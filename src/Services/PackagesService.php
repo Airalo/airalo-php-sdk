@@ -61,7 +61,7 @@ class PackagesService
                 ])->get($pageUrl ?? $url);
 
                 if (!$response) {
-                    return null;
+                    return $result;
                 }
 
                 $response = json_decode($response, true);

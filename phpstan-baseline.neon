@@ -256,7 +256,7 @@ parameters:
 			path: src/Resources/CurlResource.php
 
 		-
-			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$curl \\(resource\\|null\\) does not accept CurlHandle|false\\.$#"
+			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$curl.$#"
 			count: 1
 			path: src/Resources/CurlResource.php
 

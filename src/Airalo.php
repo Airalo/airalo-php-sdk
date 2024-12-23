@@ -309,6 +309,17 @@ class Airalo
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function getSimTopups(string $iccid): ?EasyAccess
+    {
+        return $this->sim->simTopups([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException

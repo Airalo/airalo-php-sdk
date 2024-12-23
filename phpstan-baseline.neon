@@ -181,11 +181,6 @@ parameters:
 			path: src/Helpers/Signature.php
 
 		-
-			message: "#^Instanceof between resource\\|null and CurlHandle will always evaluate to false\\.$#"
-			count: 2
-			path: src/Resources/CurlResource.php
-
-		-
 			message: "#^Method Airalo\\\\Resources\\\\CurlResource\\:\\:__call\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Resources/CurlResource.php
@@ -231,23 +226,8 @@ parameters:
 			path: src/Resources/CurlResource.php
 
 		-
-			message: "#^Parameter \\#1 \\$handle of function curl_close expects CurlHandle, resource given\\.$#"
+			message: "#^Parameter \\#1 \\$handle of function curl_close expects CurlHandle, CurlHandle\\|resource given\\.$#"
 			count: 1
-			path: src/Resources/CurlResource.php
-
-		-
-			message: "#^Parameter \\#1 \\$handle of function curl_exec expects CurlHandle, resource\\|null given\\.$#"
-			count: 2
-			path: src/Resources/CurlResource.php
-
-		-
-			message: "#^Parameter \\#1 \\$handle of function curl_getinfo expects CurlHandle, resource\\|null given\\.$#"
-			count: 2
-			path: src/Resources/CurlResource.php
-
-		-
-			message: "#^Parameter \\#1 \\$handle of function curl_setopt expects CurlHandle, resource\\|null given\\.$#"
-			count: 17
 			path: src/Resources/CurlResource.php
 
 		-
@@ -256,7 +236,7 @@ parameters:
 			path: src/Resources/CurlResource.php
 
 		-
-			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$curl \\(resource\\|null\\) does not accept CurlHandle\\.$#"
+			message: "#^Property Airalo\\\\Resources\\\\CurlResource\\:\\:\\$curl has no type specified\\.$#"
 			count: 1
 			path: src/Resources/CurlResource.php
 
@@ -509,6 +489,11 @@ parameters:
 			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
 			count: 1
 			path: src/Services/PackagesService.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, float\\|int\\|string given\\.$#"
+			count: 2
+			path: src/Services/SimService.php
 
 		-
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:createTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"

@@ -9,9 +9,6 @@ use CurlHandle;
 
 class CurlResource
 {
-    /**
-     * @var resource|null
-     */
     private $curl = null;
 
     public string $header = '';

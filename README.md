@@ -934,6 +934,45 @@ Example response can be found in the API documentation (link above). <br>
 >Each iccid is a key in the returned response.
 ><br><b>If an error occurs in one of the parallel usage calls, the error REST response will be assigned to the iccid key, so you must make sure to validate each response</b>
 <br><br>
+<h2> Sim Topups </h2>
+
+`public function getSimTopups(string $iccid): ?EasyAccess`<br>
+
+Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#13535dd3-c337-4122-8e97-2fdb93263e86<br>
+
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+// get packages
+// place an order to obtain the valid iccid
+$availableTopups = $alo->getSimTopups($iccid);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+// get packages
+// place an order to obtain the valid iccid
+$availableTopups = AiraloStatic::getSimTopups($iccid);
+```
+
+Example response can be found in the API documentation (link above). <br>
+<br><br>
 <h2> Sim Instructions </h2>
 
 `public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>

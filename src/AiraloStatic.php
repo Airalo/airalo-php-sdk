@@ -337,6 +337,17 @@ class AiraloStatic
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public static function getSimTopups(string $iccid): ?EasyAccess
+    {
+        return self::$sim->simTopups([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock

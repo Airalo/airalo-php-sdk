@@ -86,42 +86,66 @@ class SimService
             if (!$response = $this->multiCurl->exec()) {
                 return null;
             }
-    
+
             $result = [];
             /* @phpstan-ignore-next-line */
             foreach ($response as $iccid => $each) {
                 $result[$iccid] = new EasyAccess($each);
             }
-    
+
             return new EasyAccess($result);
         }, $this->getKey(implode('', $iccids), []), 300);
+    }
+
+    /**
+     * @param array<string, mixed> $params An associative array of parameters
+     * @return EasyAccess|null
+     */
+    public function simTopups(array $params = []): ?EasyAccess
+    {
+        $url = $this->buildUrl($params, ApiConstants::SIMS_TOPUPS);
+
+        $result = Cached::get(function () use ($url) {
+
+            /* @phpstan-ignore-next-line */
+            $response = $this->curl->setHeaders([
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $this->accessToken,
+            ])->get($url);
+
+            $result = json_decode($response, true);
+
+            return new EasyAccess($result);
+        }, $this->getKey($url, $params), 300);
+
+        /* @phpstan-ignore-next-line */
+        return count($result['data']) ? $result : null;
     }
 
     /**
      * Builds a URL based on the provided parameters.
      *
      * @param array<string, mixed> $params An associative array of parameters. Must include the 'iccid' key.
+     * @param string|null $slug The slug to append to the base URL.
      * @return string The constructed URL.
      * @throws AiraloException if the 'iccid' parameter is not provided or is not a valid type.
      */
-    private function buildUrl(array $params): string
+    private function buildUrl(array $params, ?string $slug = null): string
     {
-
-        if (!isset($params['iccid'])) {
-            throw new AiraloException('The parameter "iccid" is required.');
+        if (!isset($params['iccid']) || !$this->isIccid($params['iccid'])) {
+            throw new AiraloException('The parameter "iccid" is invalid.');
         }
 
         /* @phpstan-ignore-next-line */
         $iccid = (string) $params['iccid'];
-        $url = sprintf(
+
+        return sprintf(
             '%s%s/%s/%s',
             $this->baseUrl,
             ApiConstants::SIMS_SLUG,
             $iccid,
-            ApiConstants::SIMS_USAGE
+            $slug ?? ApiConstants::SIMS_USAGE
         );
-
-        return $url;
     }
 
     /**
@@ -134,5 +158,16 @@ class SimService
     private function getKey(string $url, array $params): string
     {
         return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders())  . $this->accessToken);
+    }
+
+    /**
+     * @param mixed $val
+     * @return boolean
+     */
+    private function isIccid($val): bool
+    {
+        return is_numeric($val)
+            && strlen($val) >= 18
+            && strlen($val) <= 22;
     }
 }

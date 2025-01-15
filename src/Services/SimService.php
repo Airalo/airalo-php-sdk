@@ -123,6 +123,30 @@ class SimService
     }
 
     /**
+     * @param array<string, mixed> $params An associative array of parameters
+     * @return EasyAccess|null
+     */
+    public function simPackageHistory(array $params = []): ?EasyAccess
+    {
+        $url = $this->buildUrl($params, ApiConstants::SIMS_PACKAGES);
+
+        $result = Cached::get(function () use ($url) {
+            /* @phpstan-ignore-next-line */
+            $response = $this->curl->setHeaders([
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $this->accessToken,
+            ])->get($url);
+
+            $result = json_decode($response, true);
+
+            return new EasyAccess($result);
+        }, $this->getKey($url, $params), 900);
+
+        /* @phpstan-ignore-next-line */
+        return count($result['data']) ? $result : null;
+    }
+
+    /**
      * Builds a URL based on the provided parameters.
      *
      * @param array<string, mixed> $params An associative array of parameters. Must include the 'iccid' key.

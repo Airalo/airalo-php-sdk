@@ -973,6 +973,45 @@ $availableTopups = AiraloStatic::getSimTopups($iccid);
 
 Example response can be found in the API documentation (link above). <br>
 <br><br>
+<h2> Sim Package History </h2>
+
+`public function getSimPackageHistory(string $iccid): ?EasyAccess`<br>
+
+Fetches package history for the provided `iccid` belonging to an ordered eSIM. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#5e9bdbcb-dce5-42f7-8e41-d7c1d2dba7a5<br>
+
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+// get packages
+// place an order to obtain the valid iccid
+$simPackageHistory = $alo->getSimPackageHistory($iccid);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+// get packages
+// place an order to obtain the valid iccid
+$simPackageHistory = AiraloStatic::getSimPackageHistory($iccid);
+```
+
+Example response can be found in the API documentation (link above). <br>
+<br><br>
 <h2> Sim Instructions </h2>
 
 `public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>

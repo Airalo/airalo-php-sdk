@@ -348,6 +348,17 @@ class AiraloStatic
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public static function getSimPackageHistory(string $iccid): ?EasyAccess
+    {
+        return self::$sim->simPackageHistory([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock

@@ -320,6 +320,17 @@ class Airalo
     }
 
     /**
+     * @param string $iccid
+     * @return EasyAccess|null
+     */
+    public function getSimPackageHistory(string $iccid): ?EasyAccess
+    {
+        return $this->sim->simPackageHistory([
+            'iccid' => $iccid
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException

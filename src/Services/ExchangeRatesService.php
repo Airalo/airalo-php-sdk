@@ -41,8 +41,9 @@ class ExchangeRatesService
     }
 
     /**
-     * @param array<string, string> $params An associative array of parameters
+     * @param array<string, string|null> $params
      * @return EasyAccess|null
+     * @throws AiraloException
      */
     public function exchangeRates(array $params = []): ?EasyAccess
     {
@@ -52,7 +53,7 @@ class ExchangeRatesService
         $result = Cached::get(function () use ($url) {
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
-                'Content-Type: application/json',
+                'Accept: application/json',
                 'Authorization: Bearer ' . $this->accessToken,
             ])->get($url);
 
@@ -65,7 +66,7 @@ class ExchangeRatesService
     }
 
     /**
-     * @param array<string, string> $params
+     * @param array<string, string|null> $params
      * @return void
      * @throws AiraloException
      */

@@ -41,7 +41,7 @@ class ExchangeRatesService
     }
 
     /**
-     * @param array<string, mixed> $params An associative array of parameters
+     * @param array<string, string> $params An associative array of parameters
      * @return EasyAccess|null
      */
     public function exchangeRates(array $params = []): ?EasyAccess

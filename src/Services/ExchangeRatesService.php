@@ -65,7 +65,7 @@ class ExchangeRatesService
     }
 
     /**
-     * @param array<string, mixed> $params
+     * @param array<string, string> $params
      * @return void
      * @throws AiraloException
      */

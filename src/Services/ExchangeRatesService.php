@@ -65,7 +65,7 @@ class ExchangeRatesService
     }
 
     /**
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return void
      * @throws AiraloException
      */
@@ -87,7 +87,7 @@ class ExchangeRatesService
     /**
      * Build the URL for the exchange rates API.
      *
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     private function buildUrl(array $params): string
@@ -98,12 +98,7 @@ class ExchangeRatesService
         if (isset($params['date'])) {
             $queryParams['date'] = $params['date'];
         }
-        if (isset($params['source'])) {
-            unset($queryParams['source']);
-        }
-        if (isset($params['from'])) {
-            unset($queryParams['from']);
-        }
+
         if (isset($params['to'])) {
             $queryParams['to'] = $params['to'];
         }

@@ -12,7 +12,7 @@ final class Date
      * @param $format
      * @return bool
      */
-    public static function validateDate($date, $format = 'Y-m-d'): bool
+    public static function validateDate(string $date, string $format = 'Y-m-d'): bool
     {
         $date = DateTime::createFromFormat($format, $date);
         if (!$date) {

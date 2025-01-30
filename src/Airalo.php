@@ -7,6 +7,7 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\ExchangeRatesService;
 use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
@@ -38,6 +39,7 @@ class Airalo
     private TopupService $topup;
     private SimService $sim;
     private VoucherService $voucher;
+    private ExchangeRatesService $exchangeRates;
 
     /**
      * @param mixed $config
@@ -331,6 +333,23 @@ class Airalo
     }
 
     /**
+     * @param string|null $date
+     * @param string|null $source
+     * @param string|null $from
+     * @param string|null $to
+     * @return EasyAccess|null
+     */
+    public function getExchangeRates(?string $date=null, ?string $source=null, ?string $from=null, ?string $to=null): ?EasyAccess
+    {
+        return $this->exchangeRates->exchangeRates([
+            'date' => $date,
+            'source' => $source,
+            'from' => $from,
+            'to' => $to,
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -360,6 +379,7 @@ class Airalo
             ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
         $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
+        $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
     }
 
     /**

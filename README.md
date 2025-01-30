@@ -1009,6 +1009,74 @@ AiraloStatic::init([
 // place an order to obtain the valid iccid
 $simPackageHistory = AiraloStatic::getSimPackageHistory($iccid);
 ```
+<br><br>
+<h2> Exchange Rates </h2>
+
+`public function getExchangeRates(?string $date=null, ?string $source=null, ?string $from=null, ?string $to=null): ?EasyAccess`<br>
+
+Fetches exchange rates for the provided parameters. <br>
+`$date` - date in the format `YYYY-MM-DD`. If not provided it takes the current date<br>
+`$source` - always null<br>
+`$from` - Always USD<br>
+`$to` - comma separated list of currency codes to convert to. Example `'AUD,GBP,EUR'`<br> 
+
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$exchangeRates = $alo->getExchangeRates();
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$exchangeRates = AiraloStatic::getExchangeRates();
+```
+<br><br>
+Example response for the call:<br>
+```php 
+$exchangeRates = AiraloStatic::getExchangeRates('2025-01-30', null, null, 'AUD,GBP,EUR');
+```
+```json
+{
+    "data": {
+        "date": "2025-01-30",
+        "rates": [
+            {
+                "from": "USD",
+                "mid": "1.6059162",
+                "to": "AUD"
+            },
+            {
+                "from": "USD",
+                "mid": "0.80433592",
+                "to": "GBP"
+            },
+            {
+                "from": "USD",
+                "mid": "0.96191527",
+                "to": "EUR"
+            }
+        ]
+    },
+    "meta": {
+        "message": "success"
+    }
+}
+```
 
 Example response can be found in the API documentation (link above). <br>
 <br><br>

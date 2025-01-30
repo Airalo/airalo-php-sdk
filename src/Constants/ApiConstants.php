@@ -30,6 +30,7 @@ final class ApiConstants
     public const SIMS_USAGE = 'usage';
     public const SIMS_TOPUPS = 'topups';
     public const SIMS_PACKAGES = 'packages';
+    public const EXCHANGE_RATES_SLUG = 'finance/exchange-rates';
 
     public const NOTIFICATIONS_SLUG = 'notifications';
 }

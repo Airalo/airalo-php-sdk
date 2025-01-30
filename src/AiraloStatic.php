@@ -7,6 +7,7 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\ExchangeRatesService;
 use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
@@ -30,6 +31,7 @@ class AiraloStatic
     private static TopupService $topup;
     private static InstallationInstructionsService $instruction;
     private static SimService $sim;
+    private static ExchangeRatesService $exchangeRates;
 
     /**
      * @param mixed $config
@@ -359,6 +361,23 @@ class AiraloStatic
     }
 
     /**
+     * @param string|null $date
+     * @param string|null $source
+     * @param string|null $from
+     * @param string|null $to
+     * @return EasyAccess|null
+     */
+    public static function getExchangeRates(?string $date=null, ?string $source=null, ?string $from=null, ?string $to=null): ?EasyAccess
+    {
+        return self::$exchangeRates->exchangeRates([
+            'date' => $date,
+            'source' => $source,
+            'from' => $from,
+            'to' => $to,
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -380,6 +399,7 @@ class AiraloStatic
 
     /**
      * @return void
+     * @throws AiraloException
      */
     private static function initServices(): void
     {
@@ -395,6 +415,7 @@ class AiraloStatic
             ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
         self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token);
+        self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token);
     }
 
     /**

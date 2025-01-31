@@ -135,8 +135,34 @@ Fetching all of Airalo's packages. By default the response will be the same as t
         ]
       },
       "countries": [
-            "GR"
-        ]
+        "GR"
+      ],
+      "prices": {
+        "net_price": {
+          "AUD": 6.44,
+          "BRL": 23.52,
+          "GBP": 3.2,
+          "AED": 14.68,
+          "EUR": 3.84,
+          "ILS": 14.32,
+          "JPY": 616.67,
+          "MXN": 82.72,
+          "USD": 4.0,
+          "VND": 100330.0
+        },
+        "recommended_retail_price": {
+          "AUD": 10.07,
+          "BRL": 36.75,
+          "GBP": 5.0,
+          "AED": 22.93,
+          "EUR": 6.01,
+          "ILS": 22.38,
+          "JPY": 963.54,
+          "MXN": 129.25,
+          "USD": 6.25,
+          "VND": 156765.62
+        }
+      }
     },
     {
       "package_id": "meraki-mobile-7days-1gb-topup",
@@ -165,7 +191,33 @@ Fetching all of Airalo's packages. By default the response will be the same as t
       },
       "countries": [
         "GR"
-      ]
+      ],
+      "prices": {
+        "net_price": {
+          "AUD": 6.44,
+          "BRL": 23.52,
+          "GBP": 3.2,
+          "AED": 14.68,
+          "EUR": 3.84,
+          "ILS": 14.32,
+          "JPY": 616.67,
+          "MXN": 82.72,
+          "USD": 4.0,
+          "VND": 100330.0
+        },
+        "recommended_retail_price": {
+          "AUD": 10.07,
+          "BRL": 36.75,
+          "GBP": 5.0,
+          "AED": 22.93,
+          "EUR": 6.01,
+          "ILS": 22.38,
+          "JPY": 963.54,
+          "MXN": 129.25,
+          "USD": 6.25,
+          "VND": 156765.62
+        }
+      }
     }
   ]
 }

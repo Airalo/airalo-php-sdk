@@ -8,6 +8,7 @@ use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
 use Airalo\Services\ExchangeRatesService;
+use Airalo\Services\FutureOrderService;
 use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
@@ -40,6 +41,7 @@ class Airalo
     private SimService $sim;
     private VoucherService $voucher;
     private ExchangeRatesService $exchangeRates;
+    private FutureOrderService $futureOrders;
 
     /**
      * @param mixed $config
@@ -350,6 +352,56 @@ class Airalo
     }
 
     /**
+     * @param string $packageId
+     * @param int $quantity
+     * @param string $dueDate
+     * @param string|null $webhookUrl
+     * @param string|null $description
+     * @param string|null $brandSettingsName
+     * @param string|null $toEmail
+     * @param array|null $sharingOption
+     * @param array|null $copyAddress
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public function createFutureOrder(
+        string  $packageId,
+        int     $quantity,
+        string  $dueDate,
+        ?string $webhookUrl = null,
+        ?string $description = null,
+        ?string $brandSettingsName = null,
+        ?string $toEmail = null,
+        ?array  $sharingOption = null,
+        ?array  $copyAddress = null
+    ): ?EasyAccess
+    {
+        return $this->futureOrders->createFutureOrder([
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'due_date' => $dueDate,
+            'webhook_url' => $webhookUrl,
+            'description' => $description ?? 'Future order placed via Airalo PHP SDK',
+            'brand_settings_name' => $brandSettingsName,
+            'to_email' => $toEmail,
+            'sharing_option' => $sharingOption,
+            'copy_address' => $copyAddress,
+        ]);
+    }
+
+    /**
+     * @param array $requestIds
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public function cancelFutureOrder(array $requestIds): ?EasyAccess
+    {
+        return $this->futureOrders->cancelFutureOrder([
+            'request_ids' => $requestIds,
+        ]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -380,6 +432,7 @@ class Airalo
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
         $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
         $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
+        $this->futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService($this->config, $this->curl, $this->signature, $token);
     }
 
     /**

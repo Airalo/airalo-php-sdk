@@ -4,7 +4,7 @@ namespace Airalo\Constants;
 
 final class SdkConstants
 {
-    public const VERSION = '1.1.10';
+    public const VERSION = '1.1.11';
 
     public const BULK_ORDER_LIMIT = 50;
 
@@ -12,4 +12,5 @@ final class SdkConstants
 
     public const VOUCHER_MAX_NUM = 100000;
     public const VOUCHER_MAX_QUANTITY = 100;
+    public const FUTURE_ORDER_LIMIT = 50;
 }

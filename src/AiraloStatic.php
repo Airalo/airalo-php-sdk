@@ -8,6 +8,7 @@ use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
 use Airalo\Services\ExchangeRatesService;
+use Airalo\Services\FutureOrderService;
 use Airalo\Services\InstallationInstructionsService;
 use Airalo\Services\OAuthService;
 use Airalo\Services\OrderService;
@@ -32,6 +33,7 @@ class AiraloStatic
     private static InstallationInstructionsService $instruction;
     private static SimService $sim;
     private static ExchangeRatesService $exchangeRates;
+    private static FutureOrderService $futureOrders;
 
     /**
      * @param mixed $config
@@ -378,6 +380,56 @@ class AiraloStatic
     }
 
     /**
+     * @param string $packageId
+     * @param int $quantity
+     * @param string $dueDate
+     * @param string|null $webhookUrl
+     * @param string|null $description
+     * @param string|null $brandSettingsName
+     * @param string|null $toEmail
+     * @param array|null $sharingOption
+     * @param array|null $copyAddress
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public static function createFutureOrder(
+        string  $packageId,
+        int     $quantity,
+        string  $dueDate,
+        ?string $webhookUrl = null,
+        ?string $description = null,
+        ?string $brandSettingsName = null,
+        ?string $toEmail = null,
+        ?array  $sharingOption = null,
+        ?array  $copyAddress = null
+    ): ?EasyAccess
+    {
+        return self::$futureOrders->createFutureOrder([
+            'package_id' => $packageId,
+            'quantity' => $quantity,
+            'due_date' => $dueDate,
+            'webhook_url' => $webhookUrl,
+            'description' => $description ?? 'Future order placed via Airalo PHP SDK',
+            'brand_settings_name' => $brandSettingsName,
+            'to_email' => $toEmail,
+            'sharing_option' => $sharingOption,
+            'copy_address' => $copyAddress,
+        ]);
+    }
+
+    /**
+     * @param array $requestIds
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public static function cancelFutureOrder(array $requestIds): ?EasyAccess
+    {
+        return self::$futureOrders->cancelFutureOrder([
+            'request_ids' => $requestIds,
+        ]);
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -416,6 +468,7 @@ class AiraloStatic
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
         self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token);
         self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token);
+        self::$futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService(self::$config, self::$curl, self::$signature, $token);
     }
 
     /**

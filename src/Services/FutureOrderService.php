@@ -50,6 +50,8 @@ class FutureOrderService
     {
         $this->validateFutureOrder($payload);
 
+        $payload = array_filter($payload);
+
         $response = $this->curl
             ->setHeaders($this->getHeaders($payload))
             ->post($this->config->getUrl() . ApiConstants::FUTURE_ORDERS, $payload);

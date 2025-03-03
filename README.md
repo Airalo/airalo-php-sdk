@@ -1486,7 +1486,7 @@ Example response for the call:<br>
 }
 ```
 
-# Techincal notes
+# Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h.
 - Caching is automatically stored in filesystem for 1h.
 - Utilize the `mock()` methods in Airalo and AiraloStatic for seamless stubbing with your own unit tests.

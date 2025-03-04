@@ -1376,6 +1376,9 @@ Example response:<br>
 `public function createFutureOrder(string $packageId, int $quantity, string $dueDate, ?string $webhookUrl = null, ?string $description = null, ?string $brandSettingsName = null, ?string $toEmail = null, ?array  $sharingOption = null, ?array  $copyAddress = null): ?EasyAccess`<br>
 
 Places future order for a given package id (fetched from any of the packages calls) and calls `future-orders` endpoint of the REST API.
+>**_NOTE:_**<br>
+>`$dueDate` should always be in UTC timezone and in the format `YYYY-MM-DD HH:MM`<br>
+
 ```php
 <?php
 

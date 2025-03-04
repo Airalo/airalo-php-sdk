@@ -6,6 +6,7 @@ use Airalo\Config;
 use Airalo\Constants\ApiConstants;
 use Airalo\Constants\SdkConstants;
 use Airalo\Exceptions\AiraloException;
+use Airalo\Helpers\CloudSimShareValidator;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 use Airalo\Helpers\Signature;
@@ -284,33 +285,7 @@ class OrderService
      */
     private function validateCloudSimShare(array $simCloudShare): void
     {
-        $emailRegex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-
-        if (
-            !isset($simCloudShare['to_email'])
-            || $simCloudShare['to_email'] == ''
-            || !preg_match($emailRegex, $simCloudShare['to_email'])
-        ) {
-            throw new AiraloException('The to_email is required email address, payload: ' . json_encode($simCloudShare));
-        }
-
-        if (!isset($simCloudShare['sharing_option']) || !is_array($simCloudShare['sharing_option'])) {
-            throw new AiraloException('The sharing_option is required array, payload: ' . json_encode($simCloudShare));
-        }
-
-        foreach ($simCloudShare['sharing_option'] as $sharingOption) {
-            if (!in_array($sharingOption, ['link', 'pdf'])) {
-                throw new AiraloException('The sharing_option may be link or pdf or both, payload: ' . json_encode($simCloudShare));
-            }
-        }
-
-        if (isset($simCloudShare['copy_address']) && is_array($simCloudShare['copy_address'])) {
-            foreach ($simCloudShare['copy_address'] as $eachCCemail) {
-                if (!preg_match($emailRegex, $eachCCemail)) {
-                    throw new AiraloException("The copy_address: $eachCCemail must be valid email address, payload: " . json_encode($simCloudShare));
-                }
-            }
-        }
+        CloudSimShareValidator::validate($simCloudShare, ['to_email', 'sharing_option']);
     }
 
     /**

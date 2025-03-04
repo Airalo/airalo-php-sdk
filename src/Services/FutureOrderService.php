@@ -9,6 +9,7 @@ use Airalo\Constants\ApiConstants;
 use Airalo\Constants\SdkConstants;
 use Airalo\Resources\CurlResource;
 use Airalo\Exceptions\AiraloException;
+use Airalo\Helpers\CloudSimShareValidator;
 
 class FutureOrderService
 {
@@ -49,6 +50,7 @@ class FutureOrderService
     public function createFutureOrder(array $payload): ?EasyAccess
     {
         $this->validateFutureOrder($payload);
+        $this->validateCloudSimShare($payload);
 
         $payload = array_filter($payload);
 
@@ -126,28 +128,15 @@ class FutureOrderService
         if (!$date || $date->format('Y-m-d H:i') !== $payload['due_date']) {
             throw new AiraloException('The due_date must be in the format Y-m-d H:i, payload: ' . json_encode($payload));
         }
+    }
 
-        $emailRegex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-
-        if (isset($payload['to_email']) && !preg_match($emailRegex, $payload['to_email'])) {
-            throw new AiraloException('The to_email: ' . $payload['to_email'] . ' must be valid email address, payload: ' . json_encode($payload));
-        }
-
-        if (isset($payload['sharing_option'])) {
-            foreach ($payload['sharing_option'] as $sharingOption) {
-                if (!in_array($sharingOption, ['link', 'pdf'])) {
-                    throw new AiraloException('The sharing_option may be link or pdf or both, payload: ' . json_encode($payload));
-                }
-            }
-        }
-
-        if (isset($payload['copy_address'])) {
-            foreach ($payload['copy_address'] as $eachCCemail) {
-                if (!preg_match($emailRegex, $eachCCemail)) {
-                    throw new AiraloException("The copy_address: $eachCCemail must be valid email address, payload: " . json_encode($payload));
-                }
-            }
-        }
+    /**
+     * @param array $simCloudShare
+     * @return void
+     */
+    private function validateCloudSimShare(array $simCloudShare): void
+    {
+        CloudSimShareValidator::validate($simCloudShare);
     }
 
     /**

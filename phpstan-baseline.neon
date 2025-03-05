@@ -1,6 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:cancelFutureOrder\\(\\) has parameter \\$requestIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:createFutureOrder\\(\\) has parameter \\$copyAddress with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\Airalo\\:\\:createFutureOrder\\(\\) has parameter \\$sharingOption with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Airalo.php
+
+		-
 			message: "#^Method Airalo\\\\Airalo\\:\\:getSimPackages\\(\\) has parameter \\$limit with no type specified\\.$#"
 			count: 1
 			path: src/Airalo.php
@@ -44,6 +59,21 @@ parameters:
 			message: "#^Property Airalo\\\\Airalo\\:\\:\\$pool type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Airalo.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:cancelFutureOrder\\(\\) has parameter \\$requestIds with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:createFutureOrder\\(\\) has parameter \\$copyAddress with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
+
+		-
+			message: "#^Method Airalo\\\\AiraloStatic\\:\\:createFutureOrder\\(\\) has parameter \\$sharingOption with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/AiraloStatic.php
 
 		-
 			message: "#^Method Airalo\\\\AiraloStatic\\:\\:getSimPackages\\(\\) has parameter \\$limit with no type specified\\.$#"
@@ -129,6 +159,31 @@ parameters:
 			message: "#^Trying to invoke mixed but it's not a callable\\.$#"
 			count: 1
 			path: src/Helpers/Cached.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$requiredFields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Helpers/CloudSimShareValidator.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$simCloudShare with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Helpers/CloudSimShareValidator.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:validate\\(\\) has parameter \\$requiredFields with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Helpers/CloudSimShareValidator.php
+
+		-
+			message: "#^Method Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:validate\\(\\) has parameter \\$simCloudShare with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Helpers/CloudSimShareValidator.php
+
+		-
+			message: "#^Property Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:\\$allowedSharingOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Helpers/CloudSimShareValidator.php
 
 		-
 			message: "#^Method Airalo\\\\Helpers\\\\Crypt\\:\\:decrypt\\(\\) should return string but returns string\\|false\\.$#"
@@ -321,6 +376,61 @@ parameters:
 			path: src/Resources/MultiCurlResource.php
 
 		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/ExchangeRatesService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 2
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:cancelFutureOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:createFutureOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:getHeaders\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:getHeaders\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:validateCancelFutureOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:validateCloudSimShare\\(\\) has parameter \\$simCloudShare with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Method Airalo\\\\Services\\\\FutureOrderService\\:\\:validateFutureOrder\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/FutureOrderService.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/InstallationInstructionsService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
 			message: "#^Cannot access offset 'access_token' on mixed\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
@@ -346,6 +456,11 @@ parameters:
 			path: src/Services/OAuthService.php
 
 		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/OAuthService.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function md5 expects string, array\\|string given\\.$#"
 			count: 1
 			path: src/Services/OAuthService.php
@@ -362,6 +477,11 @@ parameters:
 
 		-
 			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 3
+			path: src/Services/OrderService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
 			count: 3
 			path: src/Services/OrderService.php
 
@@ -481,6 +601,11 @@ parameters:
 			path: src/Services/PackagesService.php
 
 		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 1
+			path: src/Services/PackagesService.php
+
+		-
 			message: "#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#"
 			count: 1
 			path: src/Services/PackagesService.php
@@ -491,9 +616,24 @@ parameters:
 			path: src/Services/PackagesService.php
 
 		-
+			message: "#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: src/Services/SimService.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, mixed given\\.$#"
+			count: 3
+			path: src/Services/SimService.php
+
+		-
 			message: "#^Parameter \\#1 \\$string of function strlen expects string, float\\|int\\|string given\\.$#"
 			count: 2
 			path: src/Services/SimService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 1
+			path: src/Services/TopupService.php
 
 		-
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:createTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
@@ -504,3 +644,8 @@ parameters:
 			message: "#^Method Airalo\\\\Services\\\\TopupService\\:\\:validateTopup\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Services/TopupService.php
+
+		-
+			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
+			count: 2
+			path: src/Services/VoucherService.php

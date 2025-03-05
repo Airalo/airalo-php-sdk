@@ -33,4 +33,7 @@ final class ApiConstants
     public const EXCHANGE_RATES_SLUG = 'finance/exchange-rates';
 
     public const NOTIFICATIONS_SLUG = 'notifications';
+
+    public const FUTURE_ORDERS = 'future-orders';
+    public const CANCEL_FUTURE_ORDERS = 'cancel-future-orders';
 }

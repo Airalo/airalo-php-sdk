@@ -1370,9 +1370,126 @@ Example response:<br>
 }
 ```
 
+<br><br>
+<h2> Future Orders </h2>
 
+`public function createFutureOrder(string $packageId, int $quantity, string $dueDate, ?string $webhookUrl = null, ?string $description = null, ?string $brandSettingsName = null, ?string $toEmail = null, ?array  $sharingOption = null, ?array  $copyAddress = null): ?EasyAccess`<br>
 
-# Techincal notes
+Places future order for a given package id (fetched from any of the packages calls) and calls `future-orders` endpoint of the REST API.
+>**_NOTE:_**<br>
+>`$dueDate` should always be in UTC timezone and in the format `YYYY-MM-DD HH:MM`<br>
+
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$futureOrder = $alo->createFutureOrder(
+    'package_id', // mandatory
+    1, // mandatory
+    '2025-03-10 10:00', // mandatory
+    'https://your-webhook.com',
+    'Test description from PHP SDK',
+    null,
+    'end.user.email@domain.com', // mandatory
+    ['link', 'pdf'],
+    ['other.user.email@domain.com'] // optional
+);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$futureOrder = AiraloStatic::createFutureOrder(
+    'package_id', // mandatory
+    1, // mandatory
+    '2025-03-10 10:00', // mandatory
+    'https://your-webhook.com',
+    'Test description from PHP SDK',
+    null,
+    'end.user.email@domain.com', // mandatory
+    ['link', 'pdf'],
+    ['other.user.email@domain.com'] // optional
+);
+```
+<br><br>
+Example response for the call:<br>
+```json
+{
+  "data": {
+    "request_id": "bUKdUc0sVB_nXJvlz0l8rTqYR",
+    "due_date": "2025-03-10 10:00",
+    "latest_cancellation_date": "2025-03-09 10:00"
+  },
+  "meta": {
+    "message": "success"
+  }
+}
+```
+
+<br><br>
+<h2> Cancel Future Orders </h2>
+
+`public function cancelFutureOrder(array $requestIds): ?EasyAccess`<br>
+
+Cancels future orders and calls `cancel-future-orders` endpoint of the REST API.
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$cancelFutureOrders = $alo->cancelFutureOrder([
+    'request_id_1',
+    'request_id_2',
+    'request_id_3',
+]);
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$cancelFutureOrders = AiraloStatic::cancelFutureOrder([
+    'request_id_1',
+    'request_id_2',
+    'request_id_3',
+]);
+```
+<br><br>
+Example response for the call:<br>
+```json
+{
+  "data": {},
+  "meta": {
+    "message": "Future orders cancelled successfully"
+  }
+}
+```
+
+# Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h.
 - Caching is automatically stored in filesystem for 1h.
 - Utilize the `mock()` methods in Airalo and AiraloStatic for seamless stubbing with your own unit tests.

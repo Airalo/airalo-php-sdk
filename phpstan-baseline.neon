@@ -729,8 +729,3 @@ parameters:
 			message: "#^Call to private method post\\(\\) of class Airalo\\\\Resources\\\\CurlResource\\.$#"
 			count: 2
 			path: src/Services/VoucherService.php
-
-		-
-			message: "#^Result of static method Airalo\\\\AiraloStatic\\:\\:init\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: src/test.php

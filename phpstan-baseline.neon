@@ -431,11 +431,6 @@ parameters:
 			path: src/Services/CatalogService.php
 
 		-
-			message: "#^Property Airalo\\\\Services\\\\CatalogService\\:\\:\\$multiCurl is never read, only written\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
 			message: "#^Result of && is always false\\.$#"
 			count: 1
 			path: src/Services/CatalogService.php

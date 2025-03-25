@@ -4,7 +4,7 @@ namespace Airalo\Constants;
 
 final class ApiConstants
 {
-    public const SANBOX_URL = 'https://sandbox-partners-api.airalo.com/v2/';
+    public const SANBOX_URL = 'https://api-ap-4979.monolith.eks.partners.airalo.com/v2/';
 
     public const PRODUCTION_URL = 'https://partners-api.airalo.com/v2/';
 
@@ -36,4 +36,5 @@ final class ApiConstants
 
     public const FUTURE_ORDERS = 'future-orders';
     public const CANCEL_FUTURE_ORDERS = 'cancel-future-orders';
+    public const OVERRIDE_SLUG = 'package/overrides';
 }

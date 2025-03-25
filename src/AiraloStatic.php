@@ -480,7 +480,7 @@ class AiraloStatic
         self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token);
         self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token);
         self::$futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService(self::$config, self::$curl, self::$signature, $token);
-        self::$catalogService = self::$pool['catalogService'] ?? new CatalogService(self::$config, self::$curl, self::$multiCurl, $token);
+        self::$catalogService = self::$pool['catalogService'] ?? new CatalogService(self::$config, self::$curl, $token);
     }
 
     /**

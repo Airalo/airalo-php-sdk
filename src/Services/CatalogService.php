@@ -3,33 +3,28 @@
 namespace Airalo\Services;
 
 use Airalo\Config;
+use Airalo\Constants\ApiConstants;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
-use Airalo\Resources\MultiCurlResource;
 
 class CatalogService
 {
-    private const OVERRIDE_URI = 'package/overrides?';
-
     private Config $config;
 
     private CurlResource $curl;
-    private MultiCurlResource $multiCurl;
     private string $baseUrl;
     private string $accessToken;
 
     /**
      * @param Config $config
      * @param Curl $curl
-     * @param MultiCurlResource $multiCurl
      * @param string $accessToken
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
-        MultiCurlResource $multiCurl,
         string $accessToken
     ) {
         if (!$accessToken) {
@@ -38,7 +33,6 @@ class CatalogService
 
         $this->config = $config;
         $this->curl = $curl;
-        $this->multiCurl = $multiCurl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
     }
@@ -97,6 +91,6 @@ class CatalogService
 
     private function buildUrl(): string
     {
-        return $this->baseUrl . self::OVERRIDE_URI;
+        return $this->baseUrl . ApiConstants::OVERRIDE_SLUG . '?';
     }
 }

@@ -445,7 +445,7 @@ class Airalo
         $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
         $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
         $this->futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService($this->config, $this->curl, $this->signature, $token);
-        $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $this->multiCurl, $token);
+        $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $token);
     }
 
     /**

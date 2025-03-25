@@ -7,6 +7,7 @@ use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
+use Airalo\Services\CatalogService;
 use Airalo\Services\ExchangeRatesService;
 use Airalo\Services\FutureOrderService;
 use Airalo\Services\InstallationInstructionsService;
@@ -42,6 +43,8 @@ class Airalo
     private VoucherService $voucher;
     private ExchangeRatesService $exchangeRates;
     private FutureOrderService $futureOrders;
+
+    private CatalogService $catalogService;
 
     /**
      * @param mixed $config
@@ -402,6 +405,15 @@ class Airalo
     }
 
     /**
+     * @param int $page
+     * @return EasyAccess|null
+     */
+    public function getCatalogOverrides(int $page = 1): ?EasyAccess
+    {
+        return $this->catalogService->catalogsBulk(['page' => $page]);
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -433,6 +445,7 @@ class Airalo
         $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
         $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
         $this->futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService($this->config, $this->curl, $this->signature, $token);
+        $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $token);
     }
 
     /**

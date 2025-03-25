@@ -36,4 +36,5 @@ final class ApiConstants
 
     public const FUTURE_ORDERS = 'future-orders';
     public const CANCEL_FUTURE_ORDERS = 'cancel-future-orders';
+    public const OVERRIDE_SLUG = 'packages/overrides';
 }

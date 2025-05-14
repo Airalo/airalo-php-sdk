@@ -91,9 +91,7 @@ class Config
      */
     public function getUrl(): string
     {
-        return $this->getEnvironment() == 'sandbox'
-            ? ApiConstants::SANBOX_URL
-            : ApiConstants::PRODUCTION_URL;
+        return $this->data['api_url'] ?? 'https://partners-api.airalo.com/v2/';
     }
 
     /**
@@ -124,12 +122,6 @@ class Config
 
         if (!isset($this->data['env'])) {
             $this->data['env'] = 'production';
-        }
-
-        if (!in_array($this->data['env'], self::ENVIRONMENTS)) {
-            throw new AiraloException(
-                "Invalid environment provided: `{$this->data['env']}`, allowed: " . implode(', ', self::ENVIRONMENTS)
-            );
         }
     }
 }

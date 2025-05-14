@@ -12,11 +12,6 @@ class Config
         'client_secret',
     ];
 
-    private const ENVIRONMENTS = [
-        'sandbox',
-        'production',
-    ];
-
     private array $data = [];
 
     /**

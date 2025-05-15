@@ -5,6 +5,7 @@ namespace Airalo\Constants;
 final class ApiConstants
 {
     public const SANBOX_URL = 'https://sandbox-partners-api.airalo.com/v2/';
+    public const DEV_URL = 'https://api.dev.partners.airalo.com/v2/';
 
     public const PRODUCTION_URL = 'https://partners-api.airalo.com/v2/';
 

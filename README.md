@@ -43,7 +43,7 @@ use Airalo\Airalo;
 $alo = new Airalo([
     'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
     'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, defaults to `production`
+    'env' => 'sandbox',                                 // optional, sandbox | dev | production. defaults to `production`
 ]);
 
 $allPackages = $alo->getAllPackages(true);
@@ -62,7 +62,7 @@ use Airalo\AiraloStatic;
 AiraloStatic::init([
     'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
     'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, defaults to `production`
+    'env' => 'sandbox',                                 // optional, sandbox | dev | production. defaults to `production`
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);

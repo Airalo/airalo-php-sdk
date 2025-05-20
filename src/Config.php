@@ -15,6 +15,13 @@ class Config
     private const ENVIRONMENTS = [
         'sandbox',
         'production',
+        'dev',
+    ];
+
+    protected const ENVIRONMENT_URLS = [
+        'dev' => ApiConstants::DEV_URL,
+        'sandbox' => ApiConstants::SANBOX_URL,
+        'production' => ApiConstants::PRODUCTION_URL,
     ];
 
     private array $data = [];
@@ -91,9 +98,7 @@ class Config
      */
     public function getUrl(): string
     {
-        return $this->getEnvironment() == 'sandbox'
-            ? ApiConstants::SANBOX_URL
-            : ApiConstants::PRODUCTION_URL;
+        return self::ENVIRONMENT_URLS[$this->getEnvironment()] ?? ApiConstants::PRODUCTION_URL;
     }
 
     /**

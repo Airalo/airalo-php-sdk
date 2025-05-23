@@ -12,17 +12,6 @@ class Config
         'client_secret',
     ];
 
-    private const ENVIRONMENTS = [
-        'sandbox',
-        'production',
-        'dev',
-    ];
-
-    protected const ENVIRONMENT_URLS = [
-        'dev' => ApiConstants::DEV_URL,
-        'sandbox' => ApiConstants::SANBOX_URL,
-        'production' => ApiConstants::PRODUCTION_URL,
-    ];
 
     private array $data = [];
 
@@ -98,7 +87,7 @@ class Config
      */
     public function getUrl(): string
     {
-        return self::ENVIRONMENT_URLS[$this->getEnvironment()] ?? ApiConstants::PRODUCTION_URL;
+        return $this->data['api_url'] ?? ApiConstants::PRODUCTION_URL;
     }
 
     /**
@@ -129,12 +118,6 @@ class Config
 
         if (!isset($this->data['env'])) {
             $this->data['env'] = 'production';
-        }
-
-        if (!in_array($this->data['env'], self::ENVIRONMENTS)) {
-            throw new AiraloException(
-                "Invalid environment provided: `{$this->data['env']}`, allowed: " . implode(', ', self::ENVIRONMENTS)
-            );
         }
     }
 }

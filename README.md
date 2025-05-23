@@ -41,9 +41,10 @@ require __DIR__ . '/vendor/autoload.php';
 use Airalo\Airalo;
 
 $alo = new Airalo([
-    'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
-    'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, sandbox | dev | production. defaults to `production`
+    'client_id' => '<YOUR_API_CLIENT_ID>',                      // mandatory
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',              // mandatory
+    'env' => 'sandbox',                                         // optional, defaults to `production`
+    'api_url' => 'https://sandbox-partners-api.airalo.com/v2/'  // optional, defaults to `https://partners-api.airalo.com/v2/`
 ]);
 
 $allPackages = $alo->getAllPackages(true);
@@ -60,9 +61,10 @@ use Airalo\AiraloStatic;
 
 // `init` must be called before using any of the methods otherwise an AiraloException will be thrown
 AiraloStatic::init([
-    'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
-    'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, sandbox | dev | production. defaults to `production`
+    'client_id' => '<YOUR_API_CLIENT_ID>',                      // mandatory
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',              // mandatory
+    'env' => 'sandbox',                                         // optional, defaults to `production`
+    'api_url' => 'https://sandbox-partners-api.airalo.com/v2/'  // optional, defaults to `https://partners-api.airalo.com/v2/`
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);

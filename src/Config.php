@@ -91,6 +91,10 @@ class Config
      */
     public function getUrl(): string
     {
+        $override = getenv('AIRALO_API_URL');
+        if (!empty($override)) {
+            return $override;
+        }
         return $this->getEnvironment() == 'sandbox'
             ? ApiConstants::SANBOX_URL
             : ApiConstants::PRODUCTION_URL;

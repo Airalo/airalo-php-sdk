@@ -100,7 +100,7 @@ class Config
             return $override;
         }
 
-        return $this->getEnvironment() == 'sandbox'
+        return $this->getEnvironment() === 'sandbox'
             ? ApiConstants::SANBOX_URL
             : ApiConstants::PRODUCTION_URL;
     }

@@ -105,7 +105,7 @@ $jsonString = (string)$allPackages;
 >Passing `true` to `$flat` parameter makes the response significantly more compact and easy to handle. However it differes than the main one returned from the endpoints. Be mindful in which occassions you will need the original and in which the compact version. Happy coding!
 
 `public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
-Fetching all of Airalo's packages. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object, example:
+Fetching all of Airalo's packages. By default the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object, example:
 ```json
 {
   "data": [
@@ -227,24 +227,24 @@ By default it will paginate all pages (multiple calls) or if `$page` is provided
 
 
 `public function getLocalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
-Fetching local Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object.<br>
+Fetching local Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
 
 `public function getGlobalPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
-Fetching global Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object.<br>
+Fetching global Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
 
 `public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess`<br>
-Fetching country specific Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object.<br>
+Fetching country specific Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
 `public function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
-Fetching Sim only Airalo packages without top ups. By default the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `$flat` as true will return package objects data in a single data object.<br>
+Fetching Sim only Airalo packages without top ups. By default the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
@@ -252,7 +252,7 @@ By default it will paginate all pages (multiple calls) or if `$page` is provided
 
 `public function order(string $packageId, int $quantity, ?string $description = null): ?EasyAccess`<br>
 Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-order-11883024e0<br>
 ```php
 <?php
 
@@ -287,7 +287,7 @@ $order = AiraloStatic::order($packageId, 1);
 
 `public function orderAsync(string $packageId, int $quantity, ?string $webhookUrl = null, ?string $description = null): ?EasyAccess`<br>
 Places an async order for a given package id (fetched from any of the packages calls) and calls `order-async` endpoint of the REST API.
-Full information can be found here: https://partners-doc.airalo.com/#c8471dfc-83d6-4d36-ac8e-6dce2d55a49e<br>
+Full information can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-order-async-11883025e0<br>
 ```php
 <?php
 
@@ -325,7 +325,6 @@ Places an order for a given package id (fetched from any of the packages calls) 
 Accepts additional array $esimCloud with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
 The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
 This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 ```php
 <?php
 
@@ -698,7 +697,6 @@ Parallel ordering for multiple packages (up to 50 different package ids) within 
 Accepts additional array $esimCloud with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
 The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
 This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 ```php
 <?php
 
@@ -753,7 +751,6 @@ $orders = AiraloStatic::orderBulkWithEmailSimShare(
 
 `public function voucher(int $usageLimit, int $amount, int $quantity, ?bool $isPaid = false, string $voucherCode = null): ?EasyAccess`<br>
 calls `voucher` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 ```php
 <?php
 
@@ -805,7 +802,7 @@ Example response:<br>
 
 `public function esimVouchers(array $vouchers): ?EasyAccess`<br>
 calls `voucher/esim` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#5a48bb8d-70d1-4030-ad92-4a82eb979281<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/esim-voucher-11883065e0<br>
 ```php
 <?php
 
@@ -870,7 +867,7 @@ Example response:<br>
 `public function topup(string $packageId, string $iccid, ?string $description = null): ?EasyAccess`<br>
 
 Places a topup for a given package id and iccid of an eSIM and calls `topups` endpoint of the REST API.<br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-top-up-order-11883026e0<br>
 
 ```php
 <?php
@@ -915,7 +912,7 @@ $topup = AiraloStatic::topup($packageId, $iccid);
 `public function simUsage(string $iccid): ?EasyAccess`<br>
 
 Places an $iccid with user iccid  and calls `simUsage` endpoint of the REST API. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-usage-data-text-voice-11883030e0<br>
 
 ```php
 <?php
@@ -951,7 +948,7 @@ Example response can be found in the API documentation (link above). <br>
 `public function simUsageBulk(array $iccids): ?EasyAccess`<br>
 
 Places an array of $iccids and calls `simUsage` endpoint of the REST API in parallel for each of the iccids. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-usage-data-text-voice-11883030e0<br>
 
 ```php
 <?php
@@ -991,7 +988,7 @@ Example response can be found in the API documentation (link above). <br>
 `public function getSimTopups(string $iccid): ?EasyAccess`<br>
 
 Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#13535dd3-c337-4122-8e97-2fdb93263e86<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-top-up-package-list-11883031e0<br>
 
 ```php
 <?php
@@ -1030,7 +1027,7 @@ Example response can be found in the API documentation (link above). <br>
 `public function getSimPackageHistory(string $iccid): ?EasyAccess`<br>
 
 Fetches package history for the provided `iccid` belonging to an ordered eSIM. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#5e9bdbcb-dce5-42f7-8e41-d7c1d2dba7a5<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-esim-package-history-11883032e0<br>
 
 ```php
 <?php
@@ -1136,7 +1133,7 @@ Example response can be found in the API documentation (link above). <br>
 
 `public function getSimInstructions(string $iccid, string $language = "en"): ?EasyAccess`<br>
 Places an $iccid with user iccid & $language with language like en,de. by default its en and calls `getSimInstructions` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-installation-instructions-11883029e0<br>
 ```php
 <?php
 

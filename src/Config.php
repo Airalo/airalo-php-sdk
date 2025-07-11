@@ -86,16 +86,21 @@ class Config
         return $this->data['env'];
     }
 
+    public function getOverrideUrl(): null|string
+    {
+        return $this->data['api_url'] ?? null;
+    }
+
     /**
      * @return string
      */
     public function getUrl(): string
     {
-        $override = getenv('AIRALO_API_URL');
-        if (!empty($override)) {
+        if ($override = $this->getOverrideUrl()) {
             return $override;
         }
-        return $this->getEnvironment() == 'sandbox'
+
+        return $this->getEnvironment() === 'sandbox'
             ? ApiConstants::SANBOX_URL
             : ApiConstants::PRODUCTION_URL;
     }

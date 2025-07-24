@@ -14,7 +14,7 @@ final class ApiConstants
 
     public const INSTRUCTIONS_SLUG = 'instructions';
 
-    public const COMPATIBILITY_SLUG = 'compatible-devices';
+    public const COMPATIBILITY_SLUG = 'compatible-devices-lite';
 
     public const ORDERS_SLUG = 'orders';
 

@@ -52,12 +52,11 @@ class CompatibilityDevicesService
             'Authorization: Bearer ' . $this->accessToken,
         ])->get($url);
 
+        /* @phpstan-ignore-next-line */
         $result = json_decode($response, true);
 
-        return new EasyAccess($result);
-
         /* @phpstan-ignore-next-line */
-        return count($result['data']) ? $result : null;
+        return count($result['data']) ? new EasyAccess($result) : null;
     }
 
     /**

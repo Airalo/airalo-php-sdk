@@ -1485,6 +1485,64 @@ Example response for the call:<br>
   }
 }
 ```
+<br>
+<h2> Get Compatible Devices </h2>
+
+`public function getCompatibleDevices(): ?EasyAccess`<br>
+
+Calls the compatible eSIM devices endpoint of the REST API.
+```php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Airalo\Airalo;
+use Airalo\AiraloStatic;
+
+$alo = new Airalo([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$devices = $alo->getCompatibleDevices();
+
+//
+// Static usage
+//
+AiraloStatic::init([
+    'client_id' => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+]);
+
+$devices = AiraloStatic::getCompatibleDevices();
+```
+<br><br>
+Example response for the call:<br>
+```json
+{
+    "data": [
+        {
+            "os": "android",
+            "brand": "ABCTECH",
+            "name": "X20"
+        },
+        {
+            "os": "android",
+            "brand": "Asus",
+            "name": "ZenFone Max Pro M1 (ZB602KL) (WW) / Max Pro M1 (ZB601KL) (IN)"
+        },
+        {
+            "os": "android",
+            "brand": "Asus",
+            "name": "ZenFone Max Pro M1 (ZB602KL) (WW) / Max Pro M1 (ZB601KL) (IN)"
+        },
+        ...
+        ...
+        ...
+    ]
+}
+```
+<br><br>
 
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h.

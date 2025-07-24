@@ -16,6 +16,7 @@ use Airalo\Services\OrderService;
 use Airalo\Services\PackagesService;
 use Airalo\Services\TopupService;
 use Airalo\Helpers\EasyAccess;
+use Airalo\Services\CompatibilityDevicesService;
 use ReflectionMethod;
 use ReflectionClass;
 
@@ -33,6 +34,7 @@ class AiraloTest extends TestCase
     private $instructionServiceMock;
     private $airalo;
     private $simServiceMock;
+    private $compatibilityDevicesServiceMock;
 
     /**
      * @throws \ReflectionException
@@ -54,6 +56,7 @@ class AiraloTest extends TestCase
         $this->simServiceMock = $this->createMock(SimService::class);
         $this->voucherServiceMock = $this->createMock(VoucherService::class);
         $this->instructionServiceMock = $this->createMock(InstallationInstructionsService::class);
+        $this->compatibilityDevicesServiceMock = $this->createMock(CompatibilityDevicesService::class);
 
         $this->oauthServiceMock
             ->method('getAccessToken')
@@ -315,6 +318,19 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testGetCompatibleDevices()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+
+        $this->compatibilityDevicesServiceMock
+            ->expects($this->once())
+            ->method('getCompatibleDevices')
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->getCompatibleDevices();
+        $this->assertSame($expectedResult, $result);
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -354,5 +370,9 @@ class AiraloTest extends TestCase
         $curl = $reflection->getProperty('voucher');
         $curl->setAccessible(true);
         $curl->setValue($this->airalo, $this->voucherServiceMock);
+
+        $compatibility = $reflection->getProperty('compatibilityDevicesService');
+        $compatibility->setAccessible(true);
+        $compatibility->setValue($this->airalo, $this->compatibilityDevicesServiceMock);
     }
 }

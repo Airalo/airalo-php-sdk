@@ -42,7 +42,7 @@ class PackagesService
      * @param array $params
      * @return EasyAccess|null
      */
-    public function getPackages(array $params = [], $locale): ?EasyAccess
+    public function getPackages(array $params = [], string $locale = 'en'): ?EasyAccess
     {
         $url = $this->buildUrl($params);
 

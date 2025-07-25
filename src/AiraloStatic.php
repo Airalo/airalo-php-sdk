@@ -70,7 +70,7 @@ class AiraloStatic
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public static function getAllPackages(bool $flat = false, $limit = null, $page = null, $locale = 'en'): ?EasyAccess
+    public static function getAllPackages(bool $flat = false, $limit = null, $page = null, string $locale = 'en'): ?EasyAccess
     {
         self::checkInitialized();
 

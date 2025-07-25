@@ -73,13 +73,13 @@ class Airalo
      * @param mixed $page
      * @return EasyAccess|null
      */
-    public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess
+    public function getAllPackages(bool $flat = false, $limit = null, $page = null, string $locale = 'en'): ?EasyAccess
     {
         return $this->packages->getPackages([
             'flat' => $flat,
             'limit' => $limit,
             'page' => $page,
-        ]);
+        ], $locale);
     }
 
     public function getSimPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess

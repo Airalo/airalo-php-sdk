@@ -189,6 +189,11 @@ class SimService
      */
     private function isIccid($val): bool
     {
+        if ($this->config->getEnvironment() !== 'production') {
+            return is_numeric($val)
+                && strlen($val) <= 22;
+        }
+
         return is_numeric($val)
             && strlen($val) >= 18
             && strlen($val) <= 22;

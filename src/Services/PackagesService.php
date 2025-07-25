@@ -42,11 +42,11 @@ class PackagesService
      * @param array $params
      * @return EasyAccess|null
      */
-    public function getPackages(array $params = []): ?EasyAccess
+    public function getPackages(array $params = [], $locale): ?EasyAccess
     {
         $url = $this->buildUrl($params);
 
-        $result = Cached::get(function () use ($url, $params) {
+        $result = Cached::get(function () use ($url, $params, $locale) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 
@@ -58,6 +58,7 @@ class PackagesService
                 $response = $this->curl->setHeaders([
                     'Content-Type: application/json',
                     'Authorization: Bearer ' . $this->accessToken,
+                    'Accept-Language: ' . $locale,
                 ])->get($pageUrl ?? $url);
 
                 if (!$response) {

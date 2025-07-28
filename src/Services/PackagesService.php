@@ -85,7 +85,7 @@ class PackagesService
             }
 
             return new EasyAccess($params['flat'] ? $this->flatten($result) : $result);
-        }, $this->getKey($url, $params), 3600);
+        }, $this->getKey($url, $params, $locale), 3600);
 
         return count($result['data']) ? $result : null;
     }
@@ -173,10 +173,11 @@ class PackagesService
     /**
      * @param string $url
      * @param array $params
+     * @param string $locale
      * @return string
      */
-    private function getKey(string $url, array $params): string
+    private function getKey(string $url, array $params, string $locale = 'en'): string
     {
-        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders())  . $this->accessToken);
+        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders()) . $locale . $this->accessToken);
     }
 }

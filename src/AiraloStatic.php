@@ -18,6 +18,7 @@ use Airalo\Services\SimService;
 use Airalo\Services\TopupService;
 use Airalo\Services\VoucherService;
 use Airalo\Tests\Mock\AiraloMock;
+use Airalo\Services\CompatibilityDevicesService;
 
 class AiraloStatic
 {
@@ -36,6 +37,7 @@ class AiraloStatic
     private static ExchangeRatesService $exchangeRates;
     private static FutureOrderService $futureOrders;
     private static CatalogService $catalogService;
+    private static CompatibilityDevicesService $compatibilityDevices;
 
     /**
      * @param mixed $config
@@ -441,6 +443,14 @@ class AiraloStatic
     }
 
     /**
+     * @return EasyAccess|null
+     */
+    public static function getCompatibleDevices(): ?EasyAccess
+    {
+        return self::$compatibilityDevices->getCompatibleDevices();
+    }
+
+    /**
      * @return AiraloMock
      */
     public static function mock(): AiraloMock
@@ -481,6 +491,8 @@ class AiraloStatic
         self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token);
         self::$futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService(self::$config, self::$curl, self::$signature, $token);
         self::$catalogService = self::$pool['catalogService'] ?? new CatalogService(self::$config, self::$curl, $token);
+        self::$compatibilityDevices = self::$pool['compatibilityDevices']
+            ?? new CompatibilityDevicesService(self::$config, self::$curl, $token);
     }
 
     /**

@@ -45,7 +45,7 @@ class PackagesService
     public function getPackages(array $params = [], string $locale = 'en'): ?EasyAccess
     {
         $url = $this->buildUrl($params);
-
+        $cacheParams = array_merge($params, ['locale' => $locale]);
         $result = Cached::get(function () use ($url, $params, $locale) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
@@ -85,7 +85,7 @@ class PackagesService
             }
 
             return new EasyAccess($params['flat'] ? $this->flatten($result) : $result);
-        }, $this->getKey($url, $params, $locale), 3600);
+        }, $this->getKey($url, $cacheParams), 3600);
 
         return count($result['data']) ? $result : null;
     }
@@ -173,11 +173,10 @@ class PackagesService
     /**
      * @param string $url
      * @param array $params
-     * @param string $locale
      * @return string
      */
-    private function getKey(string $url, array $params, string $locale = 'en'): string
+    private function getKey(string $url, array $params): string
     {
-        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders()) . $locale . $this->accessToken);
+        return md5($url . json_encode($params) . json_encode($this->config->getHttpHeaders()) . $this->accessToken);
     }
 }

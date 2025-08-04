@@ -8,6 +8,7 @@ use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
 use Airalo\Services\CatalogService;
+use Airalo\Services\CompatibilityDevicesService;
 use Airalo\Services\ExchangeRatesService;
 use Airalo\Services\FutureOrderService;
 use Airalo\Services\InstallationInstructionsService;
@@ -43,8 +44,8 @@ class Airalo
     private VoucherService $voucher;
     private ExchangeRatesService $exchangeRates;
     private FutureOrderService $futureOrders;
-
     private CatalogService $catalogService;
+    private CompatibilityDevicesService $compatibilityDevicesService;
 
     /**
      * @param mixed $config
@@ -414,6 +415,14 @@ class Airalo
     }
 
     /**
+     * @return EasyAccess|null
+     */
+    public function getCompatibleDevices(): ?EasyAccess
+    {
+        return $this->compatibilityDevicesService->getCompatibleDevices();
+    }
+
+    /**
      * @param mixed $config
      * @return void
      * @throws AiraloException
@@ -446,6 +455,8 @@ class Airalo
         $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
         $this->futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService($this->config, $this->curl, $this->signature, $token);
         $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $token);
+        $this->compatibilityDevicesService = self::$pool['compatibilityDevicesService']
+            ?? new CompatibilityDevicesService($this->config, $this->curl, $token);
     }
 
     /**

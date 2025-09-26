@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - fix_pipeline
   pull_request:
     branches:
       - main
@@ -13,20 +14,30 @@ jobs:
     strategy:
       matrix:
         php-versions: [ "8.3" ]
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CICD }}
-      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_CICD }}"} }'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.GH_APP_WORKFLOW_TRIGGER_APP_ID }}
+          private-key: ${{ secrets.GH_APP_WORKFLOW_TRIGGER_PRIVATE_KEY }}
+          owner: Airalo
+          repositories: airalo-php-sdk
+
       - name: Install dependencies
         uses: php-actions/composer@v6
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ steps.app-token.outputs.token }}"} }'
         with:
           php_version: ${{ matrix.php-versions }}
           version: 2.x
           dev: yes
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

@@ -13,20 +13,19 @@ jobs:
     strategy:
       matrix:
         php-versions: [ "8.3" ]
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CICD }}
-      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_CICD }}"} }'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:
           php_version: ${{ matrix.php-versions }}
           version: 2.x
           dev: yes
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

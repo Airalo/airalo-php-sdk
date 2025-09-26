@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - fix_pipeline
   pull_request:
     branches:
       - main

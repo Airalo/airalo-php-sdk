@@ -13,9 +13,6 @@ jobs:
     strategy:
       matrix:
         php-versions: [ "8.3" ]
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN_CICD }}
-      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GH_TOKEN_CICD }}"} }'
     steps:
       - name: Checkout
         uses: actions/checkout@v3

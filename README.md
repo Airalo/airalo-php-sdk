@@ -43,7 +43,6 @@ use Airalo\Airalo;
 $alo = new Airalo([
     'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
     'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, defaults to `production`
 ]);
 
 $allPackages = $alo->getAllPackages(true);
@@ -62,7 +61,6 @@ use Airalo\AiraloStatic;
 AiraloStatic::init([
     'client_id' => '<YOUR_API_CLIENT_ID>',              // mandatory
     'client_secret' => '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    'env' => 'sandbox',                                 // optional, defaults to `production`
 ]);
 
 $allPackages = AiraloStatic::getAllPackages(true);
@@ -443,7 +441,7 @@ Example response:<br>
           "imsis": null,
           "matching_id": "TEST",
           "qrcode": "LPA:1$lpa.airalo.com$TEST",
-          "qrcode_url": "https://sandbox.airalo.com/qr?expires=1802000927&id=137975&signature=b4e731d218fdc707b677c89d54d41773d250a38c160cf7d97f6e9493b5fec0ee",
+          "qrcode_url": "https://airalo.com/qr?expires=1802000927&id=137975&signature=b4e731d218fdc707b677c89d54d41773d250a38c160cf7d97f6e9493b5fec0ee",
           "airalo_code": null,
           "apn_type": "automatic",
           "apn_value": null,
@@ -469,7 +467,7 @@ Example response:<br>
           "imsis": null,
           "matching_id": "TEST",
           "qrcode": "LPA:1$lpa.airalo.com$TEST",
-          "qrcode_url": "https://sandbox.airalo.com/qr?expires=1802000927&id=137975&signature=b4e731d218fdc707b677c89d54d41773d250a38c160cf7d97f6e9493b5fec0ee",
+          "qrcode_url": "https://airalo.com/qr?expires=1802000927&id=137975&signature=b4e731d218fdc707b677c89d54d41773d250a38c160cf7d97f6e9493b5fec0ee",
           "airalo_code": null,
           "apn_type": "automatic",
           "apn_value": null,
@@ -525,7 +523,7 @@ Example response:<br>
           "imsis": null,
           "matching_id": "TEST",
           "qrcode": "LPA:1$lpa.airalo.com$TEST",
-          "qrcode_url": "https://sandbox.airalo.com/qr?expires=1802000927&id=137976&signature=978adede2174b6de7d2502841d6d901d417d643570dd6172c71733cde5f72503",
+          "qrcode_url": "https://airalo.com/qr?expires=1802000927&id=137976&signature=978adede2174b6de7d2502841d6d901d417d643570dd6172c71733cde5f72503",
           "airalo_code": null,
           "apn_type": "automatic",
           "apn_value": null,
@@ -591,7 +589,7 @@ Example:
           "imsis": null,
           "matching_id": "TEST",
           "qrcode": "LPA:1$lpa.airalo.com$TEST",
-          "qrcode_url": "https://sandbox.airalo.com/qr?expires=1802000927&id=137976&signature=978adede2174b6de7d2502841d6d901d417d643570dd6172c71733cde5f72503",
+          "qrcode_url": "https://airalo.com/qr?expires=1802000927&id=137976&signature=978adede2174b6de7d2502841d6d901d417d643570dd6172c71733cde5f72503",
           "airalo_code": null,
           "apn_type": "automatic",
           "apn_value": null,

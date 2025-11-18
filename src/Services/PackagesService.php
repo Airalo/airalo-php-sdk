@@ -71,6 +71,10 @@ class PackagesService
                     break;
                 }
 
+                if (!empty($response['pricing'])) {
+                    $result['pricing'] = $response['pricing'];
+                }
+
                 $result['data'] = array_merge($result['data'], $response['data']);
 
                 if (isset($params['limit']) && count($result['data']) >= $params['limit']) {
@@ -128,6 +132,7 @@ class PackagesService
     private function flatten(array $data): array
     {
         $flattened = ['data' => []];
+        $flattened['pricing'] = (array) $data['pricing'] ?? [];
 
         foreach ($data['data'] as $each) {
             foreach ($each['operators'] as $operator) {
@@ -143,7 +148,7 @@ class PackagesService
                         'slug' => $each['slug'],
                         'type' => $package['type'],
                         'price' => $package['price'],
-                        'net_price' => $package['net_price'],
+                        'net_price' => $package['net_price'] ?? null,
                         'amount' => $package['amount'],
                         'day' => $package['day'],
                         'is_unlimited' => $package['is_unlimited'],

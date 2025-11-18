@@ -71,7 +71,7 @@ class PackagesService
                     break;
                 }
 
-                if (!empty($response['pricing'])) {
+                if (is_array($response) && !empty($response['pricing'])) {
                     $result['pricing'] = $response['pricing'];
                 }
 
@@ -132,7 +132,7 @@ class PackagesService
     private function flatten(array $data): array
     {
         $flattened = ['data' => []];
-        $flattened['pricing'] = (array) $data['pricing'] ?? [];
+        $flattened['pricing'] = $data['pricing'] ?? [];
 
         foreach ($data['data'] as $each) {
             foreach ($each['operators'] as $operator) {

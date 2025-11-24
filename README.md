@@ -103,9 +103,15 @@ $jsonString = (string)$allPackages;
 >Passing `true` to `$flat` parameter makes the response significantly more compact and easy to handle. However it differes than the main one returned from the endpoints. Be mindful in which occassions you will need the original and in which the compact version. Happy coding!
 
 `public function getAllPackages(bool $flat = false, $limit = null, $page = null): ?EasyAccess`<br>
-Fetching all of Airalo's packages. By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object, example:
+Fetching all of Airalo's packages. <br>
+NOTE that depending from the pricing model (field named 'model' in the pricing object) there can be additional fields displayed or hidden. Check the documentation link below for more details.<br>
+By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object, example:
 ```json
 {
+  "pricing": {
+    "model": "net_pricing",
+    "discount_percentage": 0
+  },
   "data": [
     {
       "package_id": "meraki-mobile-7days-1gb",
@@ -423,6 +429,7 @@ Example response:<br>
       "package": "Change-1 GB - 7 Days",
       "data": "1 GB",
       "price": 4.5,
+      "pricing_model": "net_pricing",
       "created_at": "2024-05-14 11:48:47",
       "manual_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To manually activate the eSIM on your eSIM capable device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Manually enter the SM-DP+ Address and activation code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",
       "qrcode_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To activate the eSIM by scanning the QR code on your eSIM capable device you need to print or display this QR code on other device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Scan QR code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",
@@ -505,6 +512,7 @@ Example response:<br>
       "package": "Change-1 GB - 7 Days",
       "data": "1 GB",
       "price": 4.5,
+      "pricing_model": "net_pricing",
       "created_at": "2024-05-14 11:48:47",
       "manual_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To manually activate the eSIM on your eSIM capable device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Manually enter the SM-DP+ Address and activation code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",
       "qrcode_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To activate the eSIM by scanning the QR code on your eSIM capable device you need to print or display this QR code on other device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Scan QR code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",
@@ -571,6 +579,7 @@ Example:
       "package": "Change-1 GB - 7 Days",
       "data": "1 GB",
       "price": 4.5,
+      "pricing_model": "net_pricing",
       "created_at": "2024-05-14 11:48:47",
       "manual_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To manually activate the eSIM on your eSIM capable device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Manually enter the SM-DP+ Address and activation code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",
       "qrcode_installation": "<p><b>eSIM name:</b> Change</p><p><b>Coverage: </b>United States</p><p><b>To activate the eSIM by scanning the QR code on your eSIM capable device you need to print or display this QR code on other device:</b></p><ol><li>Settings > Cellular/Mobile > Add Cellular/Mobile Plan.</li><li>Scan QR code.</li><li>Confirm eSIM plan details.</li><li>Label the eSIM.</li></ol><p><b>To access Data:</b></p><ol><li>Enable data roaming.</li></ol>",

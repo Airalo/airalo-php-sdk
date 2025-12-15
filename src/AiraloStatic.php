@@ -133,8 +133,8 @@ class AiraloStatic
 
     /**
      * @param bool $flat
-     * @param $limit
-     * @param $page
+     * @param int|null $limit
+     * @param int|null $page
      * @return EasyAccess|null
      * @throws AiraloException
      */
@@ -365,6 +365,7 @@ class AiraloStatic
 
     /**
      * @param string $iccid
+     * @param string|null $iso2CountryCode
      * @return EasyAccess|null
      */
     public static function getSimTopups(string $iccid, ?string $iso2CountryCode = null): ?EasyAccess

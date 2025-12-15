@@ -162,6 +162,10 @@ class SimService
         /* @phpstan-ignore-next-line */
         $iccid = (string) $params['iccid'];
 
+        if($slug === ApiConstants::SIMS_TOPUPS && !empty($params['filter[country]'])) {
+            $slug .= '?'.http_build_query(['filter[country]' => $params['filter[country]']]);
+        }
+
         return sprintf(
             '%s%s/%s/%s',
             $this->baseUrl,

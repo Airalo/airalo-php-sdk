@@ -241,6 +241,10 @@ Fetching global Airalo packages. By default the response will be the same as the
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
+`public function getUniversalPackages(bool $flat = false, ?int $limit = null, ?int $page = null): ?EasyAccess`<br>
+Fetching universal Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
+By default no limit number of packages will be applied if `$limit` is empty<br>
+By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
 
 `public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess`<br>
 Fetching country specific Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
@@ -992,9 +996,13 @@ Example response can be found in the API documentation (link above). <br>
 <br><br>
 <h2> Sim Topups </h2>
 
-`public function getSimTopups(string $iccid): ?EasyAccess`<br>
+`public function getSimTopups(string $iccid, ?string $iso2CountryCode = null): ?EasyAccess`<br>
 
 Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
+
+`$iccid` - the `iccid` from the eSim order<br>
+`$iso2CountryCode` - optional parameter to filter topups for a specific iso2 country code. Only applicable if the `iccid` is from a universal eSim<br>
+
 Full response example can be found here: https://developers.partners.airalo.com/get-top-up-package-list-11883031e0<br>
 
 ```php

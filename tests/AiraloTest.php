@@ -124,6 +124,19 @@ class AiraloTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
+    public function testGetUniversalPackages()
+    {
+        $expectedResult = $this->createMock(EasyAccess::class);
+        $this->packagesServiceMock
+            ->expects($this->once())
+            ->method('getPackages')
+            ->with(['flat' => false, 'limit' => null, 'page' => null, 'type' => 'universal'])
+            ->willReturn($expectedResult);
+
+        $result = $this->airalo->getUniversalPackages();
+        $this->assertSame($expectedResult, $result);
+    }
+
     public function testGetCountryPackages()
     {
         $expectedResult = $this->createMock(EasyAccess::class);

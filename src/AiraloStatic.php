@@ -132,6 +132,25 @@ class AiraloStatic
     }
 
     /**
+     * @param bool $flat
+     * @param int|null $limit
+     * @param int|null $page
+     * @return EasyAccess|null
+     * @throws AiraloException
+     */
+    public static function getUniversalPackages(bool $flat = false, ?int $limit = null, ?int $page = null): ?EasyAccess
+    {
+        self::checkInitialized();
+
+        return self::$packages->getPackages([
+            'flat' => $flat,
+            'limit' => $limit,
+            'page' => $page,
+            'type' => 'universal',
+        ]);
+    }
+
+    /**
      * @param string $countryCode
      * @param bool $flat
      * @param mixed $limit
@@ -346,12 +365,14 @@ class AiraloStatic
 
     /**
      * @param string $iccid
+     * @param string|null $iso2CountryCode
      * @return EasyAccess|null
      */
-    public static function getSimTopups(string $iccid): ?EasyAccess
+    public static function getSimTopups(string $iccid, ?string $iso2CountryCode = null): ?EasyAccess
     {
         return self::$sim->simTopups([
-            'iccid' => $iccid
+            'iccid' => $iccid,
+            'filter[country]' => $iso2CountryCode,
         ]);
     }
 

@@ -115,6 +115,9 @@ class PackagesService
         if (isset($params['type']) && $params['type'] == 'global') {
             $queryParams['filter[type]'] = 'global';
         }
+        if (isset($params['type']) && $params['type'] == 'universal') {
+            $queryParams['filter[type]'] = 'universal';
+        }
         if (isset($params['country'])) {
             $queryParams['filter[country]'] = $params['country'];
         }

@@ -245,6 +245,7 @@ By default it will paginate all pages (multiple calls) or if `$page` is provided
 Fetching universal Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>
 By default no limit number of packages will be applied if `$limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `$page` is provided it will be the starting pagination index.<br>
+Note: This method will return no results unless Universal Packages are enabled for your account by your Account Manager.
 
 `public function getCountryPackages(string $countryCode, bool $flat = false, $limit = null): ?EasyAccess`<br>
 Fetching country specific Airalo packages. By default the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `$flat` as true will return package objects data in a single data object.<br>

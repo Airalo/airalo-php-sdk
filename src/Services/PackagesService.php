@@ -153,6 +153,8 @@ class PackagesService
                         'day' => $package['day'],
                         'is_unlimited' => $package['is_unlimited'],
                         'title' => $package['title'],
+                        'is_fair_usage_policy' => $package['is_fair_usage_policy'],
+                        'fair_usage_policy' => $package['fair_usage_policy'] ?? null,
                         'data' => $package['data'],
                         'short_info' => $package['short_info'],
                         'voice' => $package['voice'],

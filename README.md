@@ -2,7 +2,7 @@
 Airalo's PHP SDK provides extremely simple integration with the RESTful API and adds extra layer of security on top.<br>
 The SDK supports:
 - auto authentication and encryption<br>
-- auto caching and rate limit handling<br>
+- auto caching and rate limit handling (filesystem by default, pluggable via `CacheInterface`)<br>
 - packages fetching of local, global, country and all combined<br>
 - packages auto pagination on endpoints<br>
 - package ordering<br>
@@ -65,6 +65,74 @@ AiraloStatic::init([
 
 $allPackages = AiraloStatic::getAllPackages(true);
 ```
+
+# Custom Cache
+By default the SDK caches API responses (access tokens, packages, etc.) on the local filesystem via `FilesystemCache`. You can supply your own cache implementation by passing an object that implements `Airalo\Contracts\CacheInterface`.
+
+The interface requires two methods:
+```php
+interface CacheInterface
+{
+    /**
+     * Retrieve a value from cache or compute it via $work.
+     *
+     * @param callable $work  The callable that produces the value on a cache miss.
+     * @param string   $key   A unique cache key.
+     * @param int      $ttl   Time-to-live in seconds (0 = use implementation default).
+     * @return mixed
+     */
+    public function get(callable $work, string $key, int $ttl = 0);
+
+    /**
+     * Clear all cached entries.
+     */
+    public function clear(): void;
+}
+```
+
+### Passing a custom cache — Object usage
+```php
+<?php
+
+use Airalo\Airalo;
+use Airalo\Contracts\CacheInterface;
+
+// Your own adapter, e.g. backed by Redis, Memcached, Symfony Cache, etc.
+$myCache = new class implements CacheInterface {
+    public function get(callable $work, string $key, int $ttl = 0)
+    {
+        // look up $key in your store; on miss call $work() and store the result
+        return $work();
+    }
+    public function clear(): void
+    {
+        // flush your store
+    }
+};
+
+$alo = new Airalo([
+    'client_id'     => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+], $myCache);   // <-- pass as the second argument
+
+$allPackages = $alo->getAllPackages(true);
+```
+
+### Passing a custom cache — Static usage
+```php
+<?php
+
+use Airalo\AiraloStatic;
+
+AiraloStatic::init([
+    'client_id'     => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+], $myCache);   // <-- pass as the second argument
+
+$allPackages = AiraloStatic::getAllPackages(true);
+```
+
+> **Note:** If no cache instance is provided, the SDK falls back to `Airalo\Helpers\FilesystemCache` which stores serialised data in the system temp directory (`sys_get_temp_dir()`). This is fully backward-compatible — existing code that does not pass a cache will continue to work exactly as before.
 
 # EasyAccess responses
 The SDK provides simple and yet powerful way to interact with the response objects.<br>

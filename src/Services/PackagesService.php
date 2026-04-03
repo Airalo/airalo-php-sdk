@@ -4,8 +4,8 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
-use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
@@ -19,12 +19,15 @@ class PackagesService
 
     private CurlResource $curl;
 
+    private CacheInterface $cache;
+
     /**
      * @param Config $config
      * @param CurlResource $curl
      * @param string $accessToken
+     * @param CacheInterface|null $cache
      */
-    public function __construct(Config $config, CurlResource $curl, string $accessToken)
+    public function __construct(Config $config, CurlResource $curl, string $accessToken, ?CacheInterface $cache = null)
     {
         if (!$accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
@@ -36,6 +39,8 @@ class PackagesService
         $this->baseUrl = $this->config->getUrl();
 
         $this->curl = $curl;
+
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     /**
@@ -46,7 +51,7 @@ class PackagesService
     {
         $url = $this->buildUrl($params);
         $cacheParams = array_merge($params, ['locale' => $locale]);
-        $result = Cached::get(function () use ($url, $params, $locale) {
+        $result = $this->cache->get(function () use ($url, $params, $locale) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 

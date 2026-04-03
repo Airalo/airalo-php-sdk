@@ -4,8 +4,8 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
-use Airalo\Helpers\Cached;
 use Airalo\Helpers\Crypt;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
@@ -24,12 +24,15 @@ class OAuthService
 
     private Signature $signature;
 
+    private CacheInterface $cache;
+
     /**
      * @param Config $config
-     * @param Curl $curl
+     * @param CurlResource $curl
      * @param Signature $signature
+     * @param CacheInterface|null $cache
      */
-    public function __construct(Config $config, CurlResource $curl, Signature $signature)
+    public function __construct(Config $config, CurlResource $curl, Signature $signature, ?CacheInterface $cache = null)
     {
         $this->config = $config;
 
@@ -40,6 +43,8 @@ class OAuthService
         $this->curl = $curl;
 
         $this->signature = $signature;
+
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     /**
@@ -54,7 +59,7 @@ class OAuthService
 
         while ($retryCount < self::RETRY_LIMIT) {
             try {
-                $token = Cached::get(function () {
+                $token = $this->cache->get(function () use ($cacheName) {
                     $response = $this->curl
                         ->setHeaders([
                             'airalo-signature: ' . $this->signature->getSignature($this->payload),

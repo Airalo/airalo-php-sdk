@@ -4,10 +4,10 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
-use Airalo\Helpers\Cached;
 use Airalo\Resources\MultiCurlResource;
 
 class SimService
@@ -18,18 +18,21 @@ class SimService
     private MultiCurlResource $multiCurl;
     private string $baseUrl;
     private string $accessToken;
+    private CacheInterface $cache;
 
     /**
      * @param Config $config
-     * @param Curl $curl
+     * @param CurlResource $curl
      * @param MultiCurlResource $multiCurl
      * @param string $accessToken
+     * @param CacheInterface|null $cache
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
         MultiCurlResource $multiCurl,
-        string $accessToken
+        string $accessToken,
+        ?CacheInterface $cache = null
     ) {
         if (!$accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
@@ -40,6 +43,7 @@ class SimService
         $this->multiCurl = $multiCurl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     /**
@@ -50,7 +54,7 @@ class SimService
     {
         $url = $this->buildUrl($params);
 
-        $result = Cached::get(function () use ($url) {
+        $result = $this->cache->get(function () use ($url) {
 
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
@@ -82,7 +86,7 @@ class SimService
                 ])->get($this->buildUrl(['iccid' => $iccid]));
         }
 
-        return Cached::get(function () {
+        return $this->cache->get(function () {
             if (!$response = $this->multiCurl->exec()) {
                 return null;
             }
@@ -104,7 +108,7 @@ class SimService
     {
         $url = $this->buildUrl($params, ApiConstants::SIMS_TOPUPS);
 
-        $result = Cached::get(function () use ($url) {
+        $result = $this->cache->get(function () use ($url) {
 
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
@@ -129,7 +133,7 @@ class SimService
     {
         $url = $this->buildUrl($params, ApiConstants::SIMS_PACKAGES);
 
-        $result = Cached::get(function () use ($url) {
+        $result = $this->cache->get(function () use ($url) {
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
                 'Content-Type: application/json',

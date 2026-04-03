@@ -4,8 +4,8 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
-use Airalo\Helpers\Cached;
 use Airalo\Helpers\Date;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
@@ -17,17 +17,20 @@ class ExchangeRatesService
     private CurlResource $curl;
     private string $baseUrl;
     private string $accessToken;
+    private CacheInterface $cache;
 
     /**
      * @param Config $config
      * @param CurlResource $curl
      * @param string $accessToken
+     * @param CacheInterface|null $cache
      * @throws AiraloException
      */
     public function __construct(
         Config       $config,
         CurlResource $curl,
-        string       $accessToken
+        string       $accessToken,
+        ?CacheInterface $cache = null
     )
     {
         if (!$accessToken) {
@@ -38,6 +41,7 @@ class ExchangeRatesService
         $this->curl = $curl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     /**
@@ -50,7 +54,7 @@ class ExchangeRatesService
         $this->validateExchangeRatesRequest($params);
         $url = $this->buildUrl($params);
 
-        $result = Cached::get(function () use ($url) {
+        $result = $this->cache->get(function () use ($url) {
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([
                 'Accept: application/json',

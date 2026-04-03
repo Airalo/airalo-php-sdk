@@ -4,8 +4,8 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
-use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
@@ -16,16 +16,19 @@ class CatalogService
     private CurlResource $curl;
     private string $baseUrl;
     private string $accessToken;
+    private CacheInterface $cache;
 
     /**
      * @param Config $config
-     * @param Curl $curl
+     * @param CurlResource $curl
      * @param string $accessToken
+     * @param CacheInterface|null $cache
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
-        string $accessToken
+        string $accessToken,
+        ?CacheInterface $cache = null
     ) {
         if (!$accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
@@ -35,13 +38,14 @@ class CatalogService
         $this->curl = $curl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     public function catalogsBulk($params)
     {
         $url = $this->buildUrl();
 
-       $result = Cached::get(function () use ($url) {
+       $result = $this->cache->get(function () use ($url, $params) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 

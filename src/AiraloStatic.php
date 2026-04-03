@@ -2,8 +2,10 @@
 
 namespace Airalo;
 
+use Airalo\Contracts\CacheInterface;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
+use Airalo\Helpers\FilesystemCache;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
@@ -27,6 +29,7 @@ class AiraloStatic
     private static CurlResource $curl;
     private static MultiCurlResource $multiCurl;
     private static Signature $signature;
+    private static CacheInterface $cache;
     private static OAuthService $oauth;
     private static PackagesService $packages;
     private static OrderService $order;
@@ -41,11 +44,13 @@ class AiraloStatic
 
     /**
      * @param mixed $config
+     * @param CacheInterface|null $cache
      * @throws AiraloException
      */
-    public static function init($config): void
+    public static function init($config, ?CacheInterface $cache = null): void
     {
         try {
+            self::$cache = $cache ?? new FilesystemCache();
             self::initResources($config);
             self::initServices();
 
@@ -476,21 +481,21 @@ class AiraloStatic
      */
     private static function initServices(): void
     {
-        self::$oauth = self::$pool['oauth'] ?? new OAuthService(self::$config, self::$curl, self::$signature);
+        self::$oauth = self::$pool['oauth'] ?? new OAuthService(self::$config, self::$curl, self::$signature, self::$cache);
         $token = self::$oauth->getAccessToken();
 
-        self::$packages = self::$pool['packages'] ?? new PackagesService(self::$config, self::$curl, $token);
+        self::$packages = self::$pool['packages'] ?? new PackagesService(self::$config, self::$curl, $token, self::$cache);
         self::$order = self::$pool['order']
             ?? new OrderService(self::$config, self::$curl, self::$multiCurl, self::$signature, $token);
         self::$instruction = self::$pool['instruction']
-            ?? new InstallationInstructionsService(self::$config, self::$curl, $token);
+            ?? new InstallationInstructionsService(self::$config, self::$curl, $token, self::$cache);
         self::$voucher = self::$pool['voucher']
             ?? new VoucherService(self::$config, self::$curl, self::$signature, $token);
         self::$topup = self::$pool['topup'] ?? new TopupService(self::$config, self::$curl, self::$signature, $token);
-        self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token);
-        self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token);
+        self::$sim = self::$pool['sim'] ?? new SimService(self::$config, self::$curl, self::$multiCurl, $token, self::$cache);
+        self::$exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService(self::$config, self::$curl, $token, self::$cache);
         self::$futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService(self::$config, self::$curl, self::$signature, $token);
-        self::$catalogService = self::$pool['catalogService'] ?? new CatalogService(self::$config, self::$curl, $token);
+        self::$catalogService = self::$pool['catalogService'] ?? new CatalogService(self::$config, self::$curl, $token, self::$cache);
         self::$compatibilityDevices = self::$pool['compatibilityDevices']
             ?? new CompatibilityDevicesService(self::$config, self::$curl, $token);
     }

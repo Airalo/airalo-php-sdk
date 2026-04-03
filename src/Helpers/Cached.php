@@ -35,15 +35,11 @@ class Cached
      */
     public static function get($work, string $cacheName, int $ttl = 0)
     {
-        $type = gettype($work);
-
-        if (!in_array($type, ['object', 'callable'])) {
-            $callable = function () use ($work) {
+        $callable = is_callable($work)
+            ? $work
+            : function () use ($work) {
                 return $work;
             };
-        } else {
-            $callable = $work;
-        }
 
         return self::getInstance()->get($callable, $cacheName, $ttl);
     }

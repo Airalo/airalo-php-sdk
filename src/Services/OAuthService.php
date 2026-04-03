@@ -59,7 +59,7 @@ class OAuthService
 
         while ($retryCount < self::RETRY_LIMIT) {
             try {
-                $token = $this->cache->get(function () use ($cacheName) {
+                $token = $this->cache->get(function () {
                     $response = $this->curl
                         ->setHeaders([
                             'airalo-signature: ' . $this->signature->getSignature($this->payload),

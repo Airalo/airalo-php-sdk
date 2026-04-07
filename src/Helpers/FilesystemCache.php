@@ -51,7 +51,17 @@ class FilesystemCache implements CacheInterface
 
         $result = file_get_contents($file);
 
-        return $result === false ? $default : unserialize($result);
+        if ($result === false) {
+            return $default;
+        }
+
+        $value = @unserialize($result, ['allowed_classes' => false]);
+
+        if ($value === false && $result !== serialize(false)) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**

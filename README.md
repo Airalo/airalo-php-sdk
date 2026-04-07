@@ -69,7 +69,7 @@ $allPackages = AiraloStatic::getAllPackages(true);
 # Custom Cache
 By default the SDK caches API responses (access tokens, packages, etc.) on the local filesystem via `Airalo\Helpers\FilesystemCache`. You can supply your own cache implementation by passing any object that implements the [PSR-16 `Psr\SimpleCache\CacheInterface`](https://www.php-fig.org/psr/psr-16/).
 
-Most frameworks already ship a PSR-16 adapter (e.g. Symfony's `Psr16Cache`, Laravel's `Repository`, or any `league/flysystem` / Redis / Memcached wrapper). Simply pass it as the second argument.
+Most frameworks already ship a PSR-16 adapter (e.g. Symfony's `Psr16Cache`, Laravel's `Illuminate\Cache\Psr16Cache`, or any Redis / Memcached wrapper). Simply pass it as the second argument.
 
 ### Passing a custom cache — Object usage
 ```php

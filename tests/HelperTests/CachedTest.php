@@ -12,19 +12,22 @@ class CachedTest extends TestCase
 {
     private $cacheName;
     private $cacheFile;
+    private string $tmpDir;
     private FilesystemCache $filesystemCache;
 
     protected function setUp(): void
     {
         $this->cacheName = 'test_cache';
-        $this->cacheFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
-        $this->filesystemCache = new FilesystemCache();
+        $this->tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_test_' . uniqid('', true);
+        mkdir($this->tmpDir, 0700, true);
+        $this->filesystemCache = new FilesystemCache($this->tmpDir);
+        $this->cacheFile = $this->tmpDir . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
     }
 
     protected function tearDown(): void
     {
-        @unlink($this->cacheFile);
         $this->filesystemCache->clear();
+        @rmdir($this->tmpDir);
     }
 
     // -- Deprecated Cached facade tests (backward-compat) --
@@ -52,7 +55,8 @@ class CachedTest extends TestCase
         }, $this->cacheName);
         Cached::clearCache();
 
-        $this->assertFileDoesNotExist($this->cacheFile);
+        $defaultCacheFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
+        $this->assertFileDoesNotExist($defaultCacheFile);
     }
 
     // -- FilesystemCache PSR-16 tests --
@@ -121,7 +125,7 @@ class CachedTest extends TestCase
 
         $path = $method->invoke($this->filesystemCache, $this->cacheName);
 
-        $expected = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
+        $expected = $this->tmpDir . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
         $this->assertSame($expected, $path);
     }
 
@@ -161,12 +165,30 @@ class CachedTest extends TestCase
 
     public function testSetWithExplicitTtlStoresPerKeyExpiry()
     {
+        $before = time();
         $this->filesystemCache->set('short_ttl', 'value_a', 3600);
         $this->filesystemCache->set('long_ttl', 'value_b', 7200);
 
         // Both should be retrievable immediately
         $this->assertSame('value_a', $this->filesystemCache->get('short_ttl'));
         $this->assertSame('value_b', $this->filesystemCache->get('long_ttl'));
+
+        // Verify each key has its own distinct expiry time stored
+        $filePath = new ReflectionMethod(FilesystemCache::class, 'filePath');
+        $filePath->setAccessible(true);
+
+        $shortEntry = unserialize(
+            file_get_contents($filePath->invoke($this->filesystemCache, 'short_ttl')),
+            ['allowed_classes' => false]
+        );
+        $longEntry = unserialize(
+            file_get_contents($filePath->invoke($this->filesystemCache, 'long_ttl')),
+            ['allowed_classes' => false]
+        );
+
+        $this->assertGreaterThanOrEqual($before + 3600, $shortEntry['expiresAt']);
+        $this->assertGreaterThanOrEqual($before + 7200, $longEntry['expiresAt']);
+        $this->assertLessThan($longEntry['expiresAt'], $shortEntry['expiresAt']);
     }
 
     public function testSetWithNullTtlUsesDefaultTtl()
@@ -260,11 +282,14 @@ class CachedTest extends TestCase
 
     public function testCustomDefaultTtl()
     {
-        $cache = new FilesystemCache('', 120);
+        $tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_test_' . uniqid('', true);
+        mkdir($tmpDir, 0700, true);
+        $cache = new FilesystemCache($tmpDir, 120);
         $cache->set('custom_ttl_key', 'value');
 
         $this->assertSame('value', $cache->get('custom_ttl_key'));
 
         $cache->clear();
+        @rmdir($tmpDir);
     }
 }

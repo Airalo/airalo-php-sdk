@@ -27,7 +27,26 @@ class CachedTest extends TestCase
     protected function tearDown(): void
     {
         $this->filesystemCache->clear();
-        @rmdir($this->tmpDir);
+        $this->removeDir($this->tmpDir);
+    }
+
+    private function removeDir(string $dir): void
+    {
+        foreach (glob($dir . DIRECTORY_SEPARATOR . '*') ?: [] as $file) {
+            is_dir($file) ? $this->removeDir($file) : @unlink($file);
+        }
+        @rmdir($dir);
+    }
+
+    private function readCacheEntry(string $key): array
+    {
+        $filePath = new ReflectionMethod(FilesystemCache::class, 'filePath');
+        $filePath->setAccessible(true);
+
+        return unserialize(
+            file_get_contents($filePath->invoke($this->filesystemCache, $key)),
+            ['allowed_classes' => false]
+        );
     }
 
     // -- Deprecated Cached facade tests (backward-compat) --
@@ -174,17 +193,8 @@ class CachedTest extends TestCase
         $this->assertSame('value_b', $this->filesystemCache->get('long_ttl'));
 
         // Verify each key has its own distinct expiry time stored
-        $filePath = new ReflectionMethod(FilesystemCache::class, 'filePath');
-        $filePath->setAccessible(true);
-
-        $shortEntry = unserialize(
-            file_get_contents($filePath->invoke($this->filesystemCache, 'short_ttl')),
-            ['allowed_classes' => false]
-        );
-        $longEntry = unserialize(
-            file_get_contents($filePath->invoke($this->filesystemCache, 'long_ttl')),
-            ['allowed_classes' => false]
-        );
+        $shortEntry = $this->readCacheEntry('short_ttl');
+        $longEntry  = $this->readCacheEntry('long_ttl');
 
         $this->assertGreaterThanOrEqual($before + 3600, $shortEntry['expiresAt']);
         $this->assertGreaterThanOrEqual($before + 7200, $longEntry['expiresAt']);
@@ -290,6 +300,6 @@ class CachedTest extends TestCase
         $this->assertSame('value', $cache->get('custom_ttl_key'));
 
         $cache->clear();
-        @rmdir($tmpDir);
+        $this->removeDir($tmpDir);
     }
 }

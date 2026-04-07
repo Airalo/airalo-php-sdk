@@ -171,9 +171,9 @@ class FilesystemCache implements CacheInterface
     }
 
     /**
-     * @param iterable $keys
+     * @param iterable<string> $keys
      * @param mixed $default
-     * @return iterable
+     * @return iterable<string, mixed>
      * @throws InvalidCacheKeyException
      */
     public function getMultiple($keys, $default = null)
@@ -190,7 +190,7 @@ class FilesystemCache implements CacheInterface
     }
 
     /**
-     * @param iterable $values
+     * @param iterable<string, mixed> $values
      * @param null|int|\DateInterval $ttl
      * @return bool
      * @throws InvalidCacheKeyException
@@ -211,7 +211,7 @@ class FilesystemCache implements CacheInterface
     }
 
     /**
-     * @param iterable $keys
+     * @param iterable<string> $keys
      * @return bool
      * @throws InvalidCacheKeyException
      */

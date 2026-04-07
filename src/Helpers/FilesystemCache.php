@@ -296,7 +296,8 @@ class FilesystemCache implements CacheInterface
         }
 
         if ($ttl instanceof \DateInterval) {
-            return (int) (new \DateTime('@0'))->add($ttl)->getTimestamp();
+            $now = new \DateTimeImmutable();
+            return $now->add($ttl)->getTimestamp() - $now->getTimestamp();
         }
 
         return (int) $ttl;

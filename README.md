@@ -1605,7 +1605,12 @@ Example response for the call:<br>
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Airalo\Helpers\Cached;
+// If using a custom PSR-16 cache instance:
+$myCache->clear();
 
-Cached::clearCache();
+// Or if using the default FilesystemCache directly:
+use Airalo\Helpers\FilesystemCache;
+
+$cache = new FilesystemCache();
+$cache->clear();
 ```

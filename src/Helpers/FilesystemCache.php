@@ -9,9 +9,16 @@ class FilesystemCache implements CacheInterface
     private const CACHE_KEY = 'airalo_';
 
     /**
+     * PSR-16 reserved characters that MUST NOT appear in cache keys.
+     */
+    private const RESERVED_CHARACTERS = '{}()/\@:';
+
+    /**
+     * Default TTL in seconds (24 hours), applied when set()/setMultiple() receive ttl=null.
+     *
      * @var int
      */
-    private int $defaultTtl = 86400;
+    private int $defaultTtl;
 
     /**
      * @var string
@@ -19,39 +26,61 @@ class FilesystemCache implements CacheInterface
     private string $cachePath;
 
     /**
-     * @param string $cachePath
+     * @param string $cachePath  Directory for cache files (defaults to sys_get_temp_dir())
+     * @param int    $defaultTtl Default TTL in seconds used when set() receives ttl=null
      */
-    public function __construct(string $cachePath = '')
+    public function __construct(string $cachePath = '', int $defaultTtl = 86400)
     {
         $this->cachePath = $cachePath !== ''
             ? rtrim($cachePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR
             : sys_get_temp_dir() . DIRECTORY_SEPARATOR;
+
+        $this->defaultTtl = $defaultTtl;
     }
 
     /**
      * @param string $key
      * @param mixed $default
      * @return mixed
+     * @throws InvalidCacheKeyException
      */
+    #[\ReturnTypeWillChange]
     public function get($key, $default = null)
     {
+        $this->validateKey($key);
+
         $file = $this->filePath($key);
 
         if (!file_exists($file)) {
             return $default;
         }
 
-        $now = time();
+        $raw = file_get_contents($file);
 
-        if ($now - filemtime($file) > $this->defaultTtl) {
+        if ($raw === false) {
+            return $default;
+        }
+
+        $entry = @unserialize($raw);
+
+        if (
+            !is_array($entry)
+            || !array_key_exists('expiresAt', $entry)
+            || !array_key_exists('value', $entry)
+        ) {
+            // Corrupted or legacy format – treat as cache miss and clean up
             @unlink($file);
 
             return $default;
         }
 
-        $result = file_get_contents($file);
+        if ($entry['expiresAt'] !== null && time() >= $entry['expiresAt']) {
+            @unlink($file);
 
-        return $result === false ? $default : unserialize($result);
+            return $default;
+        }
+
+        return $entry['value'];
     }
 
     /**
@@ -59,27 +88,34 @@ class FilesystemCache implements CacheInterface
      * @param mixed $value
      * @param null|int|\DateInterval $ttl
      * @return bool
+     * @throws InvalidCacheKeyException
      */
     public function set($key, $value, $ttl = null): bool
     {
-        $data = serialize($value);
+        $this->validateKey($key);
+
+        $seconds = $this->normalizeTtl($ttl);
+
+        // PSR-16: a TTL of 0 or a negative value MUST delete the item immediately
+        if ($seconds !== null && $seconds <= 0) {
+            return $this->delete($key);
+        }
+
+        $effectiveTtl = $seconds ?? $this->defaultTtl;
+        $expiresAt = time() + $effectiveTtl;
+
+        $entry = serialize([
+            'expiresAt' => $expiresAt,
+            'value' => $value,
+        ]);
+
         $file = $this->filePath($key);
 
-        if (file_put_contents($file, $data) === false) {
+        if (file_put_contents($file, $entry) === false) {
             return false;
         }
 
         chmod($file, 0777);
-
-        if ($ttl !== null) {
-            $seconds = $ttl instanceof \DateInterval
-                ? (int) (new \DateTime('@0'))->add($ttl)->getTimestamp()
-                : (int) $ttl;
-
-            if ($seconds > 0) {
-                $this->defaultTtl = $seconds;
-            }
-        }
 
         return true;
     }
@@ -87,9 +123,12 @@ class FilesystemCache implements CacheInterface
     /**
      * @param string $key
      * @return bool
+     * @throws InvalidCacheKeyException
      */
     public function delete($key): bool
     {
+        $this->validateKey($key);
+
         $file = $this->filePath($key);
 
         if (file_exists($file)) {
@@ -120,6 +159,7 @@ class FilesystemCache implements CacheInterface
     /**
      * @param string $key
      * @return bool
+     * @throws InvalidCacheKeyException
      */
     public function has($key): bool
     {
@@ -130,9 +170,13 @@ class FilesystemCache implements CacheInterface
      * @param iterable $keys
      * @param mixed $default
      * @return iterable
+     * @throws InvalidCacheKeyException
      */
+    #[\ReturnTypeWillChange]
     public function getMultiple($keys, $default = null)
     {
+        $this->validateIterable($keys);
+
         $result = [];
 
         foreach ($keys as $key) {
@@ -146,9 +190,12 @@ class FilesystemCache implements CacheInterface
      * @param iterable $values
      * @param null|int|\DateInterval $ttl
      * @return bool
+     * @throws InvalidCacheKeyException
      */
     public function setMultiple($values, $ttl = null): bool
     {
+        $this->validateIterable($values);
+
         $success = true;
 
         foreach ($values as $key => $value) {
@@ -163,9 +210,12 @@ class FilesystemCache implements CacheInterface
     /**
      * @param iterable $keys
      * @return bool
+     * @throws InvalidCacheKeyException
      */
     public function deleteMultiple($keys): bool
     {
+        $this->validateIterable($keys);
+
         $success = true;
 
         foreach ($keys as $key) {
@@ -184,5 +234,66 @@ class FilesystemCache implements CacheInterface
     private function filePath(string $key): string
     {
         return $this->cachePath . self::CACHE_KEY . md5($key);
+    }
+
+    /**
+     * Validate a cache key per PSR-16 requirements.
+     *
+     * @param mixed $key
+     * @return void
+     * @throws InvalidCacheKeyException
+     */
+    private function validateKey($key): void
+    {
+        if (!is_string($key)) {
+            throw new InvalidCacheKeyException(
+                sprintf('Cache key must be a string, %s given.', gettype($key))
+            );
+        }
+
+        if ($key === '') {
+            throw new InvalidCacheKeyException('Cache key must not be empty.');
+        }
+
+        if (preg_match('/[' . preg_quote(self::RESERVED_CHARACTERS, '/') . ']/', $key)) {
+            throw new InvalidCacheKeyException(
+                sprintf('Cache key "%s" contains reserved characters: %s', $key, self::RESERVED_CHARACTERS)
+            );
+        }
+    }
+
+    /**
+     * Validate that a value is iterable (required by PSR-16 for *Multiple methods).
+     *
+     * @param mixed $value
+     * @return void
+     * @throws InvalidCacheKeyException
+     */
+    private function validateIterable($value): void
+    {
+        if (!is_iterable($value)) {
+            throw new InvalidCacheKeyException(
+                sprintf('Expected an iterable, %s given.', gettype($value))
+            );
+        }
+    }
+
+    /**
+     * Normalize a TTL value to seconds or null.
+     *
+     * @param null|int|\DateInterval $ttl
+     * @return int|null  null means "use default TTL"
+     */
+    private function normalizeTtl($ttl): ?int
+    {
+        if ($ttl === null) {
+            return null;
+        }
+
+        if ($ttl instanceof \DateInterval) {
+            return (int) (new \DateTime('@0'))->add($ttl)->getTimestamp();
+        }
+
+        return (int) $ttl;
     }
 }

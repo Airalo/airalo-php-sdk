@@ -5,6 +5,7 @@ namespace Airalo\Tests\HelperTests;
 use PHPUnit\Framework\TestCase;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\FilesystemCache;
+use Airalo\Helpers\InvalidCacheKeyException;
 use ReflectionMethod;
 
 class CachedTest extends TestCase
@@ -154,5 +155,116 @@ class CachedTest extends TestCase
 
         $this->assertNull($this->filesystemCache->get('del_a'));
         $this->assertNull($this->filesystemCache->get('del_b'));
+    }
+
+    // -- Per-key TTL tests --
+
+    public function testSetWithExplicitTtlStoresPerKeyExpiry()
+    {
+        $this->filesystemCache->set('short_ttl', 'value_a', 3600);
+        $this->filesystemCache->set('long_ttl', 'value_b', 7200);
+
+        // Both should be retrievable immediately
+        $this->assertSame('value_a', $this->filesystemCache->get('short_ttl'));
+        $this->assertSame('value_b', $this->filesystemCache->get('long_ttl'));
+    }
+
+    public function testSetWithNullTtlUsesDefaultTtl()
+    {
+        $this->filesystemCache->set($this->cacheName, 'value', null);
+
+        $this->assertSame('value', $this->filesystemCache->get($this->cacheName));
+    }
+
+    public function testSetWithZeroTtlDeletesItem()
+    {
+        $this->filesystemCache->set($this->cacheName, 'value');
+
+        // PSR-16: ttl=0 MUST delete the item
+        $this->filesystemCache->set($this->cacheName, 'new_value', 0);
+
+        $this->assertNull($this->filesystemCache->get($this->cacheName));
+    }
+
+    public function testSetWithNegativeTtlDeletesItem()
+    {
+        $this->filesystemCache->set($this->cacheName, 'value');
+
+        // PSR-16: negative ttl MUST delete the item
+        $this->filesystemCache->set($this->cacheName, 'new_value', -1);
+
+        $this->assertNull($this->filesystemCache->get($this->cacheName));
+    }
+
+    public function testSetWithDateIntervalTtl()
+    {
+        $interval = new \DateInterval('PT1H'); // 1 hour
+        $this->filesystemCache->set($this->cacheName, 'interval_val', $interval);
+
+        $this->assertSame('interval_val', $this->filesystemCache->get($this->cacheName));
+    }
+
+    // -- Key validation tests --
+
+    public function testGetWithEmptyKeyThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->get('');
+    }
+
+    public function testSetWithEmptyKeyThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->set('', 'value');
+    }
+
+    public function testGetWithReservedCharactersThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->get('invalid{key}');
+    }
+
+    public function testSetWithReservedCharactersThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->set('invalid@key', 'value');
+    }
+
+    public function testDeleteWithReservedCharactersThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->delete('invalid/key');
+    }
+
+    public function testHasWithReservedCharactersThrowsException()
+    {
+        $this->expectException(InvalidCacheKeyException::class);
+
+        $this->filesystemCache->has('invalid:key');
+    }
+
+    public function testInvalidCacheKeyExceptionImplementsPsr16Interface()
+    {
+        $exception = new InvalidCacheKeyException('test');
+
+        $this->assertInstanceOf(\Psr\SimpleCache\InvalidArgumentException::class, $exception);
+        $this->assertInstanceOf(\InvalidArgumentException::class, $exception);
+    }
+
+    // -- Constructor defaultTtl parameter test --
+
+    public function testCustomDefaultTtl()
+    {
+        $cache = new FilesystemCache('', 120);
+        $cache->set('custom_ttl_key', 'value');
+
+        $this->assertSame('value', $cache->get('custom_ttl_key'));
+
+        $cache->clear();
     }
 }

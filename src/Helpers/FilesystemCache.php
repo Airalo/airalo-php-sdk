@@ -60,7 +60,7 @@ class FilesystemCache implements CacheInterface
             return $default;
         }
 
-        $entry = @unserialize($raw);
+        $entry = @unserialize($raw, ['allowed_classes' => false]);
 
         if ($entry === false && $raw !== serialize(false)) {
             // Corrupted data – treat as cache miss and clean up

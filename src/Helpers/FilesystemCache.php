@@ -75,12 +75,9 @@ class FilesystemCache implements CacheInterface
         $data = serialize($value);
         $file = $this->filePath($key);
 
-        if (file_put_contents($file, $data) === false) {
+        if (file_put_contents($file, $data, LOCK_EX) === false) {
             return false;
         }
-
-        chmod($file, 0777);
-
         if ($ttl !== null) {
             $seconds = $ttl instanceof \DateInterval
                 ? (int) (new \DateTime('@0'))->add($ttl)->getTimestamp()

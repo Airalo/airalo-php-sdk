@@ -50,6 +50,8 @@ class Cached
 
         $result = $callable();
 
+        // Preserve backward-compat: falsy values (false, 0, '', []) are not cached,
+        // matching the original Cached facade behaviour.
         if ($result) {
             $cache->set($cacheName, $result, $ttl ?: null);
         }

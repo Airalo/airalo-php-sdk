@@ -44,7 +44,6 @@ class FilesystemCache implements CacheInterface
      * @return mixed
      * @throws InvalidCacheKeyException
      */
-    #[\ReturnTypeWillChange]
     public function get($key, $default = null)
     {
         $this->validateKey($key);
@@ -122,7 +121,6 @@ class FilesystemCache implements CacheInterface
             return false;
         }
 
-
         return true;
     }
 
@@ -178,7 +176,6 @@ class FilesystemCache implements CacheInterface
      * @return iterable
      * @throws InvalidCacheKeyException
      */
-    #[\ReturnTypeWillChange]
     public function getMultiple($keys, $default = null)
     {
         $this->validateIterable($keys);

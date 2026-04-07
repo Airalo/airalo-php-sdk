@@ -4,7 +4,7 @@
     "type": "project",
     "require": {
         "php": ">=7.4",
-        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
+        "psr/simple-cache": "^1.0"
     },
     "autoload": {
         "psr-4": {

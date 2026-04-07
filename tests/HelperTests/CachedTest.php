@@ -22,10 +22,15 @@ class CachedTest extends TestCase
         mkdir($this->tmpDir, 0700, true);
         $this->filesystemCache = new FilesystemCache($this->tmpDir);
         $this->cacheFile = $this->tmpDir . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
+
+        // Clear Cached facade's cache to prevent cross-test pollution
+        Cached::clearCache();
+        clearstatcache();
     }
 
     protected function tearDown(): void
     {
+        Cached::clearCache();
         $this->filesystemCache->clear();
         $this->removeDir($this->tmpDir);
     }

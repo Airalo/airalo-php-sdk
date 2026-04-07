@@ -1603,14 +1603,14 @@ Example response for the call:<br>
 ```php
 <?php
 
+use Airalo\Helpers\FilesystemCache;
+
 require __DIR__ . '/vendor/autoload.php';
 
 // If using a custom PSR-16 cache instance:
 $myCache->clear();
 
 // Or if using the default FilesystemCache directly:
-use Airalo\Helpers\FilesystemCache;
-
 $cache = new FilesystemCache();
 $cache->clear();
 ```

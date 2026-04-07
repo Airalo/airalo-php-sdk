@@ -50,7 +50,7 @@ class Cached
 
         $result = $callable();
 
-        if ($result !== null) {
+        if ($result) {
             $cache->set($cacheName, $result, $ttl ?: null);
         }
 

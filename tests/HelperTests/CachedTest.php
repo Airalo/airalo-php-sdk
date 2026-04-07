@@ -17,20 +17,15 @@ class CachedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheName = 'test_cache';
+        $this->cacheName = 'test_cache_' . uniqid('', true);
         $this->tmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_test_' . uniqid('', true);
         mkdir($this->tmpDir, 0700, true);
         $this->filesystemCache = new FilesystemCache($this->tmpDir);
         $this->cacheFile = $this->tmpDir . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
-
-        // Clear Cached facade's cache to prevent cross-test pollution
-        Cached::clearCache();
-        clearstatcache();
     }
 
     protected function tearDown(): void
     {
-        Cached::clearCache();
         $this->filesystemCache->clear();
         $this->removeDir($this->tmpDir);
     }
@@ -203,7 +198,8 @@ class CachedTest extends TestCase
 
         $this->assertGreaterThanOrEqual($before + 3600, $shortEntry['expiresAt']);
         $this->assertGreaterThanOrEqual($before + 7200, $longEntry['expiresAt']);
-        $this->assertLessThan($longEntry['expiresAt'], $shortEntry['expiresAt']);
+        // long_ttl (7200s) must expire after short_ttl (3600s)
+        $this->assertGreaterThan($shortEntry['expiresAt'], $longEntry['expiresAt']);
     }
 
     public function testSetWithNullTtlUsesDefaultTtl()

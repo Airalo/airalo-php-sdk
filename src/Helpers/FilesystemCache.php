@@ -167,7 +167,9 @@ class FilesystemCache implements CacheInterface
      */
     public function has($key): bool
     {
-        return $this->get($key) !== null;
+        $sentinel = new \stdClass();
+
+        return $this->get($key, $sentinel) !== $sentinel;
     }
 
     /**

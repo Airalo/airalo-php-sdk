@@ -63,12 +63,19 @@ class FilesystemCache implements CacheInterface
 
         $entry = @unserialize($raw);
 
+        if ($entry === false && $raw !== serialize(false)) {
+            // Corrupted data – treat as cache miss and clean up
+            @unlink($file);
+
+            return $default;
+        }
+
         if (
             !is_array($entry)
             || !array_key_exists('expiresAt', $entry)
             || !array_key_exists('value', $entry)
         ) {
-            // Corrupted or legacy format – treat as cache miss and clean up
+            // Legacy format or unexpected structure – treat as cache miss and clean up
             @unlink($file);
 
             return $default;
@@ -111,11 +118,10 @@ class FilesystemCache implements CacheInterface
 
         $file = $this->filePath($key);
 
-        if (file_put_contents($file, $entry) === false) {
+        if (file_put_contents($file, $entry, LOCK_EX) === false) {
             return false;
         }
 
-        chmod($file, 0777);
 
         return true;
     }

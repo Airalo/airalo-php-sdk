@@ -2,7 +2,7 @@
 Airalo's PHP SDK provides extremely simple integration with the RESTful API and adds extra layer of security on top.<br>
 The SDK supports:
 - auto authentication and encryption<br>
-- auto caching and rate limit handling (filesystem by default, pluggable via `CacheInterface`)<br>
+- auto caching and rate limit handling (filesystem by default, pluggable via [PSR-16 SimpleCache](https://www.php-fig.org/psr/psr-16/))<br>
 - packages fetching of local, global, country and all combined<br>
 - packages auto pagination on endpoints<br>
 - package ordering<br>
@@ -67,48 +67,19 @@ $allPackages = AiraloStatic::getAllPackages(true);
 ```
 
 # Custom Cache
-By default the SDK caches API responses (access tokens, packages, etc.) on the local filesystem via `FilesystemCache`. You can supply your own cache implementation by passing an object that implements `Airalo\Contracts\CacheInterface`.
+By default the SDK caches API responses (access tokens, packages, etc.) on the local filesystem via `Airalo\Helpers\FilesystemCache`. You can supply your own cache implementation by passing any object that implements the [PSR-16 `Psr\SimpleCache\CacheInterface`](https://www.php-fig.org/psr/psr-16/).
 
-The interface requires two methods:
-```php
-interface CacheInterface
-{
-    /**
-     * Retrieve a value from cache or compute it via $work.
-     *
-     * @param callable $work  The callable that produces the value on a cache miss.
-     * @param string   $key   A unique cache key.
-     * @param int      $ttl   Time-to-live in seconds (0 = use implementation default).
-     * @return mixed
-     */
-    public function get(callable $work, string $key, int $ttl = 0);
-
-    /**
-     * Clear all cached entries.
-     */
-    public function clear(): void;
-}
-```
+Most frameworks already ship a PSR-16 adapter (e.g. Symfony's `Psr16Cache`, Laravel's `Repository`, or any `league/flysystem` / Redis / Memcached wrapper). Simply pass it as the second argument.
 
 ### Passing a custom cache — Object usage
 ```php
 <?php
 
 use Airalo\Airalo;
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
 
-// Your own adapter, e.g. backed by Redis, Memcached, Symfony Cache, etc.
-$myCache = new class implements CacheInterface {
-    public function get(callable $work, string $key, int $ttl = 0)
-    {
-        // look up $key in your store; on miss call $work() and store the result
-        return $work();
-    }
-    public function clear(): void
-    {
-        // flush your store
-    }
-};
+// Any PSR-16 compatible cache, e.g. Symfony, Laravel, or a Redis adapter
+/** @var CacheInterface $myCache */
 
 $alo = new Airalo([
     'client_id'     => '<YOUR_API_CLIENT_ID>',

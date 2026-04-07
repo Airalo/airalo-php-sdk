@@ -4,13 +4,15 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
+use Airalo\Helpers\CacheTrait;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
 class PackagesService
 {
+    use CacheTrait;
     private string $accessToken;
 
     private string $baseUrl;
@@ -18,8 +20,6 @@ class PackagesService
     private Config $config;
 
     private CurlResource $curl;
-
-    private CacheInterface $cache;
 
     /**
      * @param Config $config
@@ -51,7 +51,7 @@ class PackagesService
     {
         $url = $this->buildUrl($params);
         $cacheParams = array_merge($params, ['locale' => $locale]);
-        $result = $this->cache->get(function () use ($url, $params, $locale) {
+        $result = $this->cacheRemember(function () use ($url, $params, $locale) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 

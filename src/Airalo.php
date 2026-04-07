@@ -2,7 +2,7 @@
 
 namespace Airalo;
 
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Helpers\FilesystemCache;

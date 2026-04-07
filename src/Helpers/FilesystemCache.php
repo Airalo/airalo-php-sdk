@@ -2,7 +2,7 @@
 
 namespace Airalo\Helpers;
 
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class FilesystemCache implements CacheInterface
 {
@@ -19,11 +19,6 @@ class FilesystemCache implements CacheInterface
     private string $cachePath;
 
     /**
-     * @var string|null
-     */
-    private ?string $id = null;
-
-    /**
      * @param string $cachePath
      */
     public function __construct(string $cachePath = '')
@@ -34,84 +29,160 @@ class FilesystemCache implements CacheInterface
     }
 
     /**
-     * @param callable $work
      * @param string $key
-     * @param int $ttl
+     * @param mixed $default
      * @return mixed
      */
-    public function get(callable $work, string $key, int $ttl = 0)
+    public function get($key, $default = null)
     {
-        $this->id = $this->getID($key);
+        $file = $this->filePath($key);
 
-        if (!$result = $this->cacheGet($ttl)) {
-            $result = $work();
+        if (!file_exists($file)) {
+            return $default;
+        }
 
-            return $this->cacheThis($result);
+        $now = time();
+
+        if ($now - filemtime($file) > $this->defaultTtl) {
+            @unlink($file);
+
+            return $default;
+        }
+
+        $result = file_get_contents($file);
+
+        return $result === false ? $default : unserialize($result);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param null|int|\DateInterval $ttl
+     * @return bool
+     */
+    public function set($key, $value, $ttl = null): bool
+    {
+        $data = serialize($value);
+        $file = $this->filePath($key);
+
+        if (file_put_contents($file, $data) === false) {
+            return false;
+        }
+
+        chmod($file, 0777);
+
+        if ($ttl !== null) {
+            $seconds = $ttl instanceof \DateInterval
+                ? (int) (new \DateTime('@0'))->add($ttl)->getTimestamp()
+                : (int) $ttl;
+
+            if ($seconds > 0) {
+                $this->defaultTtl = $seconds;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function delete($key): bool
+    {
+        $file = $this->filePath($key);
+
+        if (file_exists($file)) {
+            return @unlink($file);
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function clear(): bool
+    {
+        $files = glob($this->cachePath . self::CACHE_KEY . '*');
+
+        if ($files === false) {
+            return false;
+        }
+
+        foreach ($files as $file) {
+            @unlink($file);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function has($key): bool
+    {
+        return $this->get($key) !== null;
+    }
+
+    /**
+     * @param iterable $keys
+     * @param mixed $default
+     * @return iterable
+     */
+    public function getMultiple($keys, $default = null)
+    {
+        $result = [];
+
+        foreach ($keys as $key) {
+            $result[$key] = $this->get($key, $default);
         }
 
         return $result;
     }
 
     /**
-     * @return void
+     * @param iterable $values
+     * @param null|int|\DateInterval $ttl
+     * @return bool
      */
-    public function clear(): void
+    public function setMultiple($values, $ttl = null): bool
     {
-        array_map('unlink', glob($this->cachePath . self::CACHE_KEY . '*') ?: []);
+        $success = true;
+
+        foreach ($values as $key => $value) {
+            if (!$this->set($key, $value, $ttl)) {
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * @param iterable $keys
+     * @return bool
+     */
+    public function deleteMultiple($keys): bool
+    {
+        $success = true;
+
+        foreach ($keys as $key) {
+            if (!$this->delete($key)) {
+                $success = false;
+            }
+        }
+
+        return $success;
     }
 
     /**
      * @param string $key
      * @return string
      */
-    private function getID(string $key): string
+    private function filePath(string $key): string
     {
-        return self::CACHE_KEY . md5($key);
-    }
-
-    /**
-     * @param int $customTtl
-     * @return mixed
-     */
-    private function cacheGet(int $customTtl = 0)
-    {
-        $file = $this->cachePath . $this->id;
-
-        if (!file_exists($file)) {
-            return false;
-        }
-
-        $now = strtotime('now');
-        $ttl = $now + ($customTtl ?: $this->defaultTtl);
-
-        if ($now - filemtime($file) > $ttl - $now) {
-            unlink($file);
-
-            return false;
-        }
-
-        $result = file_get_contents($file);
-
-        return !$result ? false : unserialize($result);
-    }
-
-    /**
-     * @param mixed $result
-     * @return mixed
-     */
-    private function cacheThis($result)
-    {
-        if (!$result) {
-            return null;
-        }
-
-        $data = serialize($result);
-        $file = $this->cachePath . $this->id;
-
-        file_put_contents($file, $data);
-        chmod($file, 0777);
-
-        return $result;
+        return $this->cachePath . self::CACHE_KEY . md5($key);
     }
 }
-

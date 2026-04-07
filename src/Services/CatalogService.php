@@ -4,19 +4,20 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
+use Airalo\Helpers\CacheTrait;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
 class CatalogService
 {
+    use CacheTrait;
     private Config $config;
 
     private CurlResource $curl;
     private string $baseUrl;
     private string $accessToken;
-    private CacheInterface $cache;
 
     /**
      * @param Config $config
@@ -45,7 +46,7 @@ class CatalogService
     {
         $url = $this->buildUrl();
 
-       $result = $this->cache->get(function () use ($url, $params) {
+       $result = $this->cacheRemember(function () use ($url, $params) {
             $currentPage = $params['page'] ?? 1;
             $result = ['data' => []];
 

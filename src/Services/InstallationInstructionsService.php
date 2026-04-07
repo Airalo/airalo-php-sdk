@@ -4,13 +4,15 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
-use Airalo\Contracts\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
+use Airalo\Helpers\CacheTrait;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
 class InstallationInstructionsService
 {
+    use CacheTrait;
     private Config $config;
 
     private CurlResource $curl;
@@ -18,8 +20,6 @@ class InstallationInstructionsService
     private string $baseUrl;
 
     private string $accessToken;
-
-    private CacheInterface $cache;
 
     /**
      * @param Config $config
@@ -53,7 +53,7 @@ class InstallationInstructionsService
     {
         $url = $this->buildUrl($params);
 
-        $result = $this->cache->get(function () use ($url, $params) {
+        $result = $this->cacheRemember(function () use ($url, $params) {
 
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([

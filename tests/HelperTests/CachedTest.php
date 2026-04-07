@@ -54,91 +54,105 @@ class CachedTest extends TestCase
         $this->assertFileDoesNotExist($this->cacheFile);
     }
 
-    // -- FilesystemCache tests --
+    // -- FilesystemCache PSR-16 tests --
 
-    public function testGetWithCallable()
+    public function testSetAndGet()
     {
-        $result = $this->filesystemCache->get(function() {
-            return 'test';
-        }, $this->cacheName);
+        $this->filesystemCache->set($this->cacheName, 'test_value');
 
-        $this->assertSame('test', $result);
+        $result = $this->filesystemCache->get($this->cacheName);
+
+        $this->assertSame('test_value', $result);
+    }
+
+    public function testGetReturnsDefaultOnMiss()
+    {
+        $result = $this->filesystemCache->get('nonexistent_key', 'default_val');
+
+        $this->assertSame('default_val', $result);
+    }
+
+    public function testGetReturnsNullOnMissByDefault()
+    {
+        $result = $this->filesystemCache->get('nonexistent_key');
+
+        $this->assertNull($result);
     }
 
     public function testCacheHit()
     {
-        $work = function() {
-            return 'cache_test';
-        };
+        $this->filesystemCache->set($this->cacheName, 'cache_test');
 
-        $this->filesystemCache->get($work, $this->cacheName);
-        $cachedResult = $this->filesystemCache->get($work, $this->cacheName);
+        $cachedResult = $this->filesystemCache->get($this->cacheName);
 
         $this->assertSame('cache_test', $cachedResult);
     }
 
-    public function testCacheMiss()
+    public function testDelete()
     {
-        $work = function() {
-            return 'cache_test';
-        };
+        $this->filesystemCache->set($this->cacheName, 'to_delete');
+        $this->filesystemCache->delete($this->cacheName);
 
-        $cachedResult = $this->filesystemCache->get($work, $this->cacheName, -1);
+        $this->assertNull($this->filesystemCache->get($this->cacheName));
+    }
 
-        $this->assertSame('cache_test', $cachedResult);
+    public function testHas()
+    {
+        $this->assertFalse($this->filesystemCache->has($this->cacheName));
+
+        $this->filesystemCache->set($this->cacheName, 'exists');
+
+        $this->assertTrue($this->filesystemCache->has($this->cacheName));
     }
 
     public function testClearCache()
     {
-        $work = function() {
-            return 'cache_clear_test';
-        };
-
-        $this->filesystemCache->get($work, $this->cacheName);
+        $this->filesystemCache->set($this->cacheName, 'cache_clear_test');
         $this->filesystemCache->clear();
 
         $this->assertFileDoesNotExist($this->cacheFile);
     }
 
-    public function testGetID()
+    public function testFilePath()
     {
-        $method = new ReflectionMethod(FilesystemCache::class, 'getID');
+        $method = new ReflectionMethod(FilesystemCache::class, 'filePath');
         $method->setAccessible(true);
 
-        $cacheID = $method->invoke($this->filesystemCache, $this->cacheName);
+        $path = $method->invoke($this->filesystemCache, $this->cacheName);
 
-        $this->assertSame('airalo_' . md5($this->cacheName), $cacheID);
+        $expected = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName);
+        $this->assertSame($expected, $path);
     }
 
-    public function testCacheGet()
+    public function testFilesystemCacheImplementsPsr16()
     {
-        $method = new ReflectionMethod(FilesystemCache::class, 'cacheGet');
-        $method->setAccessible(true);
-
-        $work = function() {
-            return 'cache_get_test';
-        };
-
-        $this->filesystemCache->get($work, $this->cacheName);
-
-        $cachedResult = $method->invoke($this->filesystemCache, 0);
-
-        $this->assertSame('cache_get_test', $cachedResult);
+        $this->assertInstanceOf(\Psr\SimpleCache\CacheInterface::class, $this->filesystemCache);
     }
 
-    public function testFilesystemCacheImplementsCacheInterface()
+    public function testSetMultipleAndGetMultiple()
     {
-        $this->assertInstanceOf(\Airalo\Contracts\CacheInterface::class, $this->filesystemCache);
+        $this->filesystemCache->setMultiple([
+            'key_a' => 'val_a',
+            'key_b' => 'val_b',
+        ]);
+
+        $results = $this->filesystemCache->getMultiple(['key_a', 'key_b', 'key_c'], 'miss');
+
+        $this->assertSame('val_a', $results['key_a']);
+        $this->assertSame('val_b', $results['key_b']);
+        $this->assertSame('miss', $results['key_c']);
     }
 
-    public function testFilesystemCacheClear()
+    public function testDeleteMultiple()
     {
-        $this->filesystemCache->get(function () {
-            return 'clear_test';
-        }, $this->cacheName);
+        $this->filesystemCache->setMultiple([
+            'del_a' => 1,
+            'del_b' => 2,
+        ]);
 
-        $this->filesystemCache->clear();
+        $this->filesystemCache->deleteMultiple(['del_a', 'del_b']);
 
-        $this->assertFileDoesNotExist($this->cacheFile);
+        $this->assertNull($this->filesystemCache->get('del_a'));
+        $this->assertNull($this->filesystemCache->get('del_b'));
     }
 }

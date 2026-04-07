@@ -3,7 +3,7 @@
 namespace Airalo\Helpers;
 
 /**
- * @deprecated Use \Airalo\Contracts\CacheInterface and \Airalo\Helpers\FilesystemCache instead.
+ * @deprecated Use Psr\SimpleCache\CacheInterface and \Airalo\Helpers\FilesystemCache instead.
  *             This static facade will be removed in a future major version.
  */
 class Cached
@@ -31,7 +31,7 @@ class Cached
      * @param int $ttl
      * @return mixed
      *
-     * @deprecated Use CacheInterface::get() instead.
+     * @deprecated Use Psr\SimpleCache\CacheInterface::get() instead.
      */
     public static function get($work, string $cacheName, int $ttl = 0)
     {
@@ -41,17 +41,29 @@ class Cached
                 return $work;
             };
 
-        return self::getInstance()->get($callable, $cacheName, $ttl);
+        $cache = self::getInstance();
+        $cached = $cache->get($cacheName);
+
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $result = $callable();
+
+        if ($result !== null) {
+            $cache->set($cacheName, $result, $ttl ?: null);
+        }
+
+        return $result;
     }
 
     /**
      * @return void
      *
-     * @deprecated Use CacheInterface::clear() instead.
+     * @deprecated Use Psr\SimpleCache\CacheInterface::clear() instead.
      */
     public static function clearCache(): void
     {
         self::getInstance()->clear();
     }
 }
-

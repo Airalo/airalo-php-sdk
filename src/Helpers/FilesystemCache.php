@@ -66,7 +66,7 @@ class FilesystemCache implements CacheInterface
      * @return mixed
      * @throws InvalidCacheKeyException
      */
-    public function get($key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         $this->validateKey($key);
 
@@ -118,7 +118,7 @@ class FilesystemCache implements CacheInterface
      * @return bool
      * @throws InvalidCacheKeyException
      */
-    public function set($key, $value, $ttl = null): bool
+    public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
     {
         $this->validateKey($key);
 
@@ -151,7 +151,7 @@ class FilesystemCache implements CacheInterface
      * @return bool
      * @throws InvalidCacheKeyException
      */
-    public function delete($key): bool
+    public function delete(string $key): bool
     {
         $this->validateKey($key);
 
@@ -187,7 +187,7 @@ class FilesystemCache implements CacheInterface
      * @return bool
      * @throws InvalidCacheKeyException
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         $sentinel = new \stdClass();
 
@@ -200,7 +200,7 @@ class FilesystemCache implements CacheInterface
      * @return iterable<string, mixed>
      * @throws InvalidCacheKeyException
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
         $this->validateIterable($keys);
 
@@ -219,7 +219,7 @@ class FilesystemCache implements CacheInterface
      * @return bool
      * @throws InvalidCacheKeyException
      */
-    public function setMultiple($values, $ttl = null): bool
+    public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
     {
         $this->validateIterable($values);
 
@@ -239,7 +239,7 @@ class FilesystemCache implements CacheInterface
      * @return bool
      * @throws InvalidCacheKeyException
      */
-    public function deleteMultiple($keys): bool
+    public function deleteMultiple(iterable $keys): bool
     {
         $this->validateIterable($keys);
 
@@ -266,18 +266,12 @@ class FilesystemCache implements CacheInterface
     /**
      * Validate a cache key per PSR-16 requirements.
      *
-     * @param mixed $key
+     * @param string $key
      * @return void
      * @throws InvalidCacheKeyException
      */
-    private function validateKey($key): void
+    private function validateKey(string $key): void
     {
-        if (!is_string($key)) {
-            throw new InvalidCacheKeyException(
-                sprintf('Cache key must be a string, %s given.', gettype($key))
-            );
-        }
-
         if ($key === '') {
             throw new InvalidCacheKeyException('Cache key must not be empty.');
         }
@@ -292,17 +286,13 @@ class FilesystemCache implements CacheInterface
     /**
      * Validate that a value is iterable (required by PSR-16 for *Multiple methods).
      *
-     * @param mixed $value
+     * @param iterable<mixed> $value
      * @return void
      * @throws InvalidCacheKeyException
      */
-    private function validateIterable($value): void
+    private function validateIterable(iterable $value): void
     {
-        if (!is_iterable($value)) {
-            throw new InvalidCacheKeyException(
-                sprintf('Expected an iterable, %s given.', gettype($value))
-            );
-        }
+        // Type declaration enforces iterability; nothing else to check.
     }
 
     /**
@@ -311,7 +301,7 @@ class FilesystemCache implements CacheInterface
      * @param null|int|\DateInterval $ttl
      * @return int|null  null means "use default TTL"
      */
-    private function normalizeTtl($ttl): ?int
+    private function normalizeTtl(null|int|\DateInterval $ttl): ?int
     {
         if ($ttl === null) {
             return null;

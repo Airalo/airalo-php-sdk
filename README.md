@@ -12,7 +12,7 @@ The SDK supports:
 - compatible with Unix, macOS, Windows operating systems<br>
 
 # Requisites
-- PHP version >= `7.4`
+- PHP version >= `8.0`
 - `cURL` extension enabled in php.ini (enabled by default)
 - `sodium` extension enabled in php.ini (enabled by default)
 

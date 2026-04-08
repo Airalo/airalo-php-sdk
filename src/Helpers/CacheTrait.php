@@ -21,9 +21,10 @@ trait CacheTrait
      */
     private function cacheRemember(callable $work, string $key, int $ttl = 0)
     {
-        $cached = $this->cache->get($key);
+        $cacheMiss = new \stdClass();
+        $cached = $this->cache->get($key, $cacheMiss);
 
-        if ($cached !== null) {
+        if ($cached !== $cacheMiss) {
             return $cached;
         }
 

@@ -31,11 +31,33 @@ class FilesystemCache implements CacheInterface
      */
     public function __construct(string $cachePath = '', int $defaultTtl = 86400)
     {
-        $this->cachePath = $cachePath !== ''
+        $this->cachePath = $this->initializeCachePath($cachePath);
+        $this->defaultTtl = $defaultTtl;
+    }
+
+    /**
+     * @param string $cachePath
+     * @return string
+     */
+    private function initializeCachePath(string $cachePath): string
+    {
+        $path = $cachePath !== ''
             ? rtrim($cachePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR
             : sys_get_temp_dir() . DIRECTORY_SEPARATOR;
 
-        $this->defaultTtl = $defaultTtl;
+        if (!file_exists($path) && !mkdir($path, 0777, true) && !is_dir($path)) {
+            throw new \RuntimeException(sprintf('Cache path "%s" could not be created.', $path));
+        }
+
+        if (!is_dir($path)) {
+            throw new \RuntimeException(sprintf('Cache path "%s" is not a directory.', $path));
+        }
+
+        if (!is_writable($path)) {
+            throw new \RuntimeException(sprintf('Cache path "%s" is not writable.', $path));
+        }
+
+        return $path;
     }
 
     /**

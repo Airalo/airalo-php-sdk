@@ -26,6 +26,9 @@ class CachedTest extends TestCase
 
     protected function tearDown(): void
     {
+        // Remove the specific cache file the Cached facade may have written in the default temp dir
+        @unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'airalo_' . md5($this->cacheName));
+
         $this->filesystemCache->clear();
         $this->removeDir($this->tmpDir);
     }

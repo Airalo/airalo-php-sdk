@@ -2,6 +2,7 @@
 
 namespace Airalo\Tests\HelperTests;
 
+use Airalo\Helpers\EasyAccess;
 use PHPUnit\Framework\TestCase;
 use Airalo\Helpers\Cached;
 use Airalo\Helpers\FilesystemCache;
@@ -48,7 +49,7 @@ class CachedTest extends TestCase
 
         return unserialize(
             file_get_contents($filePath->invoke($this->filesystemCache, $key)),
-            ['allowed_classes' => false]
+            ['allowed_classes' => [EasyAccess::class]]
         );
     }
 

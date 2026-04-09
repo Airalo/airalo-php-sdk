@@ -82,7 +82,7 @@ class FilesystemCache implements CacheInterface
             return $default;
         }
 
-        $entry = @unserialize($raw, ['allowed_classes' => false]);
+        $entry = @unserialize($raw, ['allowed_classes' => [EasyAccess::class]]);
 
         if ($entry === false && $raw !== serialize(false)) {
             // Corrupted data – treat as cache miss and clean up

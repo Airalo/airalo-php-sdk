@@ -2,43 +2,58 @@
 
 namespace Airalo\Helpers;
 
-final class Cached
+/**
+ * @deprecated Use Psr\SimpleCache\CacheInterface and \Airalo\Helpers\FilesystemCache instead.
+ *             This static facade will be removed in a future major version.
+ */
+class Cached
 {
-    private const CACHE_KEY = 'airalo_';
+    /**
+     * @var FilesystemCache|null
+     */
+    private static ?FilesystemCache $instance = null;
 
     /**
-     * @var mixed
+     * @return FilesystemCache
      */
-    private static $id = null;
+    private static function getInstance(): FilesystemCache
+    {
+        if (self::$instance === null) {
+            self::$instance = new FilesystemCache();
+        }
 
-    /**
-     * @var integer
-     */
-    private static $ttl = 86400;
-
-    private static string $cachePath = '';
-
-    private static string $cacheName = '';
+        return self::$instance;
+    }
 
     /**
      * @param mixed $work
      * @param string $cacheName
      * @param int $ttl
      * @return mixed
+     *
+     * @deprecated Use Psr\SimpleCache\CacheInterface::get() instead.
      */
     public static function get($work, string $cacheName, int $ttl = 0)
     {
-        self::init($cacheName);
+        $callable = is_callable($work)
+            ? $work
+            : function () use ($work) {
+                return $work;
+            };
 
-        self::$id = self::getID($cacheName);
+        $cache = self::getInstance();
+        $cached = $cache->get($cacheName);
 
-        $type = gettype($work);
-        if (!$result = self::cacheGet($ttl)) {
-            $result = in_array($type, ['object', 'callable'])
-                ? $work()
-                : $work;
+        if ($cached !== null) {
+            return $cached;
+        }
 
-            return self::cacheThis($result);
+        $result = $callable();
+
+        // Preserve backward-compat: falsy values (false, 0, '', []) are not cached,
+        // matching the original Cached facade behaviour.
+        if ($result) {
+            $cache->set($cacheName, $result, $ttl ?: null);
         }
 
         return $result;
@@ -46,80 +61,11 @@ final class Cached
 
     /**
      * @return void
+     *
+     * @deprecated Use Psr\SimpleCache\CacheInterface::clear() instead.
      */
     public static function clearCache(): void
     {
-        self::init();
-
-        array_map('unlink', glob(self::$cachePath . self::CACHE_KEY . '*'));
-    }
-
-    /**
-     * @param string $cacheName
-     * @return void
-     */
-    private static function init(string $cacheName = ''): void
-    {
-        if (self::$cachePath == '') {
-            self::$cachePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
-        }
-
-        if ($cacheName != '') {
-            self::$cacheName = $cacheName;
-        }
-    }
-
-    /**
-     * @param string $key
-     * @return string
-     */
-    private static function getID(string $key): string
-    {
-        return self::CACHE_KEY . md5($key);
-    }
-
-    /**
-     * @param int $customTtl
-     * @return mixed
-     */
-    private static function cacheGet(int $customTtl = 0)
-    {
-        $file = self::$cachePath . self::$id;
-
-        if (!file_exists($file)) {
-            return false;
-        }
-
-        $now = strtotime('now');
-        $ttl = $now + ($customTtl ?: self::$ttl);
-
-        if ($now - filemtime($file) > $ttl - $now) {
-            unlink($file);
-
-            return false;
-        }
-
-        $result = file_get_contents($file);
-
-        return !$result ? false : unserialize($result);
-    }
-
-    /**
-     * @param mixed $result
-     * @return mixed
-     */
-    private static function cacheThis($result)
-    {
-        if (!$result) {
-            return;
-        }
-
-        $data = serialize($result);
-        $file = self::$cachePath . self::$id;
-
-        file_put_contents($file, $data);
-        chmod($file, 0777);
-
-        return $result;
+        self::getInstance()->clear();
     }
 }

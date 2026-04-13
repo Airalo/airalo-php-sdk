@@ -2,8 +2,10 @@
 
 namespace Airalo;
 
+use Psr\SimpleCache\CacheInterface;
 use Airalo\Exceptions\AiraloException;
 use Airalo\Helpers\EasyAccess;
+use Airalo\Helpers\FilesystemCache;
 use Airalo\Helpers\Signature;
 use Airalo\Resources\CurlResource;
 use Airalo\Resources\MultiCurlResource;
@@ -31,6 +33,7 @@ class Airalo
     private CurlResource $curl;
     private MultiCurlResource $multiCurl;
     private Signature $signature;
+    private CacheInterface $cache;
 
     //
     // Services
@@ -49,10 +52,12 @@ class Airalo
 
     /**
      * @param mixed $config
+     * @param CacheInterface|null $cache
      */
-    public function __construct($config)
+    public function __construct($config, ?CacheInterface $cache = null)
     {
         try {
+            $this->cache = $cache ?? new FilesystemCache();
             $this->initResources($config);
             $this->initServices();
 
@@ -440,21 +445,21 @@ class Airalo
      */
     public function initServices(): void
     {
-        $this->oauth = self::$pool['oauth'] ?? new OAuthService($this->config, $this->curl, $this->signature);
+        $this->oauth = self::$pool['oauth'] ?? new OAuthService($this->config, $this->curl, $this->signature, $this->cache);
         $token = $this->oauth->getAccessToken();
 
-        $this->packages = self::$pool['packages'] ?? new PackagesService($this->config, $this->curl, $token);
+        $this->packages = self::$pool['packages'] ?? new PackagesService($this->config, $this->curl, $token, $this->cache);
         $this->order = self::$pool['order']
             ?? new OrderService($this->config, $this->curl, $this->multiCurl, $this->signature, $token);
         $this->instruction = self::$pool['instruction']
-            ?? new InstallationInstructionsService($this->config, $this->curl, $token);
+            ?? new InstallationInstructionsService($this->config, $this->curl, $token, $this->cache);
         $this->voucher = self::$pool['voucher']
             ?? new VoucherService($this->config, $this->curl, $this->signature, $token);
         $this->topup = self::$pool['topup'] ?? new TopupService($this->config, $this->curl, $this->signature, $token);
-        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token);
-        $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token);
+        $this->sim = self::$pool['sim'] ?? new SimService($this->config, $this->curl, $this->multiCurl, $token, $this->cache);
+        $this->exchangeRates = self::$pool['exchangeRates'] ?? new ExchangeRatesService($this->config, $this->curl, $token, $this->cache);
         $this->futureOrders = self::$pool['futureOrders'] ?? new FutureOrderService($this->config, $this->curl, $this->signature, $token);
-        $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $token);
+        $this->catalogService = self::$pool['catalogService'] ?? new CatalogService($this->config, $this->curl, $token, $this->cache);
         $this->compatibilityDevicesService = self::$pool['compatibilityDevicesService']
             ?? new CompatibilityDevicesService($this->config, $this->curl, $token);
     }

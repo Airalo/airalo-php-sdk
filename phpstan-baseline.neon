@@ -145,20 +145,6 @@ parameters:
 			count: 1
 			path: src/Config.php
 
-		-
-			message: "#^Parameter \\#2 \\$array of function array_map expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: src/Helpers/Cached.php
-
-		-
-			message: "#^Static property Airalo\\\\Helpers\\\\Cached\\:\\:\\$cacheName is never read, only written\\.$#"
-			count: 1
-			path: src/Helpers/Cached.php
-
-		-
-			message: "#^Trying to invoke mixed but it's not a callable\\.$#"
-			count: 1
-			path: src/Helpers/Cached.php
 
 		-
 			message: "#^Method Airalo\\\\Helpers\\\\CloudSimShareValidator\\:\\:checkRequiredFields\\(\\) has parameter \\$requiredFields with no value type specified in iterable type array\\.$#"
@@ -396,11 +382,6 @@ parameters:
 			path: src/Services/CatalogService.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
 			message: "#^Method Airalo\\\\Services\\\\CatalogService\\:\\:catalogsBulk\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Services/CatalogService.php
@@ -427,31 +408,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\.\\.\\.\\$arrays of function array_merge expects array, mixed given\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
-			message: "#^Result of && is always false\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
-			message: "#^Undefined variable\\: \\$params$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
-			message: "#^Variable \\$pageUrl on left side of \\?\\? always exists and is not nullable\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
-			message: "#^Variable \\$params in isset\\(\\) is never defined\\.$#"
-			count: 1
-			path: src/Services/CatalogService.php
-
-		-
-			message: "#^Variable \\$params on left side of \\?\\? is never defined\\.$#"
 			count: 1
 			path: src/Services/CatalogService.php
 

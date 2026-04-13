@@ -2,7 +2,7 @@
 Airalo's PHP SDK provides extremely simple integration with the RESTful API and adds extra layer of security on top.<br>
 The SDK supports:
 - auto authentication and encryption<br>
-- auto caching and rate limit handling<br>
+- auto caching and rate limit handling (filesystem by default, pluggable via [PSR-16 SimpleCache](https://www.php-fig.org/psr/psr-16/))<br>
 - packages fetching of local, global, country and all combined<br>
 - packages auto pagination on endpoints<br>
 - package ordering<br>
@@ -12,7 +12,7 @@ The SDK supports:
 - compatible with Unix, macOS, Windows operating systems<br>
 
 # Requisites
-- PHP version >= `7.4`
+- PHP version >= `8.0`
 - `cURL` extension enabled in php.ini (enabled by default)
 - `sodium` extension enabled in php.ini (enabled by default)
 
@@ -65,6 +65,45 @@ AiraloStatic::init([
 
 $allPackages = AiraloStatic::getAllPackages(true);
 ```
+
+# Custom Cache
+By default the SDK caches API responses (access tokens, packages, etc.) on the local filesystem via `Airalo\Helpers\FilesystemCache`. You can supply your own cache implementation by passing any object that implements the [PSR-16 `Psr\SimpleCache\CacheInterface`](https://www.php-fig.org/psr/psr-16/).
+
+Most frameworks already ship a PSR-16 adapter (e.g. Symfony's `Psr16Cache`, Laravel's `Illuminate\Cache\Psr16Cache`, or any Redis / Memcached wrapper). Simply pass it as the second argument.
+
+### Passing a custom cache — Object usage
+```php
+<?php
+
+use Airalo\Airalo;
+use Psr\SimpleCache\CacheInterface;
+
+// Any PSR-16 compatible cache, e.g. Symfony, Laravel, or a Redis adapter
+/** @var CacheInterface $myCache */
+
+$alo = new Airalo([
+    'client_id'     => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+], $myCache);   // <-- pass as the second argument
+
+$allPackages = $alo->getAllPackages(true);
+```
+
+### Passing a custom cache — Static usage
+```php
+<?php
+
+use Airalo\AiraloStatic;
+
+AiraloStatic::init([
+    'client_id'     => '<YOUR_API_CLIENT_ID>',
+    'client_secret' => '<YOUR_API_CLIENT_SECRET>',
+], $myCache);   // <-- pass as the second argument
+
+$allPackages = AiraloStatic::getAllPackages(true);
+```
+
+> **Note:** If no cache instance is provided, the SDK falls back to `Airalo\Helpers\FilesystemCache` which stores serialised data in the system temp directory (`sys_get_temp_dir()`). This is fully backward-compatible — existing code that does not pass a cache will continue to work exactly as before.
 
 # EasyAccess responses
 The SDK provides simple and yet powerful way to interact with the response objects.<br>
@@ -1564,9 +1603,14 @@ Example response for the call:<br>
 ```php
 <?php
 
+use Airalo\Helpers\FilesystemCache;
+
 require __DIR__ . '/vendor/autoload.php';
 
-use Airalo\Helpers\Cached;
+// If using a custom PSR-16 cache instance:
+$myCache->clear();
 
-Cached::clearCache();
+// Or if using the default FilesystemCache directly:
+$cache = new FilesystemCache();
+$cache->clear();
 ```

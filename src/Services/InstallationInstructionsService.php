@@ -4,13 +4,15 @@ namespace Airalo\Services;
 
 use Airalo\Config;
 use Airalo\Constants\ApiConstants;
+use Psr\SimpleCache\CacheInterface;
+use Airalo\Helpers\CacheTrait;
 use Airalo\Exceptions\AiraloException;
-use Airalo\Helpers\Cached;
 use Airalo\Helpers\EasyAccess;
 use Airalo\Resources\CurlResource;
 
 class InstallationInstructionsService
 {
+    use CacheTrait;
     private Config $config;
 
     private CurlResource $curl;
@@ -21,14 +23,16 @@ class InstallationInstructionsService
 
     /**
      * @param Config $config
-     * @param Curl $curl
+     * @param CurlResource $curl
      * @param string $accessToken
+     * @param CacheInterface|null $cache
      * @throws AiraloException
      */
     public function __construct(
         Config $config,
         CurlResource $curl,
-        string $accessToken
+        string $accessToken,
+        ?CacheInterface $cache = null
     ) {
         if (!$accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
@@ -38,6 +42,7 @@ class InstallationInstructionsService
         $this->curl = $curl;
         $this->accessToken = $accessToken;
         $this->baseUrl = $this->config->getUrl();
+        $this->cache = $cache ?? new \Airalo\Helpers\FilesystemCache();
     }
 
     /**
@@ -48,7 +53,7 @@ class InstallationInstructionsService
     {
         $url = $this->buildUrl($params);
 
-        $result = Cached::get(function () use ($url, $params) {
+        $result = $this->cacheRemember(function () use ($url, $params) {
 
             /* @phpstan-ignore-next-line */
             $response = $this->curl->setHeaders([

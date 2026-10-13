@@ -1,0 +1,34 @@
+# Airalo PHP SDK
+
+> Official PHP SDK (`airalo/sdk`) for the Airalo Partner API. It lets partners fetch eSIM packages, place single, bulk and async orders, buy top-ups, check SIM usage, and manage vouchers, exchange rates and future orders. Authentication, request signing, encryption, caching and rate limiting are handled for you. Requires PHP >= 8.0 with the curl and sodium extensions.
+
+Getting started:
+
+- Install with `composer require airalo/sdk`. Projects without Composer can use `require_once 'alo.php';`.
+- Object usage: `$alo = new \Airalo\Airalo(['client_id' => '<YOUR_API_CLIENT_ID>', 'client_secret' => '<YOUR_API_CLIENT_SECRET>']);` then `$alo->getAllPackages(true);`
+- Static usage: `\Airalo\AiraloStatic::init([...]);` then `\Airalo\AiraloStatic::getAllPackages(true);`. You must call `init()` first.
+- Every method returns `?\Airalo\Helpers\EasyAccess`, which you can read as an array or an object. Every error is `\Airalo\Exceptions\AiraloException`.
+- Responses are cached on the filesystem by default. Pass any PSR-16 `CacheInterface` as the second constructor or `init()` argument to use your own cache.
+- For your own unit tests, call `mock()` on either facade to stub SDK calls.
+- Load credentials from environment or secret storage. Never hard-code them.
+
+## Docs
+
+- [README](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/README.md): installation, initialization, custom cache, full method reference ("Methods Interface"), technical notes
+- [Airalo Partner API documentation](https://developers.partners.airalo.com): REST endpoints and full response schemas the SDK wraps
+
+## API reference
+
+- [Airalo.php](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/src/Airalo.php): instance facade, every public method with signatures
+- [AiraloStatic.php](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/src/AiraloStatic.php): static facade with the same methods
+- [EasyAccess.php](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/src/Helpers/EasyAccess.php): response wrapper
+
+## Contributing
+
+- [AGENTS.md](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/AGENTS.md): layout, conventions, quality gates and PR rules for changing the SDK
+
+## Optional
+
+- [Config.php](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/src/Config.php): config keys and validation
+- [composer.json](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/composer.json): package metadata and scripts
+- [LICENSE](https://raw.githubusercontent.com/Airalo/airalo-php-sdk/main/LICENSE)

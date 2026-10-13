@@ -11,6 +11,8 @@ The SDK supports:
 - unified response format of type `EasyAccess` which allows key access as associative array and/or object at the same time without json_decode usage<br>
 - compatible with Unix, macOS, Windows operating systems<br>
 
+> **Using an AI assistant?** [`llms.txt`](llms.txt) gives LLMs a concise summary of the SDK and how to start using it. Coding agents contributing to this repository should follow [`AGENTS.md`](AGENTS.md).
+
 # Requisites
 - PHP version >= `8.0`
 - `cURL` extension enabled in php.ini (enabled by default)
@@ -71,7 +73,7 @@ By default the SDK caches API responses (access tokens, packages, etc.) on the l
 
 Most frameworks already ship a PSR-16 adapter (e.g. Symfony's `Psr16Cache`, Laravel's `Illuminate\Cache\Psr16Cache`, or any Redis / Memcached wrapper). Simply pass it as the second argument.
 
-### Passing a custom cache — Object usage
+### Passing a custom cache: Object usage
 ```php
 <?php
 
@@ -89,7 +91,7 @@ $alo = new Airalo([
 $allPackages = $alo->getAllPackages(true);
 ```
 
-### Passing a custom cache — Static usage
+### Passing a custom cache: Static usage
 ```php
 <?php
 
@@ -103,7 +105,7 @@ AiraloStatic::init([
 $allPackages = AiraloStatic::getAllPackages(true);
 ```
 
-> **Note:** If no cache instance is provided, the SDK falls back to `Airalo\Helpers\FilesystemCache` which stores serialised data in the system temp directory (`sys_get_temp_dir()`). This is fully backward-compatible — existing code that does not pass a cache will continue to work exactly as before.
+> **Note:** If no cache instance is provided, the SDK falls back to `Airalo\Helpers\FilesystemCache` which stores serialised data in the system temp directory (`sys_get_temp_dir()`). This is fully backward-compatible: existing code that does not pass a cache will continue to work exactly as before.
 
 # EasyAccess responses
 The SDK provides simple and yet powerful way to interact with the response objects.<br>
